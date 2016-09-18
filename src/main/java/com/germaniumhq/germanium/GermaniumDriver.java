@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * GermaniumDriver.
@@ -246,5 +247,40 @@ public class GermaniumDriver implements WebDriver, JavascriptExecutor, TakesScre
     @Override
     public <X> X getScreenshotAs(OutputType<X> target) throws WebDriverException {
         return ((TakesScreenshot)webDriver).getScreenshotAs(target);
+    }
+
+    public <T> Locator<T> S(Object selector) {
+        return this.S(selector, "default");
+    }
+
+    public <T> Locator<T> S(Object selector, String strategy) {
+        return CreateLocator
+                .createLocator(this, selector, strategy);
+    }
+
+    /**
+     * Returns a locator class for the given strategy.
+     * @param strategy
+     * @return
+     */
+    Class<? extends Locator> getLocatorClass(String strategy) {
+        Class<? extends Locator> result = locatorMap.get(strategy);
+
+        if (result == null) {
+            throw new IllegalArgumentException(String.format(
+                    "Unable to find a registered locator with name '%s' " +
+                    "in the Germanium driver. Registered drivers are: %s.",
+                    strategy,
+                    locatorMap.keySet().stream()
+                            .map(it -> "'" + it + "'")
+                            .collect(Collectors.joining(", "))
+                    ));
+        }
+
+        return result;
+    }
+
+    public Map<String, Class<? extends Locator>> getLocatorMap() {
+        return locatorMap;
     }
 }

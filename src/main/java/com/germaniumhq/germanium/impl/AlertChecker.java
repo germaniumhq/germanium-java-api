@@ -2,6 +2,7 @@ package com.germaniumhq.germanium.impl;
 
 import com.germaniumhq.germanium.GermaniumDriver;
 import org.apache.log4j.Logger;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriverException;
@@ -22,7 +23,8 @@ public class AlertChecker {
 
     public boolean isAlertExisting() {
         try {
-            germaniumDriver.switchTo().alert();
+            Alert alert = germaniumDriver.switchTo().alert();
+            alert.getText();
             return true;
         } catch (NoAlertPresentException e) {
             return false;

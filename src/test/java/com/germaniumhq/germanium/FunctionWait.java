@@ -12,9 +12,7 @@ public class FunctionWait {
     public void i_wait_on_a_closure_that_returns_a_closure_that_returns_False() throws Throwable {
         try {
             Wait.waitFor(2, () -> {
-                return (Supplier<Boolean>) () -> {
-                    return false;
-                };
+                return (Supplier<Boolean>) () -> false;
             });
         } catch (Exception e) {
             Context.set("exception", e);
