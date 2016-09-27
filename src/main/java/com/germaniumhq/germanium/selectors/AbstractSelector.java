@@ -57,47 +57,102 @@ public abstract class AbstractSelector implements BrowserContentProvider<WebElem
     }
 
     @Override
+    public WebElement element(Visibility visibility) {
+        return this.element(visibility, GermaniumApi.getGermanium());
+    }
+
+    @Override
     public WebElement element(GermaniumDriver germanium) {
-        return GermaniumApi.S(this, germanium).element();
+        return this.element(Visibility.ONLY_VISIBLE);
+    }
+
+    @Override
+    public WebElement element(Visibility visibility, GermaniumDriver germaniumDriver) {
+        return (WebElement) germaniumDriver.S(this).element(visibility);
     }
 
     @Override
     public List<WebElement> elementList() {
-        return this.elementList(GermaniumApi.getGermanium());
+        return this.elementList(Visibility.ONLY_VISIBLE, GermaniumApi.getGermanium());
     }
 
     @Override
     public List<WebElement> elementList(GermaniumDriver germanium) {
-        return GermaniumApi.S(this, germanium).elementList();
+        return this.elementList(Visibility.ONLY_VISIBLE, germanium);
+    }
+
+    @Override
+    public List<WebElement> elementList(Visibility visibility) {
+        return this.elementList(visibility, GermaniumApi.getGermanium());
+    }
+
+    @Override
+    public List<WebElement> elementList(Visibility visibility, GermaniumDriver germaniumDriver) {
+        return germaniumDriver.<WebElement>S(this).elementList(visibility);
     }
 
     @Override
     public boolean exists() {
-        return this.exists(GermaniumApi.getGermanium());
+        return this.exists(Visibility.ONLY_VISIBLE, GermaniumApi.getGermanium());
+    }
+
+    @Override
+    public boolean exists(Visibility visibility) {
+        return this.exists(visibility, GermaniumApi.getGermanium());
     }
 
     @Override
     public boolean exists(GermaniumDriver germanium) {
-        return GermaniumApi.S(this, germanium).exists();
+        return this.exists(Visibility.ONLY_VISIBLE, germanium);
+    }
+
+    @Override
+    public boolean exists(Visibility visibility, GermaniumDriver germaniumDriver) {
+        return germaniumDriver.S(this).exists(visibility);
     }
 
     @Override
     public boolean notExists() {
-        return this.notExists(GermaniumApi.getGermanium());
+        return this.notExists(Visibility.ONLY_VISIBLE, GermaniumApi.getGermanium());
+    }
+
+    @Override
+    public boolean notExists(Visibility visibility) {
+        return this.notExists(visibility, GermaniumApi.getGermanium());
     }
 
     @Override
     public boolean notExists(GermaniumDriver germanium) {
-        return GermaniumApi.S(this, germanium).notExists();
+        return this.notExists(Visibility.ONLY_VISIBLE, germanium);
+    }
+
+    @Override
+    public boolean notExists(Visibility visibility, GermaniumDriver germaniumDriver) {
+        return germaniumDriver.S(this).notExists(visibility);
     }
 
     @Override
     public String text() {
-        return this.text(GermaniumApi.getGermanium());
+        return this.text(Visibility.ONLY_VISIBLE, GermaniumApi.getGermanium());
+    }
+
+    @Override
+    public String text(Visibility visibility) {
+        return this.text(visibility, GermaniumApi.getGermanium());
     }
 
     @Override
     public String text(GermaniumDriver germanium) {
-        return GermaniumApi.S(this, germanium).text();
+        return this.text(Visibility.ONLY_VISIBLE, germanium);
+    }
+
+    @Override
+    public String text(Visibility visibility, GermaniumDriver germaniumDriver) {
+        return germaniumDriver.S(this).text(visibility);
+    }
+
+    @Override
+    public List<WebElement> get() {
+        return elementList();
     }
 }

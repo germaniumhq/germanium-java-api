@@ -16,6 +16,7 @@ public class GermaniumApi {
     }
 
     public static <T> Locator<T> S(Selector<T> selector) {
+        return GermaniumApi.S(selector);
     }
 
     public static <T> Locator<T> S(Selector<T> selector, GermaniumDriver germanium) {
@@ -23,8 +24,10 @@ public class GermaniumApi {
     }
 
     public static <T> Locator<T> S(String selector) {
+        return GermaniumApi.getGermanium().S(selector);
     }
 
     public static <T> Locator<T> S(String selector, GermaniumDriver germanium) {
+        return germanium.S(selector);
     }
 }

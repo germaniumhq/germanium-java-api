@@ -1,7 +1,20 @@
 package com.germaniumhq.germanium;
 
-import com.germaniumhq.germanium.locators.*;
-import com.germaniumhq.germanium.selectors.*;
+import com.germaniumhq.germanium.locators.AlertLocator;
+import com.germaniumhq.germanium.locators.CompositeLocator;
+import com.germaniumhq.germanium.locators.CssLocator;
+import com.germaniumhq.germanium.locators.DeferredLocator;
+import com.germaniumhq.germanium.locators.InsideFilterLocator;
+import com.germaniumhq.germanium.locators.Locator;
+import com.germaniumhq.germanium.locators.PositionalFilterLocator;
+import com.germaniumhq.germanium.locators.StaticElementLocator;
+import com.germaniumhq.germanium.locators.WindowLocator;
+import com.germaniumhq.germanium.locators.XPathLocator;
+import com.germaniumhq.germanium.selectors.AbstractSelector;
+import com.germaniumhq.germanium.selectors.Alert;
+import com.germaniumhq.germanium.selectors.InsideFilterSelector;
+import com.germaniumhq.germanium.selectors.PositionalFilterSelector;
+import com.germaniumhq.germanium.selectors.Window;
 import org.openqa.selenium.WebElement;
 
 import java.lang.reflect.Constructor;
@@ -71,7 +84,7 @@ public class CreateLocator {
 
             return (Locator<T>) new PositionalFilterLocator(
                     germanium,
-                    CreateLocator.createLocator(germanium, positionalFilterSelector.getParentSelector()),
+                    (DeferredLocator) CreateLocator.<WebElement>createLocator(germanium, positionalFilterSelector.getParentSelector()),
                     leftOfFilters,
                     rightOfFilters,
                     aboveFilters,
@@ -97,7 +110,7 @@ public class CreateLocator {
 
             return (Locator<T>) new InsideFilterLocator(
                     germanium,
-                    CreateLocator.createLocator(germanium, insideFilterSelector.getParentSelector()),
+                    (DeferredLocator) CreateLocator.<WebElement>createLocator(germanium, insideFilterSelector.getParentSelector()),
                     insideFilters,
                     containingFilters,
                     containingAllFilters,
@@ -116,10 +129,11 @@ public class CreateLocator {
                         selectors.iterator().next());
             }
 
-            List<Locator> locatorList = new ArrayList<>();
+            List<DeferredLocator> locatorList = new ArrayList<>();
 
             for (String s: selectors) {
-                locatorList.add(CreateLocator.createLocator(germanium, s));
+                locatorList.add((DeferredLocator)
+                        CreateLocator.<WebElement>createLocator(germanium, s));
             }
 
             return (Locator<T>) new CompositeLocator(locatorList);
