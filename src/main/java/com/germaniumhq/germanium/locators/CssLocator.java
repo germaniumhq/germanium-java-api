@@ -11,10 +11,10 @@ import java.util.List;
 public class CssLocator extends DeferredLocator {
     private final String selector;
 
-    public CssLocator(GermaniumDriver germanium, String stringSelector) {
+    public CssLocator(GermaniumDriver germanium, Object stringSelector) {
         super(germanium, null);
 
-        this.selector = stringSelector;
+        this.selector = "" + stringSelector;
     }
 
     @Override

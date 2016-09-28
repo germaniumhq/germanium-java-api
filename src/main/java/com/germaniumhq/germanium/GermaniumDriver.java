@@ -130,7 +130,7 @@ public class GermaniumDriver implements WebDriver, JavascriptExecutor, TakesScre
     }
 
     private void loadSupportScripts() {
-        throw new IllegalStateException("Not implemented");
+        //throw new IllegalStateException("Not implemented");
     }
 
     public <T> T js(String code, Object ... arguments) {
@@ -250,7 +250,7 @@ public class GermaniumDriver implements WebDriver, JavascriptExecutor, TakesScre
     }
 
     public <T> Locator<T> S(Object selector) {
-        return this.S(selector, "default");
+        return this.S(selector, CreateLocator.DETECT);
     }
 
     public <T> Locator<T> S(Object selector, String strategy) {

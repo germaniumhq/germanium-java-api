@@ -1,5 +1,6 @@
-package com.germaniumhq.germanium;
+package com.germaniumhq.germanium.steps;
 
+import com.germaniumhq.germanium.Context;
 import com.germaniumhq.germanium.all.Wait;
 import cucumber.api.PendingException;
 import cucumber.api.java.en.Then;

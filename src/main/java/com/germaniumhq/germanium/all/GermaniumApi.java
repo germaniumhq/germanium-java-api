@@ -1,6 +1,7 @@
 package com.germaniumhq.germanium.all;
 
 import com.germaniumhq.germanium.GermaniumDriver;
+import com.germaniumhq.germanium.all.operations.OpenBrowser;
 import com.germaniumhq.germanium.locators.Locator;
 import com.germaniumhq.germanium.selectors.Selector;
 
@@ -8,15 +9,18 @@ import com.germaniumhq.germanium.selectors.Selector;
  * The full static Germanium API.
  */
 public class GermaniumApi {
-    public static void openBrowser(String browser) {
+    private static GermaniumDriver INSTANCE;
+
+    public static OpenBrowser openBrowser() {
+        return new OpenBrowser();
     }
 
     public static GermaniumDriver getGermanium() {
-        throw new IllegalArgumentException("Not implemented");
+        return INSTANCE;
     }
 
     public static <T> Locator<T> S(Selector<T> selector) {
-        return GermaniumApi.S(selector);
+        return GermaniumApi.S(selector, GermaniumApi.getGermanium());
     }
 
     public static <T> Locator<T> S(Selector<T> selector, GermaniumDriver germanium) {
@@ -24,10 +28,24 @@ public class GermaniumApi {
     }
 
     public static <T> Locator<T> S(String selector) {
-        return GermaniumApi.getGermanium().S(selector);
+        return GermaniumApi.S(selector, GermaniumApi.getGermanium());
     }
 
     public static <T> Locator<T> S(String selector, GermaniumDriver germanium) {
         return germanium.S(selector);
+    }
+
+    /**
+     * Sets the current instance of germanium to the given one,
+     * and returns the old one that was set previously.
+     *
+     * @param germanium
+     * @return
+     */
+    public static GermaniumDriver setGermanium(GermaniumDriver germanium) {
+        GermaniumDriver oldInstance = INSTANCE;
+        INSTANCE = germanium;
+
+        return oldInstance;
     }
 }

@@ -14,6 +14,7 @@ import com.germaniumhq.germanium.selectors.AbstractSelector;
 import com.germaniumhq.germanium.selectors.Alert;
 import com.germaniumhq.germanium.selectors.InsideFilterSelector;
 import com.germaniumhq.germanium.selectors.PositionalFilterSelector;
+import com.germaniumhq.germanium.selectors.Selector;
 import com.germaniumhq.germanium.selectors.Window;
 import org.openqa.selenium.WebElement;
 
@@ -31,9 +32,11 @@ public class CreateLocator {
     public static final Pattern LOCATOR_SPECIFIER = Pattern.compile("((\\w[\\w\\d]*?):)(.*)",
             Pattern.MULTILINE | Pattern.DOTALL);
 
+    public static final String DETECT = "detect";
+
     public static <T> Locator<T> createLocator(GermaniumDriver germanium,
                                                Object selector) {
-        return (Locator<T>) CreateLocator.createLocator(germanium, selector, "default");
+        return (Locator<T>) CreateLocator.createLocator(germanium, selector, DETECT);
     }
 
     public static <T> Locator<T> createLocator(GermaniumDriver germanium,
@@ -46,13 +49,13 @@ public class CreateLocator {
                     "is being used?");
         }
 
-        if (!"detect".equals(strategy)) {
+        if (!DETECT.equals(strategy)) {
             Class<? extends Locator> clazz = germanium.getLocatorClass(strategy);
             return instantiateLocator(clazz, germanium, selector);
         }
 
-        if (selector instanceof Locator) {
-            if (!"detect".equals(strategy)) {
+        if (selector instanceof Locator && !(selector instanceof Selector)) {
+            if (!DETECT.equals(strategy)) {
                 throw new IllegalArgumentException(String.format(
                         "The locator is already constructed, but a strategy is " +
                         "also defined: '%s'", strategy));
@@ -186,7 +189,7 @@ public class CreateLocator {
         if (m.matches()) {
             Class<? extends Locator> clazz = germanium.getLocatorMap().get(m.group(2));
             if (clazz != null) {
-                return instantiateLocator(clazz, germanium, selector);
+                return instantiateLocator(clazz, germanium, m.group(3));
             }
         }
 

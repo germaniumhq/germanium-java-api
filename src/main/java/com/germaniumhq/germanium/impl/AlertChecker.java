@@ -68,6 +68,7 @@ public class AlertChecker {
     public static void allowAlert(GermaniumDriver germaniumDriver, Runnable code) {
         try {
             code.run();
+            return;
         } catch (UnhandledAlertException unhandledAlertException) {
             // nothing on purpose
         } catch (WebDriverException e) {
