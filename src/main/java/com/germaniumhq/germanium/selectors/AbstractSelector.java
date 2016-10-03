@@ -53,7 +53,7 @@ public abstract class AbstractSelector implements BrowserContentProvider<WebElem
 
     @Override
     public WebElement element() {
-        return this.element(GermaniumApi.getGermanium());
+        return this.element(Visibility.ONLY_VISIBLE, GermaniumApi.getGermanium());
     }
 
     @Override
@@ -63,7 +63,7 @@ public abstract class AbstractSelector implements BrowserContentProvider<WebElem
 
     @Override
     public WebElement element(GermaniumDriver germanium) {
-        return this.element(Visibility.ONLY_VISIBLE);
+        return this.element(Visibility.ONLY_VISIBLE, germanium);
     }
 
     @Override
