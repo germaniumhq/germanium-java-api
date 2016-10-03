@@ -11,9 +11,9 @@ import java.util.List;
 public class XPathLocator extends DeferredLocator {
     private final String selector;
 
-    public XPathLocator(GermaniumDriver germanium, String stringSelector) {
+    public XPathLocator(GermaniumDriver germanium, Object stringSelector) {
         super(germanium, /* rootElement */ null);
-        this.selector = stringSelector;
+        this.selector = String.valueOf(stringSelector);
     }
 
     @Override
