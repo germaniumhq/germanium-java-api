@@ -9,6 +9,7 @@ import cucumber.api.java.en.When;
 import org.openqa.selenium.WebElement;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class GermaniumSelectorsCss {
     @When("^I look for the following css selector: (.*?)$")
@@ -21,6 +22,8 @@ public class GermaniumSelectorsCss {
     @Then("^I find the element with id: '(.*?)'$")
     public void i_find_the_element_with_id_inputButton(String elementId) throws Throwable {
         WebElement element = Context.get("found_element");
+        assertNotNull("Element was not found. `found_element` is null " +
+                "in the context.", element);
         assertEquals(elementId, element.getAttribute("id"));
     }
 }

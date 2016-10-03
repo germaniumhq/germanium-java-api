@@ -9,10 +9,10 @@ import java.util.List;
 public class JsLocator extends DeferredLocator {
     private final String code;
 
-    public JsLocator(GermaniumDriver germanium, String code, WebElement rootElement) {
-        super(germanium, rootElement);
+    public JsLocator(GermaniumDriver germanium, Object code) {
+        super(germanium, null);
 
-        this.code = code;
+        this.code = String.valueOf(code);
     }
 
     @Override

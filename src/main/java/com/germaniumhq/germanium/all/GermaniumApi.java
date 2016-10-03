@@ -48,4 +48,12 @@ public class GermaniumApi {
 
         return oldInstance;
     }
+
+    /**
+     * Close the currently running browser.
+     */
+    public static void closeBrowser() {
+        INSTANCE.close();
+        INSTANCE = null;
+    }
 }
