@@ -16,7 +16,27 @@ public abstract class AbstractSelector implements BrowserContentProvider<WebElem
                 .leftOf(selectors);
     }
 
+    public AbstractSelector leftOf(WebElement...elements) {
+        return new PositionalFilterSelector(this)
+                .leftOf(elements);
+    }
+
+    public AbstractSelector leftOf(String...selectors) {
+        return new PositionalFilterSelector(this)
+                .leftOf(selectors);
+    }
+
     public AbstractSelector rightOf(AbstractSelector...selectors) {
+        return new PositionalFilterSelector(this)
+                .rightOf(selectors);
+    }
+
+    public AbstractSelector rightOf(WebElement...elements) {
+        return new PositionalFilterSelector(this)
+                .rightOf(elements);
+    }
+
+    public AbstractSelector rightOf(String...selectors) {
         return new PositionalFilterSelector(this)
                 .rightOf(selectors);
     }
@@ -26,7 +46,27 @@ public abstract class AbstractSelector implements BrowserContentProvider<WebElem
                 .above(selectors);
     }
 
+    public AbstractSelector above(WebElement...elements) {
+        return new PositionalFilterSelector(this)
+                .above(elements);
+    }
+
+    public AbstractSelector above(String...selectors) {
+        return new PositionalFilterSelector(this)
+                .above(selectors);
+    }
+
     public AbstractSelector below(AbstractSelector...selectors) {
+        return new PositionalFilterSelector(this)
+                .below(selectors);
+    }
+
+    public AbstractSelector below(WebElement...elements) {
+        return new PositionalFilterSelector(this)
+                .below(elements);
+    }
+
+    public AbstractSelector below(String...selectors) {
         return new PositionalFilterSelector(this)
                 .below(selectors);
     }
@@ -36,9 +76,9 @@ public abstract class AbstractSelector implements BrowserContentProvider<WebElem
                 .inside(selectors);
     }
 
-    public AbstractSelector inside(WebElement...selectors) {
+    public AbstractSelector inside(WebElement...elements) {
         return new InsideFilterSelector(this)
-                .inside(selectors);
+                .inside(elements);
     }
 
     public AbstractSelector inside(String...selectors) {
@@ -51,9 +91,9 @@ public abstract class AbstractSelector implements BrowserContentProvider<WebElem
                 .containing(selectors);
     }
 
-    public AbstractSelector containing(WebElement...selectors) {
+    public AbstractSelector containing(WebElement...elements) {
         return new InsideFilterSelector(this)
-                .containing(selectors);
+                .containing(elements);
     }
 
     public AbstractSelector containing(String...selectors) {
@@ -66,9 +106,9 @@ public abstract class AbstractSelector implements BrowserContentProvider<WebElem
                 .containingAll(selectors);
     }
 
-    public AbstractSelector containingAll(WebElement...selectors) {
+    public AbstractSelector containingAll(WebElement...elements) {
         return new InsideFilterSelector(this)
-                .containingAll(selectors);
+                .containingAll(elements);
     }
 
     public AbstractSelector containingAll(String...selectors) {
