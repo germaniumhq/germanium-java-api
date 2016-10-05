@@ -142,7 +142,7 @@ public class InsideFilterLocator extends FilterLocator {
 
         List<Object> jsArguments = new ArrayList<>();
 
-        String code = ScriptLoader.getScript("inside-filter.min.js");
+        String code = ScriptLoader.getScript("/germanium/locators/inside-filter.min.js");
         jsArguments.add(this.withoutChildrenElements ? 1 : 0);
         jsArguments.add(0); // FIXME:remove
         jsArguments.add(containingElements.size());

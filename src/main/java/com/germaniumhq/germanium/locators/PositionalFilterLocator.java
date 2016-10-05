@@ -73,7 +73,7 @@ public class PositionalFilterLocator extends FilterLocator {
 
         List<Object> jsArguments = new ArrayList<>();
 
-        String code = ScriptLoader.getScript("positional-filter.min.js");
+        String code = ScriptLoader.getScript("/germanium/locators/positional-filter.min.js");
 
         jsArguments.add(aboveElements.size());
         jsArguments.addAll(aboveElements);

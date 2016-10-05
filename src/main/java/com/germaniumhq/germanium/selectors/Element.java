@@ -69,7 +69,7 @@ public class Element extends AbstractSelector {
 
     public Element extraXPath(String ... extraXPath) {
         for (String xpath : extraXPath) {
-            this.exactText += xpath;
+            this.extraXPath += xpath;
         }
 
         return this;

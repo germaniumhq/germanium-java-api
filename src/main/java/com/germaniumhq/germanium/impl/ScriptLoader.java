@@ -14,7 +14,10 @@ public class ScriptLoader {
     private final static Logger log = Logger.getLogger(ScriptLoader.class);
 
     /**
-     * Loads the given script from the classpath.
+     * Loads the given script from the classpath. This will
+     * call StriptLoader.class.getResourceAsStream, so you
+     * need to use absolute paths to fetch the scripts.
+     *
      * @param name
      * @return
      */
