@@ -1,0 +1,31 @@
+js:
+var searchedText = "%s";
+
+function text(node) {
+    return node.innerText || node.textContent || "";
+}
+
+if (text(document.body).indexOf(searchedText) < 0) {
+    return null;
+}
+
+var processing_queue = [ document.body ];
+var result = [];
+
+while (processing_queue.length) {
+    var foundChildElement = false;
+    var currentNode = processing_queue.splice(0, 1)[0];
+
+    for (var i = 0; i < currentNode.children.length; i++) {
+        if (text(currentNode.children[i]).indexOf(searchedText) >= 0) {
+            foundChildElement = true;
+            processing_queue.push(currentNode.children[i]);
+        }
+    }
+
+    if (!foundChildElement) {
+        result.push(currentNode);
+    }
+}
+
+return result;

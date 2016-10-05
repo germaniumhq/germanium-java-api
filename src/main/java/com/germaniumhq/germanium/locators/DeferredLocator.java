@@ -26,7 +26,7 @@ public abstract class DeferredLocator implements Locator<WebElement> {
     @Override
     public WebElement element(Visibility visibility) {
         if (visibility == Visibility.ONLY_VISIBLE) {
-            List<WebElement> elements = findElementList();
+            List<WebElement> elements = elementList(Visibility.ONLY_VISIBLE);
 
             if (elements == null || elements.size() == 0) {
                 return null;

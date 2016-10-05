@@ -36,12 +36,42 @@ public abstract class AbstractSelector implements BrowserContentProvider<WebElem
                 .inside(selectors);
     }
 
+    public AbstractSelector inside(WebElement...selectors) {
+        return new InsideFilterSelector(this)
+                .inside(selectors);
+    }
+
+    public AbstractSelector inside(String...selectors) {
+        return new InsideFilterSelector(this)
+                .inside(selectors);
+    }
+
     public AbstractSelector containing(AbstractSelector...selectors) {
         return new InsideFilterSelector(this)
                 .containing(selectors);
     }
 
+    public AbstractSelector containing(WebElement...selectors) {
+        return new InsideFilterSelector(this)
+                .containing(selectors);
+    }
+
+    public AbstractSelector containing(String...selectors) {
+        return new InsideFilterSelector(this)
+                .containing(selectors);
+    }
+
     public AbstractSelector containingAll(AbstractSelector...selectors) {
+        return new InsideFilterSelector(this)
+                .containingAll(selectors);
+    }
+
+    public AbstractSelector containingAll(WebElement...selectors) {
+        return new InsideFilterSelector(this)
+                .containingAll(selectors);
+    }
+
+    public AbstractSelector containingAll(String...selectors) {
         return new InsideFilterSelector(this)
                 .containingAll(selectors);
     }
