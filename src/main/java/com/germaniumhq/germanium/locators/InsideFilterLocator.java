@@ -134,7 +134,7 @@ public class InsideFilterLocator extends FilterLocator {
                     continue;
                 }
 
-                HashSet<String> items = new HashSet<>();
+                HashSet<String> items = new LinkedHashSet<>();
                 items.add(groupIndexString);
                 containingAllElements.put(containingAllElement, items);
             }

@@ -7,6 +7,9 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.openqa.selenium.WebElement;
 
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 public class GermaniumSelectorsButton {
@@ -33,5 +36,8 @@ public class GermaniumSelectorsButton {
         assertNull(Context.get("found_element"));
     }
 
-
+    @Then("^there are no elements found$")
+    public void there_are_no_elements_found() throws Throwable {
+        assertEquals(0, ((List)Context.get("found_elements")).size());
+    }
 }

@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -14,7 +15,7 @@ public class Element extends AbstractSelector {
     private String id;
     private String exactText;
     private String containsText;
-    private Set<String> cssClasses = new HashSet<>();
+    private Set<String> cssClasses = new LinkedHashSet<>();
     private Map<String, String> exactAttributes = new HashMap<>();
     private Map<String, String> containsAttributes = new HashMap<>();
     private String extraXPath = "";

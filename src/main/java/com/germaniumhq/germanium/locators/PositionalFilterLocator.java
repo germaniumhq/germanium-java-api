@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -51,22 +52,22 @@ public class PositionalFilterLocator extends FilterLocator {
 
         List<WebElement> elements = parentLocator.elementList();
 
-        Set<WebElement> leftOfElements = new HashSet<>();
+        Set<WebElement> leftOfElements = new LinkedHashSet<>();
         for (Locator<WebElement> selector : leftOfFilters) {
             leftOfElements.addAll(selector.elementList());
         }
 
-        Set<WebElement> rightOfElements = new HashSet<>();
+        Set<WebElement> rightOfElements = new LinkedHashSet<>();
         for (Locator<WebElement> selector : rightOfFilters) {
             rightOfElements.addAll(selector.elementList());
         }
 
-        Set<WebElement> aboveElements = new HashSet<>();
+        Set<WebElement> aboveElements = new LinkedHashSet<>();
         for (Locator<WebElement> selector : aboveFilters) {
             aboveElements.addAll(selector.elementList());
         }
 
-        Set<WebElement> belowElements = new HashSet<>();
+        Set<WebElement> belowElements = new LinkedHashSet<>();
         for (Locator<WebElement> selector : belowFilters) {
             belowElements.addAll(selector.elementList());
         }
@@ -87,7 +88,7 @@ public class PositionalFilterLocator extends FilterLocator {
         jsArguments.add(elements.size());
         jsArguments.addAll(elements);
 
-        List<WebElement> resultElements = germanium.js(code, jsArguments);
+        List<WebElement> resultElements = germanium.js(code, jsArguments.toArray());
 
         return resultElements;
     }
