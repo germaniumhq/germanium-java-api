@@ -2,6 +2,7 @@ package com.germaniumhq.germanium.all;
 
 import com.germaniumhq.germanium.selectors.Alert;
 import com.germaniumhq.germanium.selectors.Button;
+import com.germaniumhq.germanium.selectors.CheckBox;
 import com.germaniumhq.germanium.selectors.Css;
 import com.germaniumhq.germanium.selectors.Element;
 import com.germaniumhq.germanium.selectors.Image;
@@ -22,8 +23,19 @@ public class GermaniumSelectors {
         return new Alert();
     }
 
+    public static Button Button(String searchedText) {
+        return new Button(searchedText);
+    }
+
     public static Button Button() {
         return new Button();
+    }
+
+    public static CheckBox CheckBox(String name) {
+        return new CheckBox(name);
+    }
+    public static CheckBox CheckBox() {
+        return new CheckBox();
     }
 
     public static Css Css(String css) {

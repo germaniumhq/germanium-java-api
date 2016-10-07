@@ -8,6 +8,13 @@ public class Button extends AbstractSelector {
     private String text;
     private String name;
 
+    public Button() {
+    }
+
+    public Button(String searchText) {
+        this.searchText = searchText;
+    }
+
     public Button searchText(String searchText) {
         if (text != null) {
             throw new IllegalArgumentException("You can't have both a searched text and an exact text match");
