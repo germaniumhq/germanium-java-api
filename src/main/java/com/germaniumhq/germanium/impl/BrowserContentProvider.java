@@ -15,6 +15,7 @@ public interface BrowserContentProvider<T> extends Locator<T> {
     T element(Visibility visibility, GermaniumDriver germaniumDriver);
     T element(GermaniumDriver germanium);
 
+    T elementList(int index);
     List<T> elementList();
     List<T> elementList(Visibility visibility, GermaniumDriver germaniumDriver);
     List<T> elementList(GermaniumDriver germanium);

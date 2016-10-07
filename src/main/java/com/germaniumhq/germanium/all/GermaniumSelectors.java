@@ -4,6 +4,7 @@ import com.germaniumhq.germanium.selectors.Alert;
 import com.germaniumhq.germanium.selectors.Button;
 import com.germaniumhq.germanium.selectors.Css;
 import com.germaniumhq.germanium.selectors.Element;
+import com.germaniumhq.germanium.selectors.Image;
 import com.germaniumhq.germanium.selectors.Input;
 import com.germaniumhq.germanium.selectors.InputText;
 import com.germaniumhq.germanium.selectors.JsSelector;
@@ -31,6 +32,14 @@ public class GermaniumSelectors {
 
     public static Element Element(String tagName) {
         return new Element(tagName);
+    }
+
+    public static Image Image(String alt) {
+        return new Image(alt);
+    }
+
+    public static Image Image() {
+        return new Image();
     }
 
     public static Input Input() {

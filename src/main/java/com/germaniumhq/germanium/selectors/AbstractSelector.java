@@ -142,6 +142,24 @@ public abstract class AbstractSelector implements BrowserContentProvider<WebElem
     }
 
     @Override
+    public WebElement elementList(int index) {
+        if (index < 0) {
+            throw new IllegalArgumentException("An index ien an array must be positive.");
+        }
+
+        List<WebElement> foundElements = this.elementList(Visibility.ONLY_VISIBLE, GermaniumApi.getGermanium());
+
+        if (index >= foundElements.size()) {
+            throw new IllegalArgumentException(String.format(
+                    "Element with index %d was not found. The search returned " +
+                    "only %d elements.", index, foundElements.size()
+            ));
+        }
+
+        return foundElements.get(index);
+    }
+
+    @Override
     public List<WebElement> elementList() {
         return this.elementList(Visibility.ONLY_VISIBLE, GermaniumApi.getGermanium());
     }
