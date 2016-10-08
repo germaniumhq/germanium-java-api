@@ -283,4 +283,8 @@ public class GermaniumDriver implements WebDriver, JavascriptExecutor, TakesScre
     public Map<String, Class<? extends Locator>> getLocatorMap() {
         return locatorMap;
     }
+
+    public String getCurrentIFrame() {
+        return currentIFrame;
+    }
 }

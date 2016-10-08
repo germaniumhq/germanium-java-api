@@ -17,6 +17,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,6 +42,15 @@ public class OpenBrowser {
 
     public OpenBrowser iFrameSelector(IFrameSelector iFrameSelector) {
         this.iFrameSelector = iFrameSelector;
+        return this;
+    }
+
+    public OpenBrowser iFrameSelector(BiConsumer<GermaniumDriver, String> iFrameSelector) {
+        this.iFrameSelector = (germanium, iFrameName) -> {
+            iFrameSelector.accept(germanium, iFrameName);
+            return iFrameName;
+        };
+
         return this;
     }
 
