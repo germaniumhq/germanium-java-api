@@ -65,4 +65,8 @@ public class GermaniumApi {
         INSTANCE.close();
         INSTANCE = null;
     }
+
+    public static <T> T js(String code, Object ... parameters) {
+        return getGermanium().js(code, parameters);
+    }
 }
