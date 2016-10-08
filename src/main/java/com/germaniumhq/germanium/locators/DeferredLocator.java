@@ -54,6 +54,27 @@ public abstract class DeferredLocator implements Locator<WebElement> {
     }
 
     @Override
+    public WebElement elementList(int index) {
+        if (index < 0) {
+            throw new IllegalArgumentException(String.format(
+                    "The index inside a list must be a positive number, not %d.", index));
+        }
+
+        List<WebElement> webElements = elementList();
+
+        if (index >= webElements.size()) {
+            throw new IllegalArgumentException(String.format(
+                    "The element with index %d was requested, but only %d elements " +
+                    "were available in the result.",
+                    index,
+                    webElements.size()
+            ));
+        }
+
+        return webElements.get(index);
+    }
+
+    @Override
     public boolean exists() {
         return exists(Visibility.ONLY_VISIBLE);
     }

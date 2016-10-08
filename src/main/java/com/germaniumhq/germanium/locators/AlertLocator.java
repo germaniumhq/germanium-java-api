@@ -46,6 +46,24 @@ public class AlertLocator implements Locator<Alert> {
     }
 
     @Override
+    public Alert elementList(int index) {
+        if (index != 0) {
+            throw new IllegalArgumentException(String.format(
+                    "There can be at most one alert dialog opened, so the index must be 0. " +
+                    "Index %d is invalid to be fetched.",
+                    index));
+        }
+
+        List<org.openqa.selenium.Alert> alerts = this.elementList();
+
+        if (alerts == null || alerts.isEmpty()) {
+            throw new IllegalArgumentException("Unable to find any alert opened.");
+        }
+
+        return alerts.get(index);
+    }
+
+    @Override
     public boolean exists() {
         return exists(Visibility.ALL_ELEMENTS);
     }

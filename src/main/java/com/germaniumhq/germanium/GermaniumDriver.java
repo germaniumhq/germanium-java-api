@@ -2,10 +2,20 @@ package com.germaniumhq.germanium;
 
 import com.germaniumhq.germanium.impl.AlertChecker;
 import com.germaniumhq.germanium.impl.ScriptLoader;
-import com.germaniumhq.germanium.locators.*;
+import com.germaniumhq.germanium.locators.AlertLocator;
+import com.germaniumhq.germanium.locators.CssLocator;
+import com.germaniumhq.germanium.locators.JsLocator;
+import com.germaniumhq.germanium.locators.Locator;
+import com.germaniumhq.germanium.locators.XPathLocator;
 import com.germaniumhq.germanium.util.Wait;
 import org.apache.log4j.Logger;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

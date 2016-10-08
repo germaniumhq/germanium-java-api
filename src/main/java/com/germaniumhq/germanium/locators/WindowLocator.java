@@ -32,6 +32,11 @@ public class WindowLocator implements Locator<WebDriverWindow> {
     }
 
     @Override
+    public WebDriverWindow elementList(int index) {
+        return null;
+    }
+
+    @Override
     public boolean exists() {
         return false;
     }

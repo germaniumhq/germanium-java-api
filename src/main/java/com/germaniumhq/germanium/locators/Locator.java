@@ -24,6 +24,8 @@ public interface Locator<T> extends Supplier<List<T>> {
 
     List<T> elementList(Visibility visibility);
 
+    T elementList(int index);
+
     boolean exists();
 
     boolean exists(Visibility visibility);
