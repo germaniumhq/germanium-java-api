@@ -45,20 +45,17 @@ public class GermaniumAlertAlert {
 
     @When("^I write into the alert using Alert\\(\\)\\.send_keys 'prompt input'$")
     public void i_write_into_the_alert_using_Alert_send_keys_prompt_input() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        Alert().sendKeys("prompt input");
     }
 
-    @When("^I write into the alert using type_keys\\(\\.\\., 'alert'\\) 'prompt input'$")
-    public void i_write_into_the_alert_using_type_keys_alert_prompt_input() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+    @When("^I write into the alert using type_keys\\(\\.\\., 'alert'\\) '(.*?)'$")
+    public void i_write_into_the_alert_using_type_keys_alert_prompt_input(String text) throws Throwable {
+        typeKeys(text, "alert");
     }
 
-    @When("^I type_keys 'prompt input'$")
-    public void i_type_keys_prompt_input() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+    @When("^I type_keys '(.*?)'$")
+    public void i_type_keys_prompt_input(String text) throws Throwable {
+        typeKeys(text);
     }
 
 }

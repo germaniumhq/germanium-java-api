@@ -91,4 +91,8 @@ public class Alert implements Selector<org.openqa.selenium.Alert>, Locator<org.o
 
         waitFor(this::notExists);
     }
+
+    public void sendKeys(String keys) {
+        this.element().sendKeys(keys);
+    }
 }

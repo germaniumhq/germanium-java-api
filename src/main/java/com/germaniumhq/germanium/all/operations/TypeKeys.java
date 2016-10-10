@@ -91,6 +91,11 @@ public class TypeKeys {
             element = Alert().element();
         }
 
+        if (element instanceof Alert) {
+            ((Alert)element).sendKeys(keys);
+            return;
+        }
+
         CompositeAction actionChain = new CompositeAction();
 
         /*
