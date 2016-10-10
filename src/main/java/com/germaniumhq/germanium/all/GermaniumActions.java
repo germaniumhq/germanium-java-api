@@ -1,6 +1,6 @@
 package com.germaniumhq.germanium.all;
 
-import com.germaniumhq.germanium.all.operations.TypeKeys;
+import com.germaniumhq.germanium.all.operations.actions.TypeKeys;
 import com.germaniumhq.germanium.locators.Locator;
 import com.germaniumhq.germanium.selectors.Alert;
 import org.openqa.selenium.WebElement;

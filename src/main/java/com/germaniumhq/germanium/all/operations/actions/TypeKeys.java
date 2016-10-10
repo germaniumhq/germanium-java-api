@@ -1,8 +1,7 @@
-package com.germaniumhq.germanium.all.operations;
+package com.germaniumhq.germanium.all.operations.actions;
 
 import com.germaniumhq.germanium.GermaniumDriver;
 import com.germaniumhq.germanium.all.GermaniumApi;
-import com.germaniumhq.germanium.all.operations.actions.DelayAction;
 import com.germaniumhq.germanium.locators.Locator;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.Keys;
