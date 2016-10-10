@@ -1,7 +1,7 @@
 package com.germaniumhq.germanium.all;
 
+import com.germaniumhq.germanium.all.operations.TypeKeys;
 import com.germaniumhq.germanium.locators.Locator;
-import com.germaniumhq.germanium.selectors.AbstractSelector;
 import com.germaniumhq.germanium.selectors.Alert;
 import org.openqa.selenium.WebElement;
 
@@ -19,12 +19,18 @@ public class GermaniumActions {
     }
 
     public static void typeKeys(String keys) {
+        TypeKeys.typeKeys(keys, null, 0);
+    }
+
+    public static void typeKeys(String keys, String selector) {
+        TypeKeys.typeKeys(keys, selector, 0);
     }
 
     public static void typeKeys(String keys, Alert alert) {
+        TypeKeys.typeKeys(keys, alert, 0);
     }
 
     public static void typeKeys(String keys, Locator<WebElement> locator) {
-
+        TypeKeys.typeKeys(keys, locator, 0);
     }
 }

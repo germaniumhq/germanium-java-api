@@ -1,4 +1,4 @@
-package com.germaniumhq.germanium.all.operations;
+package com.germaniumhq.germanium.all.operations.actions;
 
 import org.openqa.selenium.interactions.Action;
 

@@ -2,15 +2,18 @@ package com.germaniumhq.germanium.all.operations;
 
 import com.germaniumhq.germanium.GermaniumDriver;
 import com.germaniumhq.germanium.all.GermaniumApi;
+import com.germaniumhq.germanium.all.operations.actions.DelayAction;
 import com.germaniumhq.germanium.locators.Locator;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.interactions.ClickAction;
 import org.openqa.selenium.interactions.CompositeAction;
 import org.openqa.selenium.interactions.KeyDownAction;
 import org.openqa.selenium.interactions.KeyUpAction;
 import org.openqa.selenium.interactions.Keyboard;
 import org.openqa.selenium.interactions.Mouse;
 import org.openqa.selenium.interactions.SendKeysAction;
+import org.openqa.selenium.internal.Locatable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,9 +108,13 @@ public class TypeKeys {
     }
 
     private static void addDelayedKeys(CompositeAction actionChain, List<KeysAction> keysArray, Object element, float delay) {
+        if (element != null && element instanceof Locatable) {
+            addClickAction(actionChain, (Locatable) element);
+        }
+
         for (int i = 0; i < keysArray.size(); i++) {
             if (i != 0) {
-                actionChain.addAction(new DelayAction(delay));
+                addDelayAction(actionChain, delay);
             }
 
             addSingleKeysAction(actionChain, keysArray.get(i));
@@ -115,9 +122,23 @@ public class TypeKeys {
     }
 
     private static void addImmediateKeys(CompositeAction actionChain, List<KeysAction> keysArray, Object element) {
+        if (element != null && element instanceof Locatable) {
+            addClickAction(actionChain, (Locatable) element);
+        }
+
         for (KeysAction keyAction : keysArray) {
             addSingleKeysAction(actionChain, keyAction);
         }
+    }
+
+    private static void addClickAction(CompositeAction actionChain, Locatable element) {
+        actionChain.addAction(new ClickAction(
+                GermaniumApi.getGermanium().getMouse(),
+                element));
+    }
+
+    private static void addDelayAction(CompositeAction actionChain, float delay) {
+        actionChain.addAction(new DelayAction(delay));
     }
 
     private static void addSingleKeysAction(CompositeAction actionChain, KeysAction keyAction) {
