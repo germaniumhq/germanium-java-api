@@ -9,6 +9,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class FilterNotDisplayed {
+    public static WebElement filterOneForAction(List<WebElement> elements) {
+        List<WebElement> items = filterNotDisplayed(
+                elements,
+                Locator.Visibility.ONLY_VISIBLE,
+                EmptyStrategy.THROW_WHEN_EMPTY);
+
+        return items.get(0);
+    }
+
     public static List<WebElement> filterNotDisplayed(List<WebElement> elements,
                                                 Locator.Visibility visibility,
                                                 EmptyStrategy throwStrategy) {

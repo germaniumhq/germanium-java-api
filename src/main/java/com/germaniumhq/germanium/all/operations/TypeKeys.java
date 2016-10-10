@@ -1,317 +1,402 @@
 package com.germaniumhq.germanium.all.operations;
 
-/*
-MULTIPLE_TIMES_KEY_PRESS_RE = re.compile("^(.*?)\*(\d+)$")
-
-
-class BasicKeysAction(object):
-    """
-    A class that just denotes basic keys to be sent to the WebDriver.
-    basic keys can also be made of keys such as ENTER, UP, etc.
-    """
-    def __init__(self, keys):
-        self.keys = []
-        for i in range(len(keys)):
-            self.keys.append(keys[i])
-
-
-class ComboKeyDown(object):
-    """
-    An action that marks a single combo key that should be pressed
-    !shift, !control, !ctrl, !alt
-    """
-    def __init__(self, key):
-        self.key = key
-
-
-class ComboKeyUp(object):
-    """
-    An action that marks a single combo key that should be released
-    ^shift, ^control, ^ctrl, ^alt
-    """
-    def __init__(self, key):
-        self.key = key
-
-
-def type_keys_g(context, keys_typed, selector=None, delay=0, *args):
-    """
-    :param context:
-    :param keys_typed:
-    :param selector:
-    :param delay:
-    :param args:
-    """
-    germanium = find_germanium_object(context)
-    keys_array = transform_to_keys(keys_typed)
-    element = None
-
-    if selector:
-        potential_elements = germanium.S(selector).element_list(only_visible=False)
-        if len(potential_elements) == 1 and \
-                isinstance(potential_elements[0], WebdriverAlert):
-            element = potential_elements[0]
-        else:
-            element = _filter_one_for_action(potential_elements)
-    elif _alert_exists(germanium):
-        element = Alert().element(germanium=germanium)
-
-    action_chain = ActionChains(germanium.web_driver)
-
-    # In case we have delays, we will pass insert after each character a small delay.
-    # This is factored in different functions, since otherwise there would be way
-    # to much ifing to add the delays.
-    # The ActionChains used is extended from the WebDriver one so we can also add
-    # custom callables into the action chain.
-    if delay:
-        add_delayed_keys(action_chain, keys_array, element, delay)
-    else:
-        add_immediate_keys(action_chain, keys_array, element)
-
-    action_chain.perform()
-
-
-def add_immediate_keys(action_chain, keys_array, element):
-    for key_action in keys_array:
-        if isinstance(key_action, BasicKeysAction):
-            keys_to_send = ''.join(key_action.keys)
-            if element:
-                action_chain.send_keys_to_element(element, keys_to_send)
-            else:
-                action_chain.send_keys(keys_to_send)
-        elif isinstance(key_action, ComboKeyDown):
-            action_chain.key_down(key_action.key, element)
-        elif isinstance(key_action, ComboKeyUp):
-            action_chain.key_up(key_action.key, element)
-
-
-def add_delayed_keys(action_chain, keys_array, element, delay):
-    for key_action in keys_array:
-        if isinstance(key_action, BasicKeysAction):
-            if element:
-                for key in key_action.keys:
-                    action_chain.send_keys_to_element(element, key)
-                    action_chain.add_action(lambda: time.sleep(delay))
-            else:
-                for key in key_action.keys:
-                    action_chain.send_keys(key)
-                    action_chain.add_action(lambda: time.sleep(delay))
-        elif isinstance(key_action, ComboKeyDown):
-            action_chain.key_down(key_action.key, element)
-            action_chain.add_action(lambda: time.sleep(delay))
-        elif isinstance(key_action, ComboKeyUp):
-            action_chain.key_up(key_action.key, element)
-            action_chain.add_action(lambda: time.sleep(delay))
-
-
-def transform_to_keys(keys):
-    """
-    Transforms the given keys string into an array of keys action
-    that can be fed into an ActionChain
-    """
-    combo_re = re.compile('<(.*?)>')
-    combo_key_scanner = combo_re.scanner(keys)
-
-    initial_key_index = 0
-    transformed_keys = []
-    last_action = None
-
-    while True:
-        m = combo_key_scanner.search()
-        if not m:
-            break
-
-        if m.start() - initial_key_index > 0:
-            if isinstance(last_action, BasicKeysAction):
-                for key in keys[initial_key_index: m.start()]:
-                    last_action.keys.append(key)
-            else:
-                action = BasicKeysAction(keys[initial_key_index: m.start()])
-                last_action = action
-                transformed_keys.append(action)
-
-        pressed_keys = m.group(1)
-
-        if is_up_down_toggle(pressed_keys):
-            action = create_up_down_toggle(pressed_keys)
-            transformed_keys.append(action)
-            last_action = action
-        elif is_multikey_combo(pressed_keys):
-            multi_combo_actions = create_multicombo(pressed_keys)
-            for multi_combo_action in multi_combo_actions:
-                transformed_keys.append(multi_combo_action)
-                last_action = multi_combo_action
-        else:
-            if isinstance(last_action, BasicKeysAction):
-                key = create_custom_key(pressed_keys)
-
-                for i in range(get_keypress_count(pressed_keys)):
-                    last_action.keys.append(key)
-            else:
-                multiple_keys = []
-                key = create_custom_key(pressed_keys)
-
-                kp = get_keypress_count(pressed_keys)
-
-                for i in range(kp):
-                    multiple_keys.append(key)
-
-                action = BasicKeysAction(multiple_keys)
-                transformed_keys.append(action)
-
-        initial_key_index = m.end()
-
-    if len(keys) - initial_key_index > 0:
-        action = BasicKeysAction(keys[initial_key_index:])
-        transformed_keys.append(action)
-
-    return transformed_keys
-
-
-def is_multikey_combo(pressed_keys):
-    return "-" in pressed_keys
-
-
-def is_up_down_toggle(pressed_keys):
-    return pressed_keys.find('^') == 0 or \
-           pressed_keys.find('!') == 0
-
-
-def create_up_down_toggle(pressed_keys):
-    """
-    Create a toggling of a button down.
-    :param pressed_keys:
-    :return:
-    """
-    if pressed_keys.find('^') == 0:  # release key
-        key = create_custom_key(pressed_keys[1:])
-
-        if get_keypress_count(pressed_keys[1:]) != 1:
-            raise Exception("The key can be released only once.")
-
-        return ComboKeyUp(key)
-    elif pressed_keys.find('!') == 0:  # pressed key
-        key = create_custom_key(pressed_keys[1:])
-
-        if get_keypress_count(pressed_keys[1:]) != 1:
-            raise Exception("The key can be pressed only once.")
-
-        return ComboKeyDown(key)
-    else:
-        raise Exception("Unable to create key toggle for: '%s'" % pressed_keys)
-
-
-def create_multicombo(pressed_keys):
-    """
-    Create a combo made of multiple keys (e.g. ctrl-shift-s)
-    :param pressed_keys:
-    :return:
-    """
-    result = []
-    combo_key=None
-
-    tokens = pressed_keys.split("-")
-    keypress_count = 1
-
-    for i in reversed(range(len(tokens))):
-        if i < len(tokens) - 1:
-            custom_key = create_custom_key(tokens[i])
-            combo_key = custom_key + combo_key + custom_key
-        else:
-            combo_key = create_key(tokens[i])
-            keypress_count = get_keypress_count(tokens[i])
-
-    for i in range(keypress_count):
-        result.append(BasicKeysAction(combo_key))
-
-    return result
-
-
-def create_custom_key(combo_string):
-    """
-    Create a single key for webdriver that represents a custom
-    key (<CR>, <SHIFT>, <UP> etc)
-    """
-
-    m = MULTIPLE_TIMES_KEY_PRESS_RE.match(combo_string)
-    if m:
-        combo_string = m.group(1)
-
-    key_string = combo_string.upper()
-
-    key = create_abbreviated_key(key_string)
-    if key:
-        return key
-
-    if key_string == "C":
-        return Keys.CONTROL
-    elif key_string == "S":
-        return Keys.SHIFT
-    elif key_string == "M":
-        return Keys.META
-
-    return getattr(Keys, key_string)
-
-
-def create_key(combo_string):
-    """
-    Create a single key for webdriver that represents a regular
-    or a custom key, that is the last part of the macro.
-    """
-    # if it's a single character return it
-    if len(combo_string) <= 1:
-        return combo_string
-
-    m = MULTIPLE_TIMES_KEY_PRESS_RE.match(combo_string)
-    if (m):
-        combo_string = m.group(1)
-
-    key_string = combo_string.upper()
-    key = create_abbreviated_key(key_string)
-
-    if key:
-        return key
-
-    return getattr(Keys, key_string)
-
-
-def get_keypress_count(combo_string):
-    """
-    Finds the number of times a key is pressed:
-    `c` - once
-    `c*3` - three times
-    """
-    m = MULTIPLE_TIMES_KEY_PRESS_RE.match(combo_string)
-
-    if (m):
-        result = int(m.group(2))
-        if result <= 0:
-            raise Exception("The number of key presses should be more than 0.");
-        return result
-
-    return 1
-
-def create_abbreviated_key(key_string):
-    if key_string == "CR":
-        return Keys.ENTER
-    elif key_string == "CTRL" or \
-         key_string == "CTL":
-        return Keys.CONTROL
-    elif key_string == "DEL":
-        return Keys.DELETE
-    elif key_string == "CMD":
-        return Keys.COMMAND
-    elif key_string == "BS":
-        return Keys.BACKSPACE
-    elif key_string == "INS":
-        return Keys.INSERT
-    elif key_string == "PGUP":
-        return Keys.PAGE_UP
-    elif key_string == "PGDN":
-        return Keys.PAGE_DOWN
-
-    return None
-
- */
+import com.germaniumhq.germanium.GermaniumDriver;
+import com.germaniumhq.germanium.all.GermaniumApi;
+import com.germaniumhq.germanium.locators.Locator;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.interactions.CompositeAction;
+import org.openqa.selenium.interactions.KeyDownAction;
+import org.openqa.selenium.interactions.KeyUpAction;
+import org.openqa.selenium.interactions.Keyboard;
+import org.openqa.selenium.interactions.Mouse;
+import org.openqa.selenium.interactions.SendKeysAction;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static com.germaniumhq.germanium.all.GermaniumSelectors.Alert;
+import static com.germaniumhq.germanium.impl.FilterNotDisplayed.filterOneForAction;
+
+
+interface KeysAction {
+}
+
+class BasicKeysAction implements KeysAction {
+    private StringBuilder keys = new StringBuilder("");
+
+    public BasicKeysAction(List<String> keys) {
+        keys.forEach(this.keys::append);
+    }
+
+
+    public BasicKeysAction(String keys) {
+        this.keys.append(keys);
+    }
+
+    public String getKeysString() {
+        return keys.toString();
+    }
+
+    public void addKeys(String keys) {
+        this.keys.append(keys);
+    }
+}
+
+class ComboKeyUp implements KeysAction {
+    private String key;
+
+    public ComboKeyUp(String key) {
+        this.key = key;
+    }
+
+    public Keys getKeyValue() {
+        return Keys.getKeyFromUnicode(key.charAt(0));
+    }
+}
+
+class ComboKeyDown implements KeysAction {
+    private String key;
+
+    public ComboKeyDown(String key) {
+        this.key = key;
+    }
+
+    public Keys getKeyValue() {
+        return Keys.getKeyFromUnicode(key.charAt(0));
+    }
+}
 
 public class TypeKeys {
+    private static Pattern MULTIPLE_TIMES_KEY_PRESS_RE = Pattern.compile("^(.*?)\\*(\\d+)$");
+
+    public static void typeKeys(String keys, Object selector, float delay) {
+        GermaniumDriver germanium = GermaniumApi.getGermanium();
+        List<KeysAction> keysArray = transformToKeys(keys); // FIXME:
+        Object element = null;
+
+        if (selector != null) {
+            List<Object> potentialElements = germanium.S(selector).elementList(Locator.Visibility.ALL_ELEMENTS);
+            if (potentialElements.size() == 1 && potentialElements.get(0) instanceof Alert) {
+                element = potentialElements.get(0);
+            } else {
+                element = filterOneForAction((List) potentialElements);
+            }
+        } else if (Alert().exists()) {
+            element = Alert().element();
+        }
+
+        CompositeAction actionChain = new CompositeAction();
+
+        /*
+         # In case we have delays, we will pass insert after each character a small delay.
+         # This is factored in different functions, since otherwise there would be way
+         # to much ifing to add the delays.
+         */
+        if (delay > 0) {
+            addDelayedKeys(actionChain, keysArray, element, delay);
+        } else {
+            addImmediateKeys(actionChain, keysArray, element);
+        }
+
+        actionChain.perform();
+    }
+
+    private static void addDelayedKeys(CompositeAction actionChain, List<KeysAction> keysArray, Object element, float delay) {
+        for (int i = 0; i < keysArray.size(); i++) {
+            if (i != 0) {
+                actionChain.addAction(new DelayAction(delay));
+            }
+
+            addSingleKeysAction(actionChain, keysArray.get(i));
+        }
+    }
+
+    private static void addImmediateKeys(CompositeAction actionChain, List<KeysAction> keysArray, Object element) {
+        for (KeysAction keyAction : keysArray) {
+            addSingleKeysAction(actionChain, keyAction);
+        }
+    }
+
+    private static void addSingleKeysAction(CompositeAction actionChain, KeysAction keyAction) {
+        Keyboard keyboard = GermaniumApi.getGermanium().getKeyboard();
+        Mouse mouse = GermaniumApi.getGermanium().getMouse();
+
+        if (keyAction instanceof BasicKeysAction) {
+            actionChain.addAction(new SendKeysAction(
+                    keyboard,
+                    mouse,
+                    ((BasicKeysAction) keyAction).getKeysString()));
+        } else if (keyAction instanceof ComboKeyDown) {
+            actionChain.addAction(new KeyDownAction(
+                    keyboard,
+                    mouse,
+                    ((ComboKeyDown) keyAction).getKeyValue()));
+        } else if (keyAction instanceof ComboKeyUp) {
+            actionChain.addAction(new KeyUpAction(
+                    keyboard,
+                    mouse,
+                    ((ComboKeyUp) keyAction).getKeyValue()));
+        }
+    }
+
+    /**
+     * Transforms the given keys string into a list of keys actions
+     * that can be fed into an ActionChain
+     */
+    private static List<KeysAction> transformToKeys(String keys) {
+        Pattern comboRe = Pattern.compile("<(.*?)>");
+        Matcher comboKeyScanner = comboRe.matcher(keys);
+
+        int initialKeyIndex = 0;
+        List<KeysAction> transformedKeys = new ArrayList<>();
+        KeysAction lastAction = null;
+
+        while (true) {
+            if (!comboKeyScanner.find()) {
+                break;
+            }
+
+            if (comboKeyScanner.start() - initialKeyIndex > 0) {
+                if (lastAction instanceof BasicKeysAction) {
+                    BasicKeysAction basicLastAction = (BasicKeysAction) lastAction;
+                    basicLastAction.addKeys(keys.substring(initialKeyIndex, comboKeyScanner.start()));
+                } else {
+                    BasicKeysAction action = new BasicKeysAction(keys.substring(initialKeyIndex, comboKeyScanner.start()));
+                    lastAction = action;
+                    transformedKeys.add(action);
+                }
+            }
+
+
+            String pressedKeys = comboKeyScanner.group(1);
+
+            if (isUpDownToggle(pressedKeys)) {
+                KeysAction action = createUpDownToggle(pressedKeys);
+                transformedKeys.add(action);
+                lastAction = action;
+            } else if (isMultikeyCombo(pressedKeys)) {
+                List<KeysAction> multiComboActions = createMulticombo(pressedKeys);
+                transformedKeys.addAll(multiComboActions);
+                lastAction = multiComboActions.get(multiComboActions.size() - 1);
+            } else {
+                if (lastAction instanceof BasicKeysAction) {
+                    BasicKeysAction basicKeysAction = (BasicKeysAction) lastAction;
+                    String key = createCustomKey(pressedKeys);
+                    int keypressCount = getKeypressCount(pressedKeys);
+
+                    for (int i = 0; i < keypressCount; i++) {
+                        basicKeysAction.addKeys(key);
+                    }
+                } else {
+                    List<String> multipleKeys = new ArrayList<>();
+                    String key = createCustomKey(pressedKeys);
+
+                    int keypressCount = getKeypressCount(pressedKeys);
+
+                    for (int i = 0; i < keypressCount; i++) {
+                        multipleKeys.add(key);
+                    }
+
+                    BasicKeysAction action = new BasicKeysAction(multipleKeys);
+                    transformedKeys.add(action);
+                }
+            }
+
+            initialKeyIndex = comboKeyScanner.end();
+        }
+
+        if (keys.length() - initialKeyIndex > 0) {
+            BasicKeysAction action = new BasicKeysAction(keys.substring(initialKeyIndex));
+            transformedKeys.add(action);
+        }
+
+        return transformedKeys;
+    }
+
+    /**
+     * Create a toggling of a button.
+     * @param pressedKeys
+     * @return
+     */
+    private static KeysAction createUpDownToggle(String pressedKeys) {
+        if (pressedKeys.startsWith("^")) { // release key
+            String key = createCustomKey(pressedKeys.substring(1));
+
+            if (getKeypressCount(pressedKeys.substring(1)) != 1) {
+                throw new IllegalArgumentException("The key can be released only once: " + pressedKeys);
+            }
+
+            return new ComboKeyUp(key);
+        } else if (pressedKeys.startsWith("!")) { // press key
+            String key = createCustomKey(pressedKeys.substring(1));
+
+            if (getKeypressCount(pressedKeys.substring(1)) != 1) {
+                throw new IllegalArgumentException("The key can be released only once: " + pressedKeys);
+            }
+
+            return new ComboKeyDown(key);
+        } else {
+            throw new IllegalArgumentException(String.format(
+                    "Unable to create key toggle for: '%s'",
+                    pressedKeys
+            ));
+        }
+    }
+
+    /**
+     * Create a combo made of multiple keys (e.g. ctrl-shift-s)
+     * @param pressedKeys
+     * @return
+     */
+    private static List<KeysAction> createMulticombo(String pressedKeys) {
+        List<KeysAction> result = new ArrayList<>();
+        String comboKey = null;
+
+        String[] tokens = pressedKeys.split("-");
+        int keypressCount = 1;
+
+        for (int i = tokens.length - 1; i >= 0; i--) {
+            if (i < tokens.length - 1) {
+                String customKey = createCustomKey(tokens[i]);
+                comboKey = customKey + comboKey + customKey;
+            } else  {
+                comboKey = createKey(tokens[i]);
+                keypressCount = getKeypressCount(tokens[i]);
+            }
+        }
+
+        for (int i = 0; i < keypressCount; i++) {
+            result.add(new BasicKeysAction(comboKey));
+        }
+
+        return result;
+    }
+
+    /**
+     * Create a single key for webdriver that represents a regular
+     * or a custom key, that is the last part of the macro.
+     * @param comboString
+     * @return
+     */
+    private static String createKey(String comboString) {
+        // if it's a single character return it
+        if (comboString.length() <= 1) {
+            return comboString;
+        }
+
+        Matcher m = MULTIPLE_TIMES_KEY_PRESS_RE.matcher(comboString);
+
+        if (m.matches()) {
+            comboString = m.group(1);
+        }
+
+        String keyString = comboString.toUpperCase();
+        String key = createAbbreviatedKey(keyString);
+
+        if (key != null) {
+            return key;
+        }
+
+        return "" + Keys.valueOf(keyString);
+    }
+
+    /**
+     * Create a single key for webdriver that represents a custom
+     * key (&lt;CR&gt;, &lt;SHIFT&gt;, &lt;UP&gt; etc)
+     * @param comboString
+     * @return
+     */
+    private static String createCustomKey(String comboString) {
+        Matcher matcher = MULTIPLE_TIMES_KEY_PRESS_RE.matcher(comboString);
+
+        if (matcher.matches()) {
+            comboString = matcher.group(1);
+        }
+
+        String keyString = comboString.toUpperCase();
+
+        String key = createAbbreviatedKey(keyString);
+        if (key != null) {
+            return key;
+        }
+
+        if ("C".equals(keyString)) {
+            return "" + Keys.CONTROL;
+        } else if ("S".equals(keyString)) {
+            return "" + Keys.SHIFT;
+        } else if ("M".equals(keyString)) {
+            return "" + Keys.META;
+        }
+
+        return "" + Keys.valueOf(keyString);
+    }
+
+    /**
+     * Add more abbreviations for keys, beside the enum values that are
+     * in the Keys. For example `CR` for `ENTER`, etc.
+     * @param keyString
+     * @return
+     */
+    private static String createAbbreviatedKey(String keyString) {
+        if ("CR".equals(keyString)) {
+            return "" + Keys.ENTER;
+        } else if ("CTRL".equals(keyString) || "CTL".equals(keyString)) {
+            return "" + Keys.CONTROL;
+        } else if ("DEL".equals(keyString)) {
+            return "" + Keys.DELETE;
+        } else if ("CMD".equals(keyString)) {
+            return "" + Keys.COMMAND;
+        } else if ("BS".equals(keyString)) {
+            return "" + Keys.BACK_SPACE;
+        } else if ("INS".equals(keyString)) {
+            return "" + Keys.INSERT;
+        } else if ("PGUP".equals(keyString)) {
+            return "" + Keys.PAGE_UP;
+        } else if ("PGDN".equals(keyString)) {
+            return "" + Keys.PAGE_DOWN;
+        }
+
+        return null;
+    }
+
+    /**
+     * Finds the number of times a key is pressed:
+     * `c` - once
+     * `c*3` - three times
+     * @param comboString
+     * @return
+     */
+    private static int getKeypressCount(String comboString) {
+        Matcher m = MULTIPLE_TIMES_KEY_PRESS_RE.matcher(comboString);
+
+        if (m.matches()) {
+            int result = Integer.parseInt(m.group(2));
+
+            if (result <= 0) {
+                throw new IllegalArgumentException("The number of key presses should be more than 0.");
+            }
+
+            return result;
+        }
+
+        return 1;
+    }
+
+    /**
+     * Checks if the given keypress signals a keypress, or a key release.
+     * @param pressedKeys
+     * @return
+     */
+    private static boolean isUpDownToggle(String pressedKeys) {
+        return pressedKeys.startsWith("^") ||
+                pressedKeys.startsWith("!");
+    }
+
+    private static boolean isMultikeyCombo(String pressedKeys) {
+        return pressedKeys.contains("-");
+    }
+
 }

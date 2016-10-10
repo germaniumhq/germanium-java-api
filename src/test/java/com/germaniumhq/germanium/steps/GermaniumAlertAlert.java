@@ -4,6 +4,7 @@ import cucumber.api.PendingException;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
+import static com.germaniumhq.germanium.all.GermaniumActions.typeKeys;
 import static com.germaniumhq.germanium.all.GermaniumSelectors.Alert;
 import static com.germaniumhq.germanium.all.GermaniumSelectors.Element;
 import static com.germaniumhq.germanium.all.Wait.waitFor;
@@ -32,10 +33,9 @@ public class GermaniumAlertAlert {
         Alert().dismiss();
     }
 
-    @When("^I write into the alert 'prompt input'$")
-    public void i_write_into_the_alert_prompt_input() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+    @When("^I write into the alert '(.*?)'$")
+    public void i_write_into_the_alert_prompt_input(String text) throws Throwable {
+        typeKeys(text, Alert());
     }
 
     @When("^I close the alert dialog by ok$")

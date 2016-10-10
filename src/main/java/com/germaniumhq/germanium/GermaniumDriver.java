@@ -16,6 +16,9 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.HasInputDevices;
+import org.openqa.selenium.interactions.Keyboard;
+import org.openqa.selenium.interactions.Mouse;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -31,7 +34,7 @@ import java.util.stream.Collectors;
 /**
  * GermaniumDriver.
  */
-public class GermaniumDriver implements WebDriver, JavascriptExecutor, TakesScreenshot {
+public class GermaniumDriver implements WebDriver, JavascriptExecutor, TakesScreenshot, HasInputDevices {
     private final static Logger log = Logger.getLogger(GermaniumDriver.class);
 
     private final WebDriver webDriver;
@@ -296,5 +299,19 @@ public class GermaniumDriver implements WebDriver, JavascriptExecutor, TakesScre
 
     public String getCurrentIFrame() {
         return currentIFrame;
+    }
+
+    public WebDriver getWebDriver() {
+        return webDriver;
+    }
+
+    @Override
+    public Keyboard getKeyboard() {
+        return ((HasInputDevices)webDriver).getKeyboard();
+    }
+
+    @Override
+    public Mouse getMouse() {
+        return ((HasInputDevices)webDriver).getMouse();
     }
 }
