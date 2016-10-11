@@ -34,6 +34,12 @@ public class BasicGermaniumTest {
         typeKeys(keys, S(selector));
     }
 
+    @Then("^I type '(.*?)' into (.*)$")
+    public void i_type_input_test_into_input(String keys, String selector) throws Throwable {
+        typeKeys(keys, selector);
+    }
+
+
     @When("^in the locator (.*?) I type_keys '(.*?)' with (\\d+)ms delay$")
     public void in_the_locator_textInput_I_type_keys_abc_with_ms_delay(String selector, String keys, int delayInMs) throws Throwable {
         typeKeys(keys, S(selector), 0.2f);
