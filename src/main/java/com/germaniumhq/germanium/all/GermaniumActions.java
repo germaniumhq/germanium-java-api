@@ -33,4 +33,20 @@ public class GermaniumActions {
     public static void typeKeys(String keys, Locator<WebElement> locator) {
         TypeKeys.typeKeys(keys, locator, 0);
     }
+
+    public static void typeKeys(String keys, float delayInSeconds) {
+        TypeKeys.typeKeys(keys, null, delayInSeconds);
+    }
+
+    public static void typeKeys(String keys, String selector, float delayInSeconds) {
+        TypeKeys.typeKeys(keys, selector, delayInSeconds);
+    }
+
+    public static void typeKeys(String keys, Alert alert, float delayInSeconds) {
+        TypeKeys.typeKeys(keys, alert, delayInSeconds);
+    }
+
+    public static void typeKeys(String keys, Locator<WebElement> locator, float delayInSeconds) {
+        TypeKeys.typeKeys(keys, locator, delayInSeconds);
+    }
 }
