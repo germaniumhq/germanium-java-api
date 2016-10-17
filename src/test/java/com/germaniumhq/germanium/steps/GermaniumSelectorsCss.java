@@ -4,6 +4,7 @@ import com.germaniumhq.germanium.Context;
 import com.germaniumhq.germanium.all.GermaniumApi;
 import com.germaniumhq.germanium.locators.Locator;
 import com.germaniumhq.germanium.selectors.Css;
+import com.germaniumhq.germanium.selectors.Selector;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.openqa.selenium.WebElement;

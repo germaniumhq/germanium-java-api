@@ -8,14 +8,6 @@ import org.openqa.selenium.WebElement;
 
 import static org.junit.Assert.assertEquals;
 
-/*
-        if iframe_name == 'iframe':
-            iframe = germanium.S('iframe').element()
-            germanium.switch_to_frame(iframe)
-        else:
-            germanium.switch_to_default_content()
-
- */
 public class OpenBrowser {
     @Given("^I open the browser$")
     public void i_open_the_browser() throws Throwable {

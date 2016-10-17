@@ -8,6 +8,7 @@ import com.germaniumhq.germanium.selectors.Selector;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * The full static Germanium API.
@@ -44,6 +45,14 @@ public class GermaniumApi {
     }
 
     public static <T> Locator<T> S(String selector, GermaniumDriver germanium) {
+        return germanium.S(selector);
+    }
+
+    public static <T> Locator<T> S(Supplier<?> selector) {
+        return GermaniumApi.getGermanium().S(selector);
+    }
+
+    public static <T> Locator<T> S(Supplier<?> selector, GermaniumDriver germanium) {
         return germanium.S(selector);
     }
 

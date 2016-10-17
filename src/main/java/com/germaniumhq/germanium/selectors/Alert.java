@@ -65,11 +65,6 @@ public class Alert implements Selector<org.openqa.selenium.Alert>, Locator<org.o
         return GermaniumApi.S(this).text();
     }
 
-    @Override
-    public List<org.openqa.selenium.Alert> get() {
-        return elementList();
-    }
-
     public void accept() {
         org.openqa.selenium.Alert alert = this.element();
 

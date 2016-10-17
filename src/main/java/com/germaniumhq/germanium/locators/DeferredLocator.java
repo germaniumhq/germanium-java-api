@@ -104,11 +104,6 @@ public abstract class DeferredLocator implements Locator<WebElement> {
         return this.element(visibility).getText();
     }
 
-    @Override
-    public List<WebElement> get() {
-        return elementList(Visibility.ONLY_VISIBLE);
-    }
-
     public DeferredLocator setRootElement(WebElement rootElement) {
         this.rootElement = rootElement;
 

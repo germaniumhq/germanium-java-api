@@ -34,7 +34,7 @@ public class FilterNotDisplayed {
         }
 
         List<WebElement> result = elements.stream()
-                .filter(WebElement::isDisplayed)
+                .filter(FilterNotDisplayed::isWebElementDisplayed)
                 .collect(Collectors.toList());
 
         if (result.isEmpty() && throwStrategy == EmptyStrategy.THROW_WHEN_EMPTY) {
@@ -42,6 +42,26 @@ public class FilterNotDisplayed {
         }
 
         return result;
+    }
+
+    /**
+     * Checks if an element is displayed. If an element's `isDisplayed` function
+     * fails to evaluate, we assume it's not displayed, since it probably can't
+     * be used correctly anyway.
+     *
+     * @param element
+     * @return
+     */
+    private static boolean isWebElementDisplayed(WebElement element) {
+        try {
+            if (element.isDisplayed()) {
+                return true;
+            }
+        } catch (Exception e) {
+            // we ignore the error on purpose.
+        }
+
+        return false;
     }
 
     private static void raiseNoItemsFountForAction() {
