@@ -1,5 +1,6 @@
 package com.germaniumhq.germanium.locators;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -9,7 +10,7 @@ import java.util.List;
  *
  * @param <T>
  */
-public interface Locator<T> {
+public interface Locator<T> extends Iterable<T> {
     public enum Visibility {
         ONLY_VISIBLE,
         ALL_ELEMENTS
@@ -36,4 +37,8 @@ public interface Locator<T> {
     String text();
 
     String text(Visibility visibility);
+
+    default Iterator<T> iterator() {
+        return elementList().iterator();
+    }
 }

@@ -1,6 +1,7 @@
 package com.germaniumhq.germanium.all;
 
 import com.germaniumhq.germanium.GermaniumDriver;
+import com.germaniumhq.germanium.all.operations.ChildNodes;
 import com.germaniumhq.germanium.all.operations.OpenBrowser;
 import com.germaniumhq.germanium.all.operations.actions.GetValue;
 import com.germaniumhq.germanium.locators.Locator;
@@ -112,5 +113,37 @@ public class GermaniumApi {
 
     public static List<String> getValueAll(Locator<WebElement> locator) {
         return GetValue.getValueAll(locator);
+    }
+
+    public static List<WebElement> childNodes(String selector) {
+        return ChildNodes.getChildNodes(selector, ChildNodes.ElementType.ONLY_ELEMENTS);
+    }
+
+    public static List<WebElement> childNodes(WebElement selector) {
+        return ChildNodes.getChildNodes(selector, ChildNodes.ElementType.ONLY_ELEMENTS);
+    }
+
+    public static List<WebElement> childNodes(Selector<WebElement> selector) {
+        return ChildNodes.getChildNodes(selector, ChildNodes.ElementType.ONLY_ELEMENTS);
+    }
+
+    public static List<WebElement> childNodes(Locator<WebElement> selector) {
+        return ChildNodes.getChildNodes(selector, ChildNodes.ElementType.ONLY_ELEMENTS);
+    }
+
+    public static List<WebElement> childNodes(String selector, ChildNodes.ElementType nodeType) {
+        return ChildNodes.getChildNodes(selector, nodeType);
+    }
+
+    public static List<WebElement> childNodes(WebElement selector, ChildNodes.ElementType nodeType) {
+        return ChildNodes.getChildNodes(selector, nodeType);
+    }
+
+    public static List<WebElement> childNodes(Selector<WebElement> selector, ChildNodes.ElementType nodeType) {
+        return ChildNodes.getChildNodes(selector, nodeType);
+    }
+
+    public static List<WebElement> childNodes(Locator<WebElement> selector, ChildNodes.ElementType nodeType) {
+        return ChildNodes.getChildNodes(selector, nodeType);
     }
 }
