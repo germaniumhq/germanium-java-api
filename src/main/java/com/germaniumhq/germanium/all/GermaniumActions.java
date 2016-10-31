@@ -2,6 +2,7 @@ package com.germaniumhq.germanium.all;
 
 import com.germaniumhq.germanium.all.operations.actions.TypeKeys;
 import com.germaniumhq.germanium.locators.Locator;
+import com.germaniumhq.germanium.points.Point;
 import com.germaniumhq.germanium.selectors.Alert;
 import org.openqa.selenium.WebElement;
 
@@ -16,6 +17,10 @@ public class GermaniumActions {
 
     public static void click(WebElement element) {
         element.click();
+    }
+
+    public static void click(Point point) {
+        throw new IllegalStateException("Not implemented");
     }
 
     public static void typeKeys(String keys) {

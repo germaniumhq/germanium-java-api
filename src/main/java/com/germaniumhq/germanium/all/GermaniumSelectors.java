@@ -1,5 +1,6 @@
 package com.germaniumhq.germanium.all;
 
+import com.germaniumhq.germanium.points.Box;
 import com.germaniumhq.germanium.selectors.Alert;
 import com.germaniumhq.germanium.selectors.Button;
 import com.germaniumhq.germanium.selectors.CheckBox;
@@ -36,6 +37,10 @@ public class GermaniumSelectors {
     }
     public static CheckBox CheckBox() {
         return new CheckBox();
+    }
+
+    public static Box Box(Object selector) {
+        return new Box(selector);
     }
 
     public static Css Css(String css) {

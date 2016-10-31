@@ -3,6 +3,7 @@ package com.germaniumhq.germanium.all;
 import com.germaniumhq.germanium.GermaniumDriver;
 import com.germaniumhq.germanium.all.operations.ChildNodes;
 import com.germaniumhq.germanium.all.operations.OpenBrowser;
+import com.germaniumhq.germanium.all.operations.actions.GetText;
 import com.germaniumhq.germanium.all.operations.actions.GetValue;
 import com.germaniumhq.germanium.locators.Locator;
 import com.germaniumhq.germanium.selectors.Selector;
@@ -97,6 +98,22 @@ public class GermaniumApi {
 
     public static String getValue(Locator<WebElement> locator) {
         return GetValue.getValue(locator);
+    }
+
+    public static String getText(String selector) {
+        return GetText.getText(selector);
+    }
+
+    public static String getText(WebElement element) {
+        return GetText.getText(element);
+    }
+
+    public static String getText(Selector<WebElement> selector) {
+        return GetText.getText(selector);
+    }
+
+    public static String getText(Locator<WebElement> locator) {
+        return GetText.getText(locator);
     }
 
     public static List<String> getValueAll(String selector) {
