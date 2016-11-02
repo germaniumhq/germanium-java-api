@@ -6,6 +6,8 @@ import com.germaniumhq.germanium.util.ActionElementFinder;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.ClickAction;
 import org.openqa.selenium.interactions.CompositeAction;
+import org.openqa.selenium.interactions.ContextClickAction;
+import org.openqa.selenium.interactions.DoubleClickAction;
 import org.openqa.selenium.interactions.MoveMouseAction;
 import org.openqa.selenium.interactions.MoveToOffsetAction;
 import org.openqa.selenium.internal.Locatable;
@@ -80,7 +82,7 @@ public class MouseActions {
         if (element != null) {
             mouseMove(element, null, null)
                     .addAction(new ClickAction(
-                            GermaniumApi.getGermanium().getMouse(),
+                             GermaniumApi.getGermanium().getMouse(),
                             (Locatable) element))
                     .perform();
 
@@ -91,6 +93,60 @@ public class MouseActions {
                 .addAction(new ClickAction(
                         GermaniumApi.getGermanium().getMouse(),
                         (Locatable) element))
+                .perform();
+    }
+
+    public static void rightClick(Object selector, Point point) {
+        Object element = elementOrNull(selector, point);
+
+        if (element != null) {
+            mouseMove(element, null, null)
+                    .addAction(new ContextClickAction(
+                            GermaniumApi.getGermanium().getMouse(),
+                            (Locatable) element))
+                    .perform();
+
+            return;
+        }
+
+        mouseMove(selector, point, null)
+                .addAction(new ContextClickAction(
+                        GermaniumApi.getGermanium().getMouse(),
+                        (Locatable) element))
+                .perform();
+    }
+
+    public static void doubleClick(Object selector, Point point) {
+        Object element = elementOrNull(selector, point);
+
+        if (element != null) {
+            mouseMove(element, null, null)
+                    .addAction(new DoubleClickAction(
+                            GermaniumApi.getGermanium().getMouse(),
+                            (Locatable) element))
+                    .perform();
+
+            return;
+        }
+
+        mouseMove(selector, point, null)
+                .addAction(new DoubleClickAction(
+                        GermaniumApi.getGermanium().getMouse(),
+                        (Locatable) element))
+                .perform();
+    }
+
+    public static void hover(Object selector, Point point) {
+        Object element = elementOrNull(selector, point);
+
+        if (element != null) {
+            mouseMove(element, null, null)
+                    .perform();
+
+            return;
+        }
+
+        mouseMove(selector, point, null)
                 .perform();
     }
 }
