@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Box {
-    private Map<String, Float> box;
+    private Map<String, Integer> box;
     private Object selector;
 
     public Box(Object selector) {
@@ -89,7 +89,7 @@ public class Box {
         return new Point(this.box.get("center"), this.box.get("middle"));
     }
 
-    public float width() {
+    public int width() {
         if (this.box == null) {
             this.getBox();
         }
@@ -97,7 +97,7 @@ public class Box {
         return this.box.get("width");
     }
 
-    public float height() {
+    public int height() {
         if (this.box == null) {
             this.getBox();
         }
@@ -105,7 +105,7 @@ public class Box {
         return this.box.get("height");
     }
 
-    public float left() {
+    public int left() {
         if (this.box == null) {
             this.getBox();
         }
@@ -113,7 +113,7 @@ public class Box {
         return this.box.get("left");
     }
 
-    public float right() {
+    public int right() {
         if (this.box == null) {
             this.getBox();
         }
@@ -121,7 +121,7 @@ public class Box {
         return this.box.get("right");
     }
 
-    public float top() {
+    public int top() {
         if (this.box == null) {
             this.getBox();
         }
@@ -129,7 +129,7 @@ public class Box {
         return this.box.get("top");
     }
 
-    public float bottom() {
+    public int bottom() {
         if (this.box == null) {
             this.getBox();
         }
@@ -140,19 +140,19 @@ public class Box {
     public Box getBox() {
         String code = ScriptLoader.getScript("/germanium/points/box.min.js");
 
-        List<Float> positions = GermaniumApi.js(code, GermaniumApi.getGermanium()
-                .<WebElement>S(this.selector));
+        List<Long> positions = GermaniumApi.js(code, GermaniumApi.getGermanium()
+                .<WebElement>S(this.selector).element());
 
         this.box = new HashMap<>();
 
-        this.box.put("top", positions.get(0));
-        this.box.put("right", positions.get(1));
-        this.box.put("bottom", positions.get(2));
-        this.box.put("left", positions.get(3));
-        this.box.put("center", positions.get(4));
-        this.box.put("middle", positions.get(5));
-        this.box.put("width", positions.get(6));
-        this.box.put("height", positions.get(7));
+        this.box.put("top", positions.get(0).intValue());
+        this.box.put("right", positions.get(1).intValue());
+        this.box.put("bottom", positions.get(2).intValue());
+        this.box.put("left", positions.get(3).intValue());
+        this.box.put("center", positions.get(4).intValue());
+        this.box.put("middle", positions.get(5).intValue());
+        this.box.put("width", positions.get(6).intValue());
+        this.box.put("height", positions.get(7).intValue());
 
         return this;
     }

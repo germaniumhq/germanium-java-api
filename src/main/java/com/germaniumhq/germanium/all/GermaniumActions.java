@@ -1,5 +1,6 @@
 package com.germaniumhq.germanium.all;
 
+import com.germaniumhq.germanium.all.operations.MouseActions;
 import com.germaniumhq.germanium.all.operations.actions.TypeKeys;
 import com.germaniumhq.germanium.locators.Locator;
 import com.germaniumhq.germanium.points.Point;
@@ -20,7 +21,7 @@ public class GermaniumActions {
     }
 
     public static void click(Point point) {
-        throw new IllegalStateException("Not implemented");
+        MouseActions.click(point, null);
     }
 
     public static void typeKeys(String keys) {

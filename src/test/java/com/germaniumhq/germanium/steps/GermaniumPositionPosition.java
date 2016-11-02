@@ -1,10 +1,13 @@
 package com.germaniumhq.germanium.steps;
 
+import com.germaniumhq.germanium.all.GermaniumApi;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 import static com.germaniumhq.germanium.all.GermaniumActions.click;
 import static com.germaniumhq.germanium.all.GermaniumSelectors.Box;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class GermaniumPositionPosition {
     @When("^I click on the exact element of '(.*?)'$")
@@ -59,19 +62,16 @@ public class GermaniumPositionPosition {
 
     @Then("^the text of the '(.*?)' is '(.*?)'$")
     public void verify_text(String selector, String expected_text) {
-//        if ("inline x: 149 y: 100".equals(expected_text) ||
-//            "absolute x: 149 y: 100".equals(expected_text)) {
-//            String expected_text_150 = expected_text.replace("149", "150")
-//        }
-//
-//        // I need to implement getText
-//        assertTrue(expected_text.equals(GermaniumApi.))
-//    assert_true(expected_text == get_text(selector) or
-//    expected_text_150 == get_text(selector))
-//
-//            return
-//
-//    assert_equals(expected_text, get_text(selector))
-//
+        if ("inline x: 149 y: 100".equals(expected_text) ||
+            "absolute x: 149 y: 100".equals(expected_text)) {
+            String expected_text_150 = expected_text.replace("149", "150");
+
+            assertTrue(expected_text.equals(GermaniumApi.getText(selector)) ||
+                    expected_text_150.equals(GermaniumApi.getText(selector)));
+
+            return;
+        }
+
+        assertEquals(expected_text, GermaniumApi.getText(selector));
     }
 }
