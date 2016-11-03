@@ -3,7 +3,6 @@ package com.germaniumhq.germanium.impl;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.stream.Collectors;
 
@@ -30,7 +29,7 @@ public class ScriptLoader {
 
             return bufferedReader.lines().collect(Collectors.joining("\n"));
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new IllegalArgumentException("Unable to read script: " + name, e);
         }
     }

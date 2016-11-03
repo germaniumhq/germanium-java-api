@@ -3,6 +3,7 @@ package com.germaniumhq.germanium.all;
 import com.germaniumhq.germanium.GermaniumDriver;
 import com.germaniumhq.germanium.all.operations.ChildNodes;
 import com.germaniumhq.germanium.all.operations.OpenBrowser;
+import com.germaniumhq.germanium.all.operations.actions.GetAttributes;
 import com.germaniumhq.germanium.all.operations.actions.GetText;
 import com.germaniumhq.germanium.all.operations.actions.GetValue;
 import com.germaniumhq.germanium.locators.Locator;
@@ -10,6 +11,7 @@ import com.germaniumhq.germanium.selectors.Selector;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 /**
@@ -162,5 +164,37 @@ public class GermaniumApi {
 
     public static List<WebElement> childNodes(Locator<WebElement> selector, ChildNodes.ElementType nodeType) {
         return ChildNodes.getChildNodes(selector, nodeType);
+    }
+
+    public static Map<String, String> getAttributes(String selector) {
+        return GetAttributes.getAttributes(selector, Locator.Visibility.ONLY_VISIBLE);
+    }
+
+    public static Map<String, String> getAttributes(WebElement selector) {
+        return GetAttributes.getAttributes(selector, Locator.Visibility.ONLY_VISIBLE);
+    }
+
+    public static Map<String, String> getAttributes(Locator<WebElement> selector) {
+        return GetAttributes.getAttributes(selector, Locator.Visibility.ONLY_VISIBLE);
+    }
+
+    public static Map<String, String> getAttributes(Selector<WebElement> selector) {
+        return GetAttributes.getAttributes(selector, Locator.Visibility.ONLY_VISIBLE);
+    }
+
+    public static Map<String, String> getAttributes(String selector, Locator.Visibility visibility) {
+        return GetAttributes.getAttributes(selector, visibility);
+    }
+
+    public static Map<String, String> getAttributes(WebElement selector, Locator.Visibility visibility) {
+        return GetAttributes.getAttributes(selector, visibility);
+    }
+
+    public static Map<String, String> getAttributes(Locator<WebElement> selector, Locator.Visibility visibility) {
+        return GetAttributes.getAttributes(selector, visibility);
+    }
+
+    public static Map<String, String> getAttributes(Selector<WebElement> selector, Locator.Visibility visibility) {
+        return GetAttributes.getAttributes(selector, visibility);
     }
 }
