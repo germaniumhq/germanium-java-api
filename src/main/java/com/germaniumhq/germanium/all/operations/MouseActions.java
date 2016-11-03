@@ -4,7 +4,9 @@ import com.germaniumhq.germanium.all.GermaniumApi;
 import com.germaniumhq.germanium.points.Point;
 import com.germaniumhq.germanium.util.ActionElementFinder;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.ButtonReleaseAction;
 import org.openqa.selenium.interactions.ClickAction;
+import org.openqa.selenium.interactions.ClickAndHoldAction;
 import org.openqa.selenium.interactions.CompositeAction;
 import org.openqa.selenium.interactions.ContextClickAction;
 import org.openqa.selenium.interactions.DoubleClickAction;
@@ -32,7 +34,7 @@ public class MouseActions {
      * @param point
      * @return
      */
-    private static Object elementOrNull(Object selector, Point point) {
+    private static WebElement elementOrNull(Object selector, Point point) {
         if (selector instanceof Point) {
             return null;
         }
@@ -148,5 +150,40 @@ public class MouseActions {
 
         mouseMove(selector, point, null)
                 .perform();
+    }
+
+    public static void dragAndDrop(Object fromSelector, Point fromPoint,
+                                   Object toSelector, Point toPoint) {
+        WebElement fromElement = elementOrNull(fromSelector, fromPoint);
+
+        CompositeAction action;
+
+        if (fromElement != null) {
+            action = mouseMove(fromElement, null, null)
+                    .addAction(new ClickAndHoldAction(
+                            GermaniumApi.getGermanium().getMouse(),
+                            (Locatable) fromElement));
+        } else {
+            action = mouseMove(fromSelector, fromPoint, null)
+                    .addAction(new ClickAndHoldAction(
+                            GermaniumApi.getGermanium().getMouse(),
+                            null));
+        }
+
+        WebElement toElement = elementOrNull(toSelector, toPoint);
+
+        if (toElement != null) {
+            action = mouseMove(toElement, null, action)
+                    .addAction(new ButtonReleaseAction(
+                            GermaniumApi.getGermanium().getMouse(),
+                            (Locatable) toElement));
+        } else {
+            action = mouseMove(toSelector, toPoint, action)
+                    .addAction(new ButtonReleaseAction(
+                            GermaniumApi.getGermanium().getMouse(),
+                            null));
+        }
+
+        action.perform();
     }
 }

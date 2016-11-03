@@ -153,6 +153,74 @@ public class GermaniumActions {
                 offset);
     }
 
+    public static void dragAndDrop(String fromSelector, String toSelector) {
+        MouseActions.dragAndDrop(fromSelector, null, toSelector, null);
+    }
+
+    public static void dragAndDrop(Locator<WebElement> fromSelector, String toSelector) {
+        MouseActions.dragAndDrop(fromSelector, null, toSelector, null);
+    }
+
+    public static void dragAndDrop(WebElement fromSelector, String toSelector) {
+        MouseActions.dragAndDrop(fromSelector, null, toSelector, null);
+    }
+
+    public static void dragAndDrop(Point fromSelector, String toSelector) {
+        MouseActions.dragAndDrop(fromSelector, null, toSelector, null);
+    }
+
+    public static void dragAndDrop(String fromSelector, Locator<WebElement> toSelector) {
+        MouseActions.dragAndDrop(fromSelector, null, toSelector, null);
+    }
+
+    public static void dragAndDrop(Locator<WebElement> fromSelector, Locator<WebElement> toSelector) {
+        MouseActions.dragAndDrop(fromSelector, null, toSelector, null);
+    }
+
+    public static void dragAndDrop(WebElement fromSelector, Locator<WebElement> toSelector) {
+        MouseActions.dragAndDrop(fromSelector, null, toSelector, null);
+    }
+
+    public static void dragAndDrop(Point fromSelector, Locator<WebElement> toSelector) {
+        MouseActions.dragAndDrop(fromSelector, null, toSelector, null);
+    }
+
+    public static void dragAndDrop(String fromSelector, WebElement toSelector) {
+        MouseActions.dragAndDrop(fromSelector, null, toSelector, null);
+    }
+
+    public static void dragAndDrop(Locator<WebElement> fromSelector, WebElement toSelector) {
+        MouseActions.dragAndDrop(fromSelector, null, toSelector, null);
+    }
+
+    public static void dragAndDrop(WebElement fromSelector, WebElement toSelector) {
+        MouseActions.dragAndDrop(fromSelector, null, toSelector, null);
+    }
+
+    public static void dragAndDrop(Point fromSelector, WebElement toSelector) {
+        MouseActions.dragAndDrop(fromSelector, null, toSelector, null);
+    }
+
+    public static void dragAndDrop(String fromSelector, Point toSelector) {
+        MouseActions.dragAndDrop(fromSelector, null, toSelector, null);
+    }
+
+    public static void dragAndDrop(Locator<WebElement> fromSelector, Point toSelector) {
+        MouseActions.dragAndDrop(fromSelector, null, toSelector, null);
+    }
+
+    public static void dragAndDrop(WebElement fromSelector, Point toSelector) {
+        MouseActions.dragAndDrop(fromSelector, null, toSelector, null);
+    }
+
+    public static void dragAndDrop(Point fromSelector, Point toSelector) {
+        MouseActions.dragAndDrop(fromSelector, null, toSelector, null);
+    }
+
+    public static void dragAndDrop(Object fromSelector, Point fromPoint,
+                                   Object toSelector, Point toPoint) {
+        MouseActions.dragAndDrop(fromSelector, fromPoint, toSelector, toPoint);
+    }
 
     public static void typeKeys(String keys) {
         TypeKeys.typeKeys(keys, null, 0);
