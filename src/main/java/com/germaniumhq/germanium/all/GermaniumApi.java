@@ -4,6 +4,7 @@ import com.germaniumhq.germanium.GermaniumDriver;
 import com.germaniumhq.germanium.all.operations.ChildNodes;
 import com.germaniumhq.germanium.all.operations.OpenBrowser;
 import com.germaniumhq.germanium.all.operations.actions.GetAttributes;
+import com.germaniumhq.germanium.all.operations.actions.GetStyle;
 import com.germaniumhq.germanium.all.operations.actions.GetText;
 import com.germaniumhq.germanium.all.operations.actions.GetValue;
 import com.germaniumhq.germanium.locators.Locator;
@@ -196,5 +197,37 @@ public class GermaniumApi {
 
     public static Map<String, String> getAttributes(Selector<WebElement> selector, Locator.Visibility visibility) {
         return GetAttributes.getAttributes(selector, visibility);
+    }
+
+    public static String getStyle(String selector, String keyName) {
+        return GetStyle.getStyle(selector, keyName, Locator.Visibility.ONLY_VISIBLE);
+    }
+
+    public static String getStyle(WebElement selector, String keyName) {
+        return GetStyle.getStyle(selector, keyName, Locator.Visibility.ONLY_VISIBLE);
+    }
+
+    public static String getStyle(Locator<WebElement> selector, String keyName) {
+        return GetStyle.getStyle(selector, keyName, Locator.Visibility.ONLY_VISIBLE);
+    }
+
+    public static String getStyle(Selector<WebElement> selector, String keyName) {
+        return GetStyle.getStyle(selector, keyName, Locator.Visibility.ONLY_VISIBLE);
+    }
+
+    public static String getStyle(String selector, String keyName, Locator.Visibility visibility) {
+        return GetStyle.getStyle(selector, keyName, visibility);
+    }
+
+    public static String getStyle(WebElement selector, String keyName, Locator.Visibility visibility) {
+        return GetStyle.getStyle(selector, keyName, visibility);
+    }
+
+    public static String getStyle(Locator<WebElement> selector, String keyName, Locator.Visibility visibility) {
+        return GetStyle.getStyle(selector, keyName, visibility);
+    }
+
+    public static String getStyle(Selector<WebElement> selector, String keyName, Locator.Visibility visibility) {
+        return GetStyle.getStyle(selector, keyName, visibility);
     }
 }
