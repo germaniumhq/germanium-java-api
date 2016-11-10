@@ -3,6 +3,7 @@ package com.germaniumhq.germanium.all;
 import com.germaniumhq.germanium.GermaniumDriver;
 import com.germaniumhq.germanium.all.operations.ChildNodes;
 import com.germaniumhq.germanium.all.operations.OpenBrowser;
+import com.germaniumhq.germanium.all.operations.ParentNode;
 import com.germaniumhq.germanium.all.operations.actions.GetAttributes;
 import com.germaniumhq.germanium.all.operations.actions.GetStyle;
 import com.germaniumhq.germanium.all.operations.actions.GetText;
@@ -166,6 +167,22 @@ public class GermaniumApi {
 
     public static List<WebElement> childNodes(Locator<WebElement> selector, ChildNodes.ElementType nodeType) {
         return ChildNodes.getChildNodes(selector, nodeType);
+    }
+
+    public static WebElement parentNode(String selector) {
+        return ParentNode.parentNode(selector);
+    }
+
+    public static WebElement parentNode(WebElement selector) {
+        return ParentNode.parentNode(selector);
+    }
+
+    public static WebElement parentNode(Locator<WebElement> selector) {
+        return ParentNode.parentNode(selector);
+    }
+
+    public static WebElement parentNode(Selector<WebElement> selector) {
+        return ParentNode.parentNode(selector);
     }
 
     public static Map<String, String> getAttributes(String selector) {
