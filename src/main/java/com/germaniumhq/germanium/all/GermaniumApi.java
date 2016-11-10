@@ -4,11 +4,13 @@ import com.germaniumhq.germanium.GermaniumDriver;
 import com.germaniumhq.germanium.all.operations.ChildNodes;
 import com.germaniumhq.germanium.all.operations.OpenBrowser;
 import com.germaniumhq.germanium.all.operations.ParentNode;
+import com.germaniumhq.germanium.all.operations.actions.Deselect;
 import com.germaniumhq.germanium.all.operations.actions.GetAttributes;
 import com.germaniumhq.germanium.all.operations.actions.GetStyle;
 import com.germaniumhq.germanium.all.operations.actions.GetText;
 import com.germaniumhq.germanium.all.operations.actions.GetValue;
 import com.germaniumhq.germanium.all.operations.actions.Highlight;
+import com.germaniumhq.germanium.all.operations.actions.Select;
 import com.germaniumhq.germanium.locators.Locator;
 import com.germaniumhq.germanium.selectors.Selector;
 import org.openqa.selenium.WebElement;
@@ -67,8 +69,8 @@ public class GermaniumApi {
      * Sets the current instance of germanium to the given one,
      * and returns the old one that was set previously.
      *
-     * @param germanium
-     * @return
+     * @param germanium The germanium instance to use.
+     * @return The old instance if present. Null if no other instance was there.
      */
     public static GermaniumDriver setGermanium(GermaniumDriver germanium) {
         GermaniumDriver oldInstance = INSTANCE;
@@ -85,7 +87,7 @@ public class GermaniumApi {
         INSTANCE = null;
     }
 
-    public static <T> T js(String code, Object ... parameters) {
+    public static <T> T js(String code, Object... parameters) {
         return getGermanium().js(code, parameters);
     }
 
@@ -296,5 +298,101 @@ public class GermaniumApi {
     public static void highlight(Selector<WebElement> selector, Highlight.Console console, float showHighLightSeconds, float blinkDurationSeconds) {
         Highlight.highlight(selector, console, showHighLightSeconds, blinkDurationSeconds);
     }
-}
 
+    public static void select(String selector, String... text) {
+        Select.select(selector, text);
+    }
+
+    public static void select(WebElement selector, String... text) {
+        Select.select(selector, text);
+    }
+
+    public static void select(Locator<WebElement> selector, String... text) {
+        Select.select(selector, text);
+    }
+
+    public static void select(Selector<WebElement> selector, String... text) {
+        Select.select(selector, text);
+    }
+
+    public static void selectByIndex(String selector, int... indexes) {
+        Select.selectByIndex(selector, indexes);
+    }
+
+    public static void selectByIndex(WebElement selector, int... indexes) {
+        Select.selectByIndex(selector, indexes);
+    }
+
+    public static void selectByIndex(Locator<WebElement> selector, int... indexes) {
+        Select.selectByIndex(selector, indexes);
+    }
+
+    public static void selectByIndex(Selector<WebElement> selector, int... indexes) {
+        Select.selectByIndex(selector, indexes);
+    }
+
+    public static void selectByValue(String selector, String... values) {
+        Select.selectByValue(selector, values);
+    }
+
+    public static void selectByValue(WebElement selector, String... values) {
+        Select.selectByValue(selector, values);
+    }
+
+    public static void selectByValue(Locator<WebElement> selector, String... values) {
+        Select.selectByValue(selector, values);
+    }
+
+    public static void selectByValue(Selector<WebElement> selector, String... values) {
+        Select.selectByValue(selector, values);
+    }
+
+    //
+    public static void deselect(String selector, String... text) {
+        Deselect.deselect(selector, text);
+    }
+
+    public static void deselect(WebElement selector, String... text) {
+        Deselect.deselect(selector, text);
+    }
+
+    public static void deselect(Locator<WebElement> selector, String... text) {
+        Deselect.deselect(selector, text);
+    }
+
+    public static void deselect(Selector<WebElement> selector, String... text) {
+        Deselect.deselect(selector, text);
+    }
+
+    public static void deselectByIndex(String selector, int... indexes) {
+        Deselect.deselectByIndex(selector, indexes);
+    }
+
+    public static void deselectByIndex(WebElement selector, int... indexes) {
+        Deselect.deselectByIndex(selector, indexes);
+    }
+
+    public static void deselectByIndex(Locator<WebElement> selector, int... indexes) {
+        Deselect.deselectByIndex(selector, indexes);
+    }
+
+    public static void deselectByIndex(Selector<WebElement> selector, int... indexes) {
+        Deselect.deselectByIndex(selector, indexes);
+    }
+
+    public static void deselectByValue(String selector, String... values) {
+        Deselect.deselectByValue(selector, values);
+    }
+
+    public static void deselectByValue(WebElement selector, String... values) {
+        Deselect.deselectByValue(selector, values);
+    }
+
+    public static void deselectByValue(Locator<WebElement> selector, String... values) {
+        Deselect.deselectByValue(selector, values);
+    }
+
+    public static void deselectByValue(Selector<WebElement> selector, String... values) {
+        Deselect.deselectByValue(selector, values);
+    }
+}
