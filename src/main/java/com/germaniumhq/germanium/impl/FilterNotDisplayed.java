@@ -52,7 +52,7 @@ public class FilterNotDisplayed {
      * @param element
      * @return
      */
-    private static boolean isWebElementDisplayed(WebElement element) {
+    public static boolean isWebElementDisplayed(WebElement element) {
         try {
             if (element.isDisplayed()) {
                 return true;

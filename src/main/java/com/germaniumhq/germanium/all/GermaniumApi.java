@@ -7,6 +7,7 @@ import com.germaniumhq.germanium.all.operations.actions.GetAttributes;
 import com.germaniumhq.germanium.all.operations.actions.GetStyle;
 import com.germaniumhq.germanium.all.operations.actions.GetText;
 import com.germaniumhq.germanium.all.operations.actions.GetValue;
+import com.germaniumhq.germanium.all.operations.actions.Highlight;
 import com.germaniumhq.germanium.locators.Locator;
 import com.germaniumhq.germanium.selectors.Selector;
 import org.openqa.selenium.WebElement;
@@ -230,4 +231,53 @@ public class GermaniumApi {
     public static String getStyle(Selector<WebElement> selector, String keyName, Locator.Visibility visibility) {
         return GetStyle.getStyle(selector, keyName, visibility);
     }
+
+    public static void highlight(String selector) {
+        Highlight.highlight(selector, Highlight.Console.NONE, Highlight.DEFAULT_SHOW_HIGHLIGHT_SECONDS, Highlight.DEFAULT_BLINK_DURATION_SECONDS);
+    }
+
+    public static void highlight(WebElement selector) {
+        Highlight.highlight(selector, Highlight.Console.NONE, Highlight.DEFAULT_SHOW_HIGHLIGHT_SECONDS, Highlight.DEFAULT_BLINK_DURATION_SECONDS);
+    }
+
+    public static void highlight(Locator<WebElement> selector) {
+        Highlight.highlight(selector, Highlight.Console.NONE, Highlight.DEFAULT_SHOW_HIGHLIGHT_SECONDS, Highlight.DEFAULT_BLINK_DURATION_SECONDS);
+    }
+
+    public static void highlight(Selector<WebElement> selector) {
+        Highlight.highlight(selector, Highlight.Console.NONE, Highlight.DEFAULT_SHOW_HIGHLIGHT_SECONDS, Highlight.DEFAULT_BLINK_DURATION_SECONDS);
+    }
+
+    public static void highlight(String selector, Highlight.Console console) {
+        Highlight.highlight(selector, console, Highlight.DEFAULT_SHOW_HIGHLIGHT_SECONDS, Highlight.DEFAULT_BLINK_DURATION_SECONDS);
+    }
+
+    public static void highlight(WebElement selector, Highlight.Console console) {
+        Highlight.highlight(selector, console, Highlight.DEFAULT_SHOW_HIGHLIGHT_SECONDS, Highlight.DEFAULT_BLINK_DURATION_SECONDS);
+    }
+
+    public static void highlight(Locator<WebElement> selector, Highlight.Console console) {
+        Highlight.highlight(selector, console, Highlight.DEFAULT_SHOW_HIGHLIGHT_SECONDS, Highlight.DEFAULT_BLINK_DURATION_SECONDS);
+    }
+
+    public static void highlight(Selector<WebElement> selector, Highlight.Console console) {
+        Highlight.highlight(selector, console, Highlight.DEFAULT_SHOW_HIGHLIGHT_SECONDS, Highlight.DEFAULT_BLINK_DURATION_SECONDS);
+    }
+
+    public static void highlight(String selector, Highlight.Console console, float showHighLightSeconds, float blinkDurationSeconds) {
+        Highlight.highlight(selector, console, showHighLightSeconds, blinkDurationSeconds);
+    }
+
+    public static void highlight(WebElement selector, Highlight.Console console, float showHighLightSeconds, float blinkDurationSeconds) {
+        Highlight.highlight(selector, console, showHighLightSeconds, blinkDurationSeconds);
+    }
+
+    public static void highlight(Locator<WebElement> selector, Highlight.Console console, float showHighLightSeconds, float blinkDurationSeconds) {
+        Highlight.highlight(selector, console, showHighLightSeconds, blinkDurationSeconds);
+    }
+
+    public static void highlight(Selector<WebElement> selector, Highlight.Console console, float showHighLightSeconds, float blinkDurationSeconds) {
+        Highlight.highlight(selector, console, showHighLightSeconds, blinkDurationSeconds);
+    }
 }
+
