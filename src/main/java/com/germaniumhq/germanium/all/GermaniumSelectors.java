@@ -8,6 +8,7 @@ import com.germaniumhq.germanium.selectors.Css;
 import com.germaniumhq.germanium.selectors.Element;
 import com.germaniumhq.germanium.selectors.Image;
 import com.germaniumhq.germanium.selectors.Input;
+import com.germaniumhq.germanium.selectors.InputFile;
 import com.germaniumhq.germanium.selectors.InputText;
 import com.germaniumhq.germanium.selectors.JsSelector;
 import com.germaniumhq.germanium.selectors.Link;
@@ -61,6 +62,14 @@ public class GermaniumSelectors {
 
     public static Input Input() {
         return new Input();
+    }
+
+    public static InputFile InputFile() {
+        return new InputFile();
+    }
+
+    public static InputFile InputFile(String name) {
+        return new InputFile(name);
     }
 
     public static InputText InputText() {

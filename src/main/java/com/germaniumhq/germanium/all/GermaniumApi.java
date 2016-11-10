@@ -11,6 +11,7 @@ import com.germaniumhq.germanium.all.operations.actions.GetText;
 import com.germaniumhq.germanium.all.operations.actions.GetValue;
 import com.germaniumhq.germanium.all.operations.actions.Highlight;
 import com.germaniumhq.germanium.all.operations.actions.Select;
+import com.germaniumhq.germanium.all.operations.actions.SelectFile;
 import com.germaniumhq.germanium.locators.Locator;
 import com.germaniumhq.germanium.selectors.Selector;
 import org.openqa.selenium.WebElement;
@@ -345,6 +346,34 @@ public class GermaniumApi {
 
     public static void selectByValue(Selector<WebElement> selector, String... values) {
         Select.selectByValue(selector, values);
+    }
+
+    public static void selectFile(String selector, String fileName) {
+        SelectFile.selectFile(selector, fileName, SelectFile.CheckPath.CHECK);
+    }
+
+    public static void selectFile(WebElement selector, String fileName) {
+        SelectFile.selectFile(selector, fileName, SelectFile.CheckPath.CHECK);
+    }
+
+    public static void selectFile(Locator<WebElement> selector, String fileName) {
+        SelectFile.selectFile(selector, fileName, SelectFile.CheckPath.CHECK);
+    }
+
+    public static void selectFile(String selector, String fileName, SelectFile.CheckPath checkPath) {
+        SelectFile.selectFile(selector, fileName, checkPath);
+    }
+
+    public static void selectFile(WebElement selector, String fileName, SelectFile.CheckPath checkPath) {
+        SelectFile.selectFile(selector, fileName, checkPath);
+    }
+
+    public static void selectFile(Selector<WebElement> selector, String fileName, SelectFile.CheckPath checkPath) {
+        SelectFile.selectFile(selector, fileName, checkPath);
+    }
+
+    public static void selectFile(Locator<WebElement> selector, String fileName, SelectFile.CheckPath checkPath) {
+        SelectFile.selectFile(selector, fileName, checkPath);
     }
 
     //

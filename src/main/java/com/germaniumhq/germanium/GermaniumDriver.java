@@ -85,7 +85,7 @@ public class GermaniumDriver implements WebDriver, JavascriptExecutor, TakesScre
         this.waitForPageToLoad(timeout);
     }
 
-    private void waitForPageToLoad(float timeout) {
+    public void waitForPageToLoad(float timeout) {
         AlertChecker alertChecker = new AlertChecker(this);
 
         new Wait(timeout).waitFor(
