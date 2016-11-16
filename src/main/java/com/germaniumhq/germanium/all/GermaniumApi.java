@@ -34,36 +34,31 @@ public class GermaniumApi {
         return INSTANCE;
     }
 
+    public static Locator<WebElement> S(String selector) {
+        return GermaniumApi.getGermanium().S(selector);
+    }
+
     public static Locator<WebElement> S(WebElement element) {
         return GermaniumApi.getGermanium().S(element);
     }
 
-    public static Locator<WebElement> S(WebElement element, GermaniumDriver germanium) {
-        return germanium.S(element);
-    }
-
-    public static <T> Locator<T> S(Selector<T> selector) {
+    public static <T> Locator<WebElement> S(Supplier<T> selector) {
+        // this captures also Selector/Locator/Supplier since they all implement Supplier
         return GermaniumApi.getGermanium().S(selector);
     }
 
-    public static <T> Locator<T> S(Selector<T> selector, GermaniumDriver germanium) {
-        return germanium.S(selector);
-    }
-
-    public static <T> Locator<T> S(String selector) {
-        return GermaniumApi.S(selector, GermaniumApi.getGermanium());
-    }
-
-    public static <T> Locator<T> S(String selector, GermaniumDriver germanium) {
-        return germanium.S(selector);
-    }
-
-    public static <T> Locator<T> S(Supplier<?> selector) {
+    public static <T> Locator<T> resolveS(String selector) {
+        // this captures also Selector/Locator/Supplier since they all implement Supplier
         return GermaniumApi.getGermanium().S(selector);
     }
 
-    public static <T> Locator<T> S(Supplier<?> selector, GermaniumDriver germanium) {
-        return germanium.S(selector);
+    public static Locator<WebElement> resolveS(WebElement selector) {
+        return GermaniumApi.getGermanium().S(selector);
+    }
+
+    public static <T> Locator<T> resolveS(Supplier<?> selector) {
+        // this captures also Selector/Locator/Supplier since they all implement Supplier
+        return GermaniumApi.getGermanium().S(selector);
     }
 
     /**

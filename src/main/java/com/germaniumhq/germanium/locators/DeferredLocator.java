@@ -109,4 +109,9 @@ public abstract class DeferredLocator implements Locator<WebElement> {
 
         return this;
     }
+
+    @Override
+    public WebElement get() {
+        return element();
+    }
 }

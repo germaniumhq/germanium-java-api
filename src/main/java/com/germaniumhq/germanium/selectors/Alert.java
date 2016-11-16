@@ -10,17 +10,17 @@ import static com.germaniumhq.germanium.all.Wait.waitFor;
 public class Alert implements Selector<org.openqa.selenium.Alert>, Locator<org.openqa.selenium.Alert> {
     @Override
     public org.openqa.selenium.Alert element() {
-        return GermaniumApi.S(this).element();
+        return GermaniumApi.<org.openqa.selenium.Alert>resolveS(this).element();
     }
 
     @Override
     public org.openqa.selenium.Alert element(Visibility visibility) {
-        return GermaniumApi.S(this).element();
+        return GermaniumApi.<org.openqa.selenium.Alert>resolveS(this).element();
     }
 
     @Override
     public List<org.openqa.selenium.Alert> elementList(Visibility visibility) {
-        return GermaniumApi.S(this).elementList();
+        return GermaniumApi.<org.openqa.selenium.Alert>resolveS(this).elementList();
     }
 
     @Override
@@ -40,29 +40,34 @@ public class Alert implements Selector<org.openqa.selenium.Alert>, Locator<org.o
 
     @Override
     public org.openqa.selenium.Alert elementList(int index) {
-        return GermaniumApi.S(this)
+        return GermaniumApi.<org.openqa.selenium.Alert>resolveS(this)
                 .elementList(index);
     }
 
     @Override
     public List<org.openqa.selenium.Alert> elementList() {
-        return GermaniumApi.S(this)
+        return GermaniumApi.<org.openqa.selenium.Alert>resolveS(this)
                 .elementList();
     }
 
     @Override
     public boolean exists() {
-        return GermaniumApi.S(this).exists();
+        return GermaniumApi.<org.openqa.selenium.Alert>S(this).exists();
     }
 
     @Override
     public boolean notExists() {
-        return GermaniumApi.S(this).notExists();
+        return GermaniumApi.<org.openqa.selenium.Alert>S(this).notExists();
     }
 
     @Override
     public String text() {
-        return GermaniumApi.S(this).text();
+        return GermaniumApi.<org.openqa.selenium.Alert>S(this).text();
+    }
+
+    @Override
+    public org.openqa.selenium.Alert get() {
+        return element();
     }
 
     public void accept() {

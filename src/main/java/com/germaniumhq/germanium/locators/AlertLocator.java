@@ -93,4 +93,8 @@ public class AlertLocator implements Locator<Alert> {
         return germanium.switchTo().alert().getText();
     }
 
+    @Override
+    public Alert get() {
+        return element();
+    }
 }

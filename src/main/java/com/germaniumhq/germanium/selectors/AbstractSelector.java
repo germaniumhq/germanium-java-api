@@ -187,4 +187,9 @@ public abstract class AbstractSelector implements Locator<WebElement>, Selector<
     public String text(Visibility visibility) {
         return GermaniumApi.getGermanium().S(this).text(visibility);
     }
+
+    @Override
+    public WebElement get() {
+        return element();
+    }
 }

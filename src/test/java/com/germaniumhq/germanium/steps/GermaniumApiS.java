@@ -49,9 +49,7 @@ public class GermaniumApiS {
 
     @When("^I search using a callable that returns a CssSelector '(.*?)'$")
     public void i_search_using_a_callable_that_returns_a_CssSelector(String selector) throws Throwable {
-        WebElement element = GermaniumApi.<WebElement>S(() -> {
-            return Css(selector);
-        }).element();
+        WebElement element = GermaniumApi.S(() -> Css(selector)).element();
 
         Context.set("found_element", element);
     }

@@ -65,4 +65,9 @@ public class WindowLocator implements Locator<WebDriverWindow> {
     public String text(Visibility visibility) {
         return null;
     }
+
+    @Override
+    public WebDriverWindow get() {
+        return element();
+    }
 }

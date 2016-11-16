@@ -2,6 +2,7 @@ package com.germaniumhq.germanium.locators;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * A locator is code bounded to a browser instance
@@ -10,7 +11,7 @@ import java.util.List;
  *
  * @param <T>
  */
-public interface Locator<T> extends Iterable<T> {
+public interface Locator<T> extends Iterable<T>, Supplier<T> {
     public enum Visibility {
         ONLY_VISIBLE,
         ALL_ELEMENTS
