@@ -95,12 +95,8 @@ public class GermaniumApi {
         return GetValue.getValue(element);
     }
 
-    public static String getValue(Selector<WebElement> selector) {
+    public static String getValue(Supplier<WebElement> selector) {
         return GetValue.getValue(selector);
-    }
-
-    public static String getValue(Locator<WebElement> locator) {
-        return GetValue.getValue(locator);
     }
 
     public static String getText(String selector) {
@@ -111,11 +107,7 @@ public class GermaniumApi {
         return GetText.getText(element);
     }
 
-    public static String getText(Selector<WebElement> selector) {
-        return GetText.getText(selector);
-    }
-
-    public static String getText(Locator<WebElement> locator) {
+    public static String getText(Supplier<WebElement> locator) {
         return GetText.getText(locator);
     }
 
@@ -127,12 +119,8 @@ public class GermaniumApi {
         return GetValue.getValueAll(element);
     }
 
-    public static List<String> getValueAll(Selector<WebElement> selector) {
+    public static List<String> getValueAll(Supplier<WebElement> selector) {
         return GetValue.getValueAll(selector);
-    }
-
-    public static List<String> getValueAll(Locator<WebElement> locator) {
-        return GetValue.getValueAll(locator);
     }
 
     public static List<WebElement> childNodes(String selector) {
@@ -143,11 +131,7 @@ public class GermaniumApi {
         return ChildNodes.getChildNodes(selector, ChildNodes.ElementType.ONLY_ELEMENTS);
     }
 
-    public static List<WebElement> childNodes(Selector<WebElement> selector) {
-        return ChildNodes.getChildNodes(selector, ChildNodes.ElementType.ONLY_ELEMENTS);
-    }
-
-    public static List<WebElement> childNodes(Locator<WebElement> selector) {
+    public static List<WebElement> childNodes(Supplier<WebElement> selector) {
         return ChildNodes.getChildNodes(selector, ChildNodes.ElementType.ONLY_ELEMENTS);
     }
 
@@ -159,11 +143,7 @@ public class GermaniumApi {
         return ChildNodes.getChildNodes(selector, nodeType);
     }
 
-    public static List<WebElement> childNodes(Selector<WebElement> selector, ChildNodes.ElementType nodeType) {
-        return ChildNodes.getChildNodes(selector, nodeType);
-    }
-
-    public static List<WebElement> childNodes(Locator<WebElement> selector, ChildNodes.ElementType nodeType) {
+    public static List<WebElement> childNodes(Supplier<WebElement> selector, ChildNodes.ElementType nodeType) {
         return ChildNodes.getChildNodes(selector, nodeType);
     }
 
@@ -175,11 +155,7 @@ public class GermaniumApi {
         return ParentNode.parentNode(selector);
     }
 
-    public static WebElement parentNode(Locator<WebElement> selector) {
-        return ParentNode.parentNode(selector);
-    }
-
-    public static WebElement parentNode(Selector<WebElement> selector) {
+    public static WebElement parentNode(Supplier<WebElement> selector) {
         return ParentNode.parentNode(selector);
     }
 
@@ -191,11 +167,7 @@ public class GermaniumApi {
         return GetAttributes.getAttributes(selector, Locator.Visibility.ONLY_VISIBLE);
     }
 
-    public static Map<String, String> getAttributes(Locator<WebElement> selector) {
-        return GetAttributes.getAttributes(selector, Locator.Visibility.ONLY_VISIBLE);
-    }
-
-    public static Map<String, String> getAttributes(Selector<WebElement> selector) {
+    public static Map<String, String> getAttributes(Supplier<WebElement> selector) {
         return GetAttributes.getAttributes(selector, Locator.Visibility.ONLY_VISIBLE);
     }
 
@@ -207,11 +179,7 @@ public class GermaniumApi {
         return GetAttributes.getAttributes(selector, visibility);
     }
 
-    public static Map<String, String> getAttributes(Locator<WebElement> selector, Locator.Visibility visibility) {
-        return GetAttributes.getAttributes(selector, visibility);
-    }
-
-    public static Map<String, String> getAttributes(Selector<WebElement> selector, Locator.Visibility visibility) {
+    public static Map<String, String> getAttributes(Supplier<WebElement> selector, Locator.Visibility visibility) {
         return GetAttributes.getAttributes(selector, visibility);
     }
 
@@ -239,11 +207,7 @@ public class GermaniumApi {
         return GetStyle.getStyle(selector, keyName, visibility);
     }
 
-    public static String getStyle(Locator<WebElement> selector, String keyName, Locator.Visibility visibility) {
-        return GetStyle.getStyle(selector, keyName, visibility);
-    }
-
-    public static String getStyle(Selector<WebElement> selector, String keyName, Locator.Visibility visibility) {
+    public static String getStyle(Supplier<WebElement> selector, String keyName, Locator.Visibility visibility) {
         return GetStyle.getStyle(selector, keyName, visibility);
     }
 
@@ -255,11 +219,7 @@ public class GermaniumApi {
         Highlight.highlight(selector, Highlight.Console.NONE, Highlight.DEFAULT_SHOW_HIGHLIGHT_SECONDS, Highlight.DEFAULT_BLINK_DURATION_SECONDS);
     }
 
-    public static void highlight(Locator<WebElement> selector) {
-        Highlight.highlight(selector, Highlight.Console.NONE, Highlight.DEFAULT_SHOW_HIGHLIGHT_SECONDS, Highlight.DEFAULT_BLINK_DURATION_SECONDS);
-    }
-
-    public static void highlight(Selector<WebElement> selector) {
+    public static void highlight(Supplier<WebElement> selector) {
         Highlight.highlight(selector, Highlight.Console.NONE, Highlight.DEFAULT_SHOW_HIGHLIGHT_SECONDS, Highlight.DEFAULT_BLINK_DURATION_SECONDS);
     }
 
@@ -271,11 +231,7 @@ public class GermaniumApi {
         Highlight.highlight(selector, console, Highlight.DEFAULT_SHOW_HIGHLIGHT_SECONDS, Highlight.DEFAULT_BLINK_DURATION_SECONDS);
     }
 
-    public static void highlight(Locator<WebElement> selector, Highlight.Console console) {
-        Highlight.highlight(selector, console, Highlight.DEFAULT_SHOW_HIGHLIGHT_SECONDS, Highlight.DEFAULT_BLINK_DURATION_SECONDS);
-    }
-
-    public static void highlight(Selector<WebElement> selector, Highlight.Console console) {
+    public static void highlight(Supplier<WebElement> selector, Highlight.Console console) {
         Highlight.highlight(selector, console, Highlight.DEFAULT_SHOW_HIGHLIGHT_SECONDS, Highlight.DEFAULT_BLINK_DURATION_SECONDS);
     }
 
@@ -287,11 +243,7 @@ public class GermaniumApi {
         Highlight.highlight(selector, console, showHighLightSeconds, blinkDurationSeconds);
     }
 
-    public static void highlight(Locator<WebElement> selector, Highlight.Console console, float showHighLightSeconds, float blinkDurationSeconds) {
-        Highlight.highlight(selector, console, showHighLightSeconds, blinkDurationSeconds);
-    }
-
-    public static void highlight(Selector<WebElement> selector, Highlight.Console console, float showHighLightSeconds, float blinkDurationSeconds) {
+    public static void highlight(Supplier<WebElement> selector, Highlight.Console console, float showHighLightSeconds, float blinkDurationSeconds) {
         Highlight.highlight(selector, console, showHighLightSeconds, blinkDurationSeconds);
     }
 
@@ -303,11 +255,7 @@ public class GermaniumApi {
         Select.select(selector, text);
     }
 
-    public static void select(Locator<WebElement> selector, String... text) {
-        Select.select(selector, text);
-    }
-
-    public static void select(Selector<WebElement> selector, String... text) {
+    public static void select(Supplier<WebElement> selector, String... text) {
         Select.select(selector, text);
     }
 
@@ -319,11 +267,7 @@ public class GermaniumApi {
         Select.selectByIndex(selector, indexes);
     }
 
-    public static void selectByIndex(Locator<WebElement> selector, int... indexes) {
-        Select.selectByIndex(selector, indexes);
-    }
-
-    public static void selectByIndex(Selector<WebElement> selector, int... indexes) {
+    public static void selectByIndex(Supplier<WebElement> selector, int... indexes) {
         Select.selectByIndex(selector, indexes);
     }
 
@@ -335,11 +279,7 @@ public class GermaniumApi {
         Select.selectByValue(selector, values);
     }
 
-    public static void selectByValue(Locator<WebElement> selector, String... values) {
-        Select.selectByValue(selector, values);
-    }
-
-    public static void selectByValue(Selector<WebElement> selector, String... values) {
+    public static void selectByValue(Supplier<WebElement> selector, String... values) {
         Select.selectByValue(selector, values);
     }
 
@@ -351,7 +291,7 @@ public class GermaniumApi {
         SelectFile.selectFile(selector, fileName, SelectFile.CheckPath.CHECK);
     }
 
-    public static void selectFile(Locator<WebElement> selector, String fileName) {
+    public static void selectFile(Supplier<WebElement> selector, String fileName) {
         SelectFile.selectFile(selector, fileName, SelectFile.CheckPath.CHECK);
     }
 
@@ -363,11 +303,7 @@ public class GermaniumApi {
         SelectFile.selectFile(selector, fileName, checkPath);
     }
 
-    public static void selectFile(Selector<WebElement> selector, String fileName, SelectFile.CheckPath checkPath) {
-        SelectFile.selectFile(selector, fileName, checkPath);
-    }
-
-    public static void selectFile(Locator<WebElement> selector, String fileName, SelectFile.CheckPath checkPath) {
+    public static void selectFile(Supplier<WebElement> selector, String fileName, SelectFile.CheckPath checkPath) {
         SelectFile.selectFile(selector, fileName, checkPath);
     }
 
@@ -380,11 +316,7 @@ public class GermaniumApi {
         Deselect.deselect(selector, text);
     }
 
-    public static void deselect(Locator<WebElement> selector, String... text) {
-        Deselect.deselect(selector, text);
-    }
-
-    public static void deselect(Selector<WebElement> selector, String... text) {
+    public static void deselect(Supplier<WebElement> selector, String... text) {
         Deselect.deselect(selector, text);
     }
 
@@ -396,11 +328,7 @@ public class GermaniumApi {
         Deselect.deselectByIndex(selector, indexes);
     }
 
-    public static void deselectByIndex(Locator<WebElement> selector, int... indexes) {
-        Deselect.deselectByIndex(selector, indexes);
-    }
-
-    public static void deselectByIndex(Selector<WebElement> selector, int... indexes) {
+    public static void deselectByIndex(Supplier<WebElement> selector, int... indexes) {
         Deselect.deselectByIndex(selector, indexes);
     }
 
@@ -412,11 +340,7 @@ public class GermaniumApi {
         Deselect.deselectByValue(selector, values);
     }
 
-    public static void deselectByValue(Locator<WebElement> selector, String... values) {
-        Deselect.deselectByValue(selector, values);
-    }
-
-    public static void deselectByValue(Selector<WebElement> selector, String... values) {
+    public static void deselectByValue(Supplier<WebElement> selector, String... values) {
         Deselect.deselectByValue(selector, values);
     }
 }
