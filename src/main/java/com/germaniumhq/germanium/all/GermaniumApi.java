@@ -14,6 +14,7 @@ import com.germaniumhq.germanium.all.operations.actions.Select;
 import com.germaniumhq.germanium.all.operations.actions.SelectFile;
 import com.germaniumhq.germanium.locators.Locator;
 import com.germaniumhq.germanium.selectors.Selector;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
@@ -342,5 +343,9 @@ public class GermaniumApi {
 
     public static void deselectByValue(Supplier<WebElement> selector, String... values) {
         Deselect.deselectByValue(selector, values);
+    }
+
+    public static WebDriver getWebDriver() {
+        return getGermanium().getWebDriver();
     }
 }

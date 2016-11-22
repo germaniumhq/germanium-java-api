@@ -1,6 +1,8 @@
 package com.germaniumhq.germanium.all;
 
 import com.germaniumhq.germanium.GermaniumDriver;
+import com.germaniumhq.germanium.locators.WebDriverWindow;
+import com.germaniumhq.germanium.selectors.Window;
 
 import java.util.function.Supplier;
 
@@ -75,4 +77,19 @@ public class GermaniumIFrame {
         }
     }
 
+    public static void useWindow(String windowTitle) {
+        useWindow(new Window().title(windowTitle));
+    }
+
+    public static void useWindow(Window window) {
+        if (window.getId() != null) {
+            GermaniumApi.getGermanium().switchTo().window(window.getId());
+        }
+
+
+        WebDriverWindow webDriverWindow = window.get();
+        GermaniumApi.getGermanium().switchTo().window(
+                webDriverWindow.getId()
+        );
+    }
 }

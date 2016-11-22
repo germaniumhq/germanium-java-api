@@ -151,7 +151,7 @@ public class CreateLocator {
         }
 
         if (selector instanceof Window) {
-            return (Locator<T>) new WindowLocator(germanium, (Window) selector);
+            return (Locator<T>) new WindowLocator((Window) selector);
         }
 
         if (selector instanceof Supplier) {
