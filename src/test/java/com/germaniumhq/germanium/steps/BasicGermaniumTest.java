@@ -10,7 +10,10 @@ import static com.germaniumhq.germanium.all.GermaniumActions.click;
 import static com.germaniumhq.germanium.all.GermaniumActions.typeKeys;
 import static com.germaniumhq.germanium.all.GermaniumApi.S;
 import static com.germaniumhq.germanium.all.GermaniumApi.getValue;
+import static com.germaniumhq.germanium.all.GermaniumSelectors.Element;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class BasicGermaniumTest {
     @Given("^I click on '(.*?)'$")
@@ -45,4 +48,15 @@ public class BasicGermaniumTest {
         typeKeys(keys, S(selector), 0.2f);
     }
 
+
+    @Then("^the text of the page doesn't contain '(.*?)'$")
+    public void the_text_of_the_page_doesn_t_contain_button_clicked(String searchedText) throws Throwable {
+        assertFalse(Element("body").text().contains(searchedText));
+    }
+
+
+    @Then("^the text of the page contains '(.*?)'$")
+    public void the_text_of_the_page_contains_text(String searchedText) throws Throwable {
+        assertTrue(Element("body").text().contains(searchedText));
+    }
 }

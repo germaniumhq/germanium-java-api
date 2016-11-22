@@ -1,5 +1,8 @@
 package com.germaniumhq.germanium.all;
 
+import com.germaniumhq.germanium.util.Waited;
+import org.openqa.selenium.WebElement;
+
 import java.util.function.Supplier;
 
 public class Wait {
@@ -37,5 +40,15 @@ public class Wait {
      */
     public static void waitFor(float timeout, Supplier<?>...conditions) {
         new com.germaniumhq.germanium.util.Wait(timeout).waitFor(conditions);
+    }
+
+    public static WebElement waited(Supplier<?>...conditions) {
+        return new Waited(com.germaniumhq.germanium.util.Wait.DEFAULT_TIMEOUT_IN_SECONDS)
+                .waitFor(conditions);
+    }
+
+    public static WebElement waited(float timeout, Supplier<?>...conditions) {
+        return new Waited(timeout)
+                .waitFor(conditions);
     }
 }
