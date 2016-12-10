@@ -80,7 +80,10 @@ public class GermaniumApi {
      * Close the currently running browser.
      */
     public static void closeBrowser() {
-        INSTANCE.close();
+        if (INSTANCE != null) {
+            INSTANCE.close();
+        }
+
         INSTANCE = null;
     }
 
