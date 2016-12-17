@@ -90,6 +90,8 @@ public class OpenBrowser {
                 remoteCapabilites = DesiredCapabilities.chrome();
             } else if ("ie".equalsIgnoreCase(remoteBrowser)) {
                 remoteCapabilites = DesiredCapabilities.internetExplorer();
+            } else if ("edge".equalsIgnoreCase(remoteBrowser)) {
+                remoteCapabilites = DesiredCapabilities.edge();
             } else {
                 return throwUnknownBrowser();
             }
@@ -102,6 +104,8 @@ public class OpenBrowser {
             webDriver = openLocalChrome();
         } else if ("ie".equalsIgnoreCase(browser)) {
             webDriver = openLocalIe();
+        } else if ("edge".equalsIgnoreCase(browser)) {
+            webDriver = openLocalEdge();
         } else {
             return throwUnknownBrowser();
         }
@@ -114,6 +118,10 @@ public class OpenBrowser {
     }
 
     private WebDriver openLocalIe() {
+        throw new IllegalStateException("Not implemented");
+    }
+
+    private WebDriver openLocalEdge() {
         throw new IllegalStateException("Not implemented");
     }
 

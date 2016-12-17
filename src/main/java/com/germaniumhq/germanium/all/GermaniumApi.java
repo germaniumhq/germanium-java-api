@@ -27,6 +27,10 @@ import java.util.function.Supplier;
 public class GermaniumApi {
     private static GermaniumDriver INSTANCE;
 
+    public static OpenBrowser openBrowser(String browser) {
+        return new OpenBrowser().browser(browser);
+    }
+
     public static OpenBrowser openBrowser() {
         return new OpenBrowser();
     }
