@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 public class InsideFilterLocator extends FilterLocator {
     private final List<Locator<WebElement>> insideFilters;
+    private final List<Locator<WebElement>> outsideFilters;
     private final List<Locator<WebElement>> containingFilters;
     private final List<Locator<WebElement>> containingAllFilters;
     private final boolean withoutChildrenElements;
@@ -23,12 +24,14 @@ public class InsideFilterLocator extends FilterLocator {
     public InsideFilterLocator(GermaniumDriver germanium,
                                DeferredLocator locator,
                                List<Locator<WebElement>> insideFilters,
+                               List<Locator<WebElement>> outsideFilters,
                                List<Locator<WebElement>> containingFilters,
                                List<Locator<WebElement>> containingAllFilters,
                                boolean withoutChildrenElements) {
         super(germanium, null, locator);
 
         this.insideFilters = insideFilters;
+        this.outsideFilters = outsideFilters;
         this.containingFilters = containingFilters;
         this.containingAllFilters = containingAllFilters;
         this.withoutChildrenElements = withoutChildrenElements;
@@ -78,6 +81,11 @@ public class InsideFilterLocator extends FilterLocator {
                     .findElementList();
 
             elements.addAll(insideFoundElements);
+        }
+
+        Set<WebElement> outsideElements = new LinkedHashSet<>();
+        for (Locator<WebElement> outsideFilter : outsideFilters) {
+            outsideElements.addAll(outsideFilter.elementList(Visibility.ALL_ELEMENTS));
         }
 
         Set<WebElement> containingElements = new LinkedHashSet<>();
@@ -147,6 +155,9 @@ public class InsideFilterLocator extends FilterLocator {
         jsArguments.add(0); // FIXME:remove
         jsArguments.add(containingElements.size());
         jsArguments.addAll(containingElements);
+
+        jsArguments.add(outsideElements.size());
+        jsArguments.addAll(outsideElements);
 
         jsArguments.add(containingAllFilters.size()); // groupCount
         jsArguments.add(containingAllElements.size());

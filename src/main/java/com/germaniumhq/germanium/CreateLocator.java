@@ -102,6 +102,10 @@ public class CreateLocator {
                     .stream()
                     .map((x) -> CreateLocator.<WebElement>createLocator(germanium, x))
                     .collect(Collectors.toList());
+            List<Locator<WebElement>> outsideFilters = insideFilterSelector.getOutsideFilters()
+                    .stream()
+                    .map((x) -> CreateLocator.<WebElement>createLocator(germanium, x))
+                    .collect(Collectors.toList());
             List<Locator<WebElement>> containingFilters = insideFilterSelector.getContainingFilters()
                     .stream()
                     .map((x) -> CreateLocator.<WebElement>createLocator(germanium, x))
@@ -115,6 +119,7 @@ public class CreateLocator {
                     germanium,
                     (DeferredLocator) CreateLocator.<WebElement>createLocator(germanium, insideFilterSelector.getParentSelector()),
                     insideFilters,
+                    outsideFilters,
                     containingFilters,
                     containingAllFilters,
                     insideFilterSelector.isWithoutChildrenElements()

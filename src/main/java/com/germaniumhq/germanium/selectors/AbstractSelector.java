@@ -85,6 +85,21 @@ public abstract class AbstractSelector implements Locator<WebElement>, Selector<
                 .inside(selectors);
     }
 
+    public AbstractSelector outside(AbstractSelector...selectors) {
+        return new InsideFilterSelector(this)
+                .outside(selectors);
+    }
+
+    public AbstractSelector outside(WebElement...elements) {
+        return new InsideFilterSelector(this)
+                .outside(elements);
+    }
+
+    public AbstractSelector outside(String...selectors) {
+        return new InsideFilterSelector(this)
+                .outside(selectors);
+    }
+
     public AbstractSelector containing(AbstractSelector...selectors) {
         return new InsideFilterSelector(this)
                 .containing(selectors);

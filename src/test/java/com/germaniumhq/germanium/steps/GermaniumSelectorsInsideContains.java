@@ -153,4 +153,11 @@ public class GermaniumSelectorsInsideContains {
 
         Context.set("found_element", element);
     }
+
+    @When("^I search for a span outside a div$")
+    public void i_search_for_a_span_outside_a_div() throws Throwable {
+        AbstractSelector selector = new Element("span").outside("div");
+        Context.set("found_element", selector.element());
+    }
+
 }

@@ -12,6 +12,7 @@ public class InsideFilterSelector extends AbstractSelector {
     private final AbstractSelector parentSelector;
 
     private List<Object> insideFilters = new ArrayList<>();
+    private List<Object> outsideFilters = new ArrayList<>();
     private List<Object> containingFilters = new ArrayList<>();
     private List<Object> containingAllFilters = new ArrayList<>();
 
@@ -41,6 +42,24 @@ public class InsideFilterSelector extends AbstractSelector {
 
     public AbstractSelector inside(String ... selectors) {
         this.insideFilters.addAll(Arrays.asList(selectors));
+
+        return this;
+    }
+
+    public AbstractSelector outside(AbstractSelector ... selectors) {
+        this.outsideFilters.addAll(Arrays.asList(selectors) );
+
+        return this;
+    }
+
+    public AbstractSelector outside(WebElement... elements) {
+        this.outsideFilters.addAll(Arrays.asList(elements));
+
+        return this;
+    }
+
+    public AbstractSelector outside(String ... selectors) {
+        this.outsideFilters.addAll(Arrays.asList(selectors));
 
         return this;
     }
@@ -93,6 +112,10 @@ public class InsideFilterSelector extends AbstractSelector {
 
     public List<Object> getInsideFilters() {
         return Collections.unmodifiableList(insideFilters);
+    }
+
+    public List<Object> getOutsideFilters() {
+        return Collections.unmodifiableList(outsideFilters);
     }
 
     public List<Object> getContainingFilters() {
