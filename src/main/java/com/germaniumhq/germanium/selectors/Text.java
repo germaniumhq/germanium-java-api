@@ -1,20 +1,43 @@
 package com.germaniumhq.germanium.selectors;
 
-import com.germaniumhq.germanium.impl.ScriptLoader;
-
 import java.util.Collection;
-import java.util.Collections;
 
 public class Text extends AbstractSelector {
-    private final String selector;
+    private String searchedText;
+    private boolean exactMatch;
+    private boolean trimText;
 
     public Text(String text) {
-        String template = ScriptLoader.getScript("/germanium/selectors/text.js.template");
-        this.selector = String.format(template, text.replace("\"", "\\\""));
+        this.searchedText = text;
+    }
+
+    public Text exactMatch() {
+        this.exactMatch = true;
+        return this;
+    }
+
+    public Text trimText() {
+        this.trimText = true;
+        return this;
     }
 
     @Override
     public Collection<String> getSelectors() {
-        return Collections.singleton(selector);
+        throw new IllegalStateException(
+                "Not implemented. A locator should be constructed " +
+                "for it. If you just called Text(...) it's a bug in " +
+                "Germanium, and please report it.");
+    }
+
+    public String getSearchedText() {
+        return searchedText;
+    }
+
+    public boolean isExactMatch() {
+        return exactMatch;
+    }
+
+    public boolean isTrimText() {
+        return trimText;
     }
 }

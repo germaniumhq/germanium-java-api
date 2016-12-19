@@ -8,6 +8,7 @@ import com.germaniumhq.germanium.locators.InsideFilterLocator;
 import com.germaniumhq.germanium.locators.Locator;
 import com.germaniumhq.germanium.locators.PositionalFilterLocator;
 import com.germaniumhq.germanium.locators.StaticElementLocator;
+import com.germaniumhq.germanium.locators.TextLocator;
 import com.germaniumhq.germanium.locators.WindowLocator;
 import com.germaniumhq.germanium.locators.XPathLocator;
 import com.germaniumhq.germanium.selectors.AbstractSelector;
@@ -15,6 +16,7 @@ import com.germaniumhq.germanium.selectors.Alert;
 import com.germaniumhq.germanium.selectors.InsideFilterSelector;
 import com.germaniumhq.germanium.selectors.PositionalFilterSelector;
 import com.germaniumhq.germanium.selectors.Selector;
+import com.germaniumhq.germanium.selectors.Text;
 import com.germaniumhq.germanium.selectors.Window;
 import org.openqa.selenium.WebElement;
 
@@ -40,13 +42,13 @@ public class CreateLocator {
     }
 
     public static <T> Locator<T> createLocator(GermaniumDriver germanium,
-                                 Object selector,
-                                 String strategy) {
+                                               Object selector,
+                                               String strategy) {
         if (selector == null) {
             throw new IllegalArgumentException(
                     "A `null` selector was passed to Germanium to create a " +
-                    "locator out of it. Maybe an invalid function return " +
-                    "is being used?");
+                            "locator out of it. Maybe an invalid function return " +
+                            "is being used?");
         }
 
         if (!DETECT.equals(strategy)) {
@@ -58,7 +60,7 @@ public class CreateLocator {
             if (!DETECT.equals(strategy)) {
                 throw new IllegalArgumentException(String.format(
                         "The locator is already constructed, but a strategy is " +
-                        "also defined: '%s'", strategy));
+                                "also defined: '%s'", strategy));
             }
 
             return (Locator) selector;
@@ -94,7 +96,7 @@ public class CreateLocator {
                     belowFilters
             );
         }
-        
+
         if (selector instanceof InsideFilterSelector) {
             InsideFilterSelector insideFilterSelector = (InsideFilterSelector) selector;
 
@@ -126,6 +128,14 @@ public class CreateLocator {
             );
         }
 
+        if (selector instanceof Text) {
+            Text textSelector = (Text) selector;
+            return (Locator<T>) new TextLocator(germanium,
+                    textSelector.getSearchedText(),
+                    textSelector.isExactMatch(),
+                    textSelector.isTrimText());
+        }
+
         if (selector instanceof AbstractSelector) {
             AbstractSelector abstractSelector = (AbstractSelector) selector;
 
@@ -139,7 +149,7 @@ public class CreateLocator {
 
             List<DeferredLocator> locatorList = new ArrayList<>();
 
-            for (String s: selectors) {
+            for (String s : selectors) {
                 locatorList.add((DeferredLocator)
                         CreateLocator.<WebElement>createLocator(germanium, s));
             }
@@ -160,13 +170,13 @@ public class CreateLocator {
         }
 
         if (selector instanceof Supplier) {
-            return createLocator(germanium, ((Supplier)selector).get());
+            return createLocator(germanium, ((Supplier) selector).get());
         }
 
         if (selector instanceof Iterable) {
             Iterable iterableSelector = (Iterable) new ArrayList<WebElement>();
 
-            for (Object item: iterableSelector) {
+            for (Object item : iterableSelector) {
                 if (!(item instanceof WebElement)) {
                     raiseBadSelectorType(selector);
                 }
@@ -204,18 +214,18 @@ public class CreateLocator {
     private static void raiseBadSelectorType(Object selector) {
         throw new IllegalArgumentException(String.format(
                 "Unable to build locator from the selector. " +
-                "The selector: %s, that is of type: %s is " +
-                "not a string selector, does not inherit from " +
-                "AbstractSelector, is not an Alert, nor even a " +
-                "selenium WebElement or WebElement list.",
+                        "The selector: %s, that is of type: %s is " +
+                        "not a string selector, does not inherit from " +
+                        "AbstractSelector, is not an Alert, nor even a " +
+                        "selenium WebElement or WebElement list.",
                 selector,
                 selector == null ? "<None>" : selector.getClass().getCanonicalName()
         ));
     }
 
     private static Locator instantiateLocator(Class<? extends Locator> clazz,
-                                       GermaniumDriver germanium,
-                                       Object selector) {
+                                              GermaniumDriver germanium,
+                                              Object selector) {
         try {
             Constructor<? extends Locator> constructor = clazz.getConstructor(GermaniumDriver.class, Object.class);
             return constructor.newInstance(germanium, selector);

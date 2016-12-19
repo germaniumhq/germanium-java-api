@@ -24,4 +24,18 @@ public class GermaniumSelectorsText {
 
         Context.set("found_elements", elements);
     }
+
+    @When("^I look for the exact text in multiple elements: '(.*)'$")
+    public void i_look_for_the_exact_text_in_multiple_elements(String text) {
+        List<WebElement> elements = S(Text(text).exactMatch()).elementList();
+
+        Context.set("found_elements", elements);
+    }
+
+    @When("^I look for the exact trimmed text in multiple elements: '(.*)'$")
+    public void i_look_for_the_exact_text_trimmed_in_multiple_elements(String text) {
+        List<WebElement> elements = Text(text).exactMatch().trimText().elementList();
+
+        Context.set("found_elements", elements);
+    }
 }
