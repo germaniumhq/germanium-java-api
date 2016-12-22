@@ -85,7 +85,7 @@ public class GermaniumApi {
      */
     public static void closeBrowser() {
         if (INSTANCE != null) {
-            INSTANCE.close();
+            INSTANCE.quit();
         }
 
         INSTANCE = null;

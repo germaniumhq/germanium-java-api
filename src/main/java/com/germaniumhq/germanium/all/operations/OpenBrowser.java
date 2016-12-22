@@ -28,6 +28,9 @@ public class OpenBrowser {
     private String screenshotFolder = "screenshots";
     private float timeout = 60f;
 
+    private volatile static GeckoDriverService geckoDriverService;
+    private volatile static ChromeDriverService chromeDriverService;
+
     private static final Pattern REMOTE_ADDRESS = Pattern.compile("^(\\w+?):(.*?)$");
 
     public OpenBrowser browser(String browser) {
@@ -127,26 +130,56 @@ public class OpenBrowser {
 
     private WebDriver openLocalChrome() {
         String driverPath = EnsureDriver.ensureDriver("chrome");
-
-        ChromeDriverService chromeDriverService = new ChromeDriverService.Builder()
-                .usingAnyFreePort()
-                .usingDriverExecutable(new File(driverPath))
-                .build();
+        ensureChromeDriverService(driverPath);
 
         return new ChromeDriver(chromeDriverService);
     }
 
     private WebDriver openLocalFirefox() {
         String driverPath = EnsureDriver.ensureDriver("firefox");
-
-        GeckoDriverService geckoDriverService = new GeckoDriverService.Builder()
-                .usingDriverExecutable(new File(driverPath))
-                .usingAnyFreePort()
-                .build();
+        ensureGeckoDriverService(driverPath);
 
         return new FirefoxDriver(geckoDriverService,
                 DesiredCapabilities.firefox(),
                 null);
+    }
+
+    private ChromeDriverService ensureChromeDriverService(String driverPath) {
+        if (chromeDriverService != null) {
+            return chromeDriverService;
+        }
+
+        synchronized (OpenBrowser.class) {
+            if (chromeDriverService != null) {
+                return chromeDriverService;
+            }
+
+            chromeDriverService = new ChromeDriverService.Builder()
+                    .usingAnyFreePort()
+                    .usingDriverExecutable(new File(driverPath))
+                    .build();
+        }
+
+        return chromeDriverService;
+    }
+
+    private static GeckoDriverService ensureGeckoDriverService(String driverPath) {
+        if (geckoDriverService != null) {
+            return geckoDriverService;
+        }
+
+        synchronized (OpenBrowser.class) {
+            if (geckoDriverService != null) {
+                return geckoDriverService;
+            }
+
+            geckoDriverService = new GeckoDriverService.Builder()
+                    .usingDriverExecutable(new File(driverPath))
+                    .usingAnyFreePort()
+                    .build();
+        }
+
+        return geckoDriverService;
     }
 
     private GermaniumDriver throwUnknownBrowser() {
