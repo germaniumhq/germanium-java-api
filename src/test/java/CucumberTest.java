@@ -8,6 +8,8 @@ import org.junit.runner.RunWith;
  * `src/test/resources/features` folder.
  */
 @RunWith(Cucumber.class)
-@CucumberOptions(strict = true, snippets = SnippetType.UNDERSCORE, glue = "com.germaniumhq.germanium")
+@CucumberOptions(strict = true,
+                 snippets = SnippetType.UNDERSCORE,
+                 glue = "com.germaniumhq.germanium")
 public class CucumberTest {
 }
