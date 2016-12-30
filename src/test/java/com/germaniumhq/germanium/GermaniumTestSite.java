@@ -8,6 +8,8 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static spark.Spark.init;
 import static spark.Spark.port;
@@ -15,13 +17,14 @@ import static spark.Spark.post;
 import static spark.Spark.staticFiles;
 
 public class GermaniumTestSite {
+    public static final int DEFAULT_PORT = 8000;
     public static boolean serverRunning;
 
     @Before
     public static void initialize() {
         if (!serverRunning) {
             serverRunning = true;
-            port(8000);
+            port(readPort());
             staticFiles.externalLocation("src/test/resources/");
 
             post("/upload", (request, response) -> {
@@ -38,6 +41,26 @@ public class GermaniumTestSite {
 
             init();
         }
+    }
+
+    /**
+     * Read the port directly from the TEST_HOST if it's set.
+     * @return
+     */
+    private static int readPort() {
+        String testHost = System.getenv("TEST_HOST");
+
+        if (testHost == null) {
+            return DEFAULT_PORT;
+        }
+
+        Matcher matcher = Pattern.compile("^.*?:(\\d+)$").matcher(testHost);
+
+        if (!matcher.matches()) {
+            return DEFAULT_PORT;
+        }
+
+        return Integer.parseInt(matcher.group(1));
     }
 
     @After
