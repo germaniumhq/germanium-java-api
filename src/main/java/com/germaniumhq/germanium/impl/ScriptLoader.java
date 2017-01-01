@@ -14,7 +14,7 @@ public class ScriptLoader {
 
     /**
      * Loads the given script from the classpath. This will
-     * call StriptLoader.class.getResourceAsStream, so you
+     * call ScriptLoader.class.getResourceAsStream, so you
      * need to use absolute paths to fetch the scripts.
      *
      * @param name

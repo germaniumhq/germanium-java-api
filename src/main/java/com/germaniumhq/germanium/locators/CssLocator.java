@@ -46,8 +46,8 @@ public class CssLocator extends DeferredLocator {
             }
 
             return result;
-        } catch (NoSuchElementException e) {
-            return null;
+        } catch (Exception e) {
+            return Collections.emptyList();
         }
     }
 }

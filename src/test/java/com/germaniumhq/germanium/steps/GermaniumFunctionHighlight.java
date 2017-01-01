@@ -3,6 +3,7 @@ package com.germaniumhq.germanium.steps;
 import com.germaniumhq.germanium.all.GermaniumApi;
 import com.germaniumhq.germanium.all.Wait;
 import com.germaniumhq.germanium.all.operations.actions.Highlight;
+import com.germaniumhq.germanium.impl.ScriptLoader;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.openqa.selenium.WebElement;
@@ -35,15 +36,7 @@ public class GermaniumFunctionHighlight {
 
     @When("^I highlight also in the console the element '(.*?)'$")
     public void i_highlight_also_in_the_console_the_element_visibleDiv(String selector) throws Throwable {
-        js("" +
-                "    window.console = {\n" +
-                "        log: function() {\n" +
-                "            window._lastlog_message = arguments;\n" +
-                "        },\n" +
-                "        error: function() {\n" +
-                "            window._lasterror_message = arguments;\n" +
-                "        }\n" +
-                "    };\n");
+        js(ScriptLoader.getScript("/germanium/test/console.js"));
         GermaniumApi.highlight(selector, Highlight.Console.LOG, 4, 1);
     }
 
