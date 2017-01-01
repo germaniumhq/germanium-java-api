@@ -11,4 +11,12 @@ public class Workaround {
 
         defaultCode.run();
     }
+
+    public static <T> T workaround(Supplier<Boolean> condition, Supplier<T> waCode, Supplier<T> defaultCode) {
+        if (condition.get()) {
+            return waCode.get();
+        }
+
+        return defaultCode.get();
+    }
 }

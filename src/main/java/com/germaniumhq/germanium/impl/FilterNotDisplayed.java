@@ -1,12 +1,12 @@
 package com.germaniumhq.germanium.impl;
 
+import com.germaniumhq.germanium.all.GermaniumApi;
 import com.germaniumhq.germanium.locators.EmptyStrategy;
 import com.germaniumhq.germanium.locators.Locator;
 import org.openqa.selenium.WebElement;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class FilterNotDisplayed {
     public static WebElement filterOneForAction(List<WebElement> elements) {
@@ -33,9 +33,8 @@ public class FilterNotDisplayed {
             return elements;
         }
 
-        List<WebElement> result = elements.stream()
-                .filter(FilterNotDisplayed::isWebElementDisplayed)
-                .collect(Collectors.toList());
+        String code = ScriptLoader.getScript("/germanium/impl/filter-not-displayed.min.js");
+        List<WebElement> result = GermaniumApi.js(code, (Object[]) elements.toArray(new Object[0]));
 
         if (result.isEmpty() && throwStrategy == EmptyStrategy.THROW_WHEN_EMPTY) {
             raiseNoVisibleItemsFoundForAction(elements);
