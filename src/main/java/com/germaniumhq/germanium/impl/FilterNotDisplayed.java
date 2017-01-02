@@ -3,6 +3,7 @@ package com.germaniumhq.germanium.impl;
 import com.germaniumhq.germanium.all.GermaniumApi;
 import com.germaniumhq.germanium.locators.EmptyStrategy;
 import com.germaniumhq.germanium.locators.Locator;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 
 import java.util.Collections;
@@ -34,7 +35,14 @@ public class FilterNotDisplayed {
         }
 
         String code = ScriptLoader.getScript("/germanium/impl/filter-not-displayed.min.js");
-        List<WebElement> result = GermaniumApi.js(code, (Object[]) elements.toArray(new Object[0]));
+
+        List<WebElement> result;
+
+        try {
+            result = GermaniumApi.js(code, (Object[]) elements.toArray(new Object[0]));
+        } catch (StaleElementReferenceException e) {
+            result = Collections.emptyList();
+        }
 
         if (result.isEmpty() && throwStrategy == EmptyStrategy.THROW_WHEN_EMPTY) {
             raiseNoVisibleItemsFoundForAction(elements);
