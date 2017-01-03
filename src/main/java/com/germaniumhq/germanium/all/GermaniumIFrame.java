@@ -1,10 +1,12 @@
 package com.germaniumhq.germanium.all;
 
 import com.germaniumhq.germanium.GermaniumDriver;
-import com.germaniumhq.germanium.locators.WebDriverWindow;
 import com.germaniumhq.germanium.selectors.Window;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class GermaniumIFrame {
     /**
@@ -86,10 +88,34 @@ public class GermaniumIFrame {
             GermaniumApi.getGermanium().switchTo().window(window.getId());
         }
 
+        if (window.getTitle() != null) {
+            List<String> foundTitles = new ArrayList<>();
 
-        WebDriverWindow webDriverWindow = window.get();
-        GermaniumApi.getGermanium().switchTo().window(
-                webDriverWindow.getId()
-        );
+            for (String windowHandle: GermaniumApi.getGermanium().getWindowHandles()) {
+                String pageTitle;
+
+                try {
+                    GermaniumApi.getGermanium().switchTo().window(windowHandle);
+                    pageTitle = GermaniumApi.getGermanium().getTitle();
+
+                    if (window.getTitle().equals(pageTitle)) {
+                        return;
+                    }
+                } catch (Exception e) {
+                    pageTitle = String.format("?unable-to-read-title: %s?", e.getMessage());
+                }
+
+                foundTitles.add(pageTitle);
+            }
+
+            throw new IllegalArgumentException(String.format(
+                    "Unable to find a Window with title `%s` in the list of windows: [%s].",
+                    window.getTitle(),
+                    foundTitles.stream().collect(Collectors.joining(", "))));
+        }
+
+        throw new IllegalArgumentException(
+                "When using a window, you need to either specify its `title`, either " +
+                "its `id` that you can obtain from the `germanium.getWindowHandles()`.");
     }
 }

@@ -98,7 +98,7 @@ public class FunctionWait {
 
     @When("^I wait with a while_not that has a CSS locator built with S should pass$")
     public void i_wait_with_a_while_not_that_has_a_CSS_locator_built_with_S_should_pass() throws Throwable {
-        whileNot(S("div#errorContent"))
+        whileNot(S("div#successContent"))
             .waitFor(() -> true);
     }
 }
