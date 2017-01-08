@@ -1,6 +1,7 @@
 package com.germaniumhq.germanium.impl;
 
 import com.germaniumhq.germanium.GermaniumDriver;
+import com.germaniumhq.germanium.wa.AlertExistsFirefoxWorkaround;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.NoAlertPresentException;
@@ -22,13 +23,15 @@ public class AlertChecker {
     }
 
     public boolean isAlertExisting() {
-        try {
-            Alert alert = germaniumDriver.switchTo().alert();
-            alert.getText();
-            return true;
-        } catch (NoAlertPresentException e) {
-            return false;
-        }
+        return new AlertExistsFirefoxWorkaround(() -> {
+            try {
+                Alert alert = germaniumDriver.switchTo().alert();
+                alert.getText();
+                return true;
+            } catch (NoAlertPresentException e) {
+                return false;
+            }
+        }).execute();
     }
 
     /**
