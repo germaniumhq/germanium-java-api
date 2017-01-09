@@ -6,8 +6,8 @@ import org.openqa.selenium.JavascriptExecutor;
 
 import java.util.function.Supplier;
 
-public class AlertExistsFirefoxWorkaround extends SupplierWorkaround<Boolean> {
-    public AlertExistsFirefoxWorkaround(Supplier<Boolean> defaultCode) {
+public class FirefoxWithoutMarionetteAlertWorkaround extends SupplierWorkaround<Boolean> {
+    public FirefoxWithoutMarionetteAlertWorkaround(Supplier<Boolean> defaultCode) {
         super(defaultCode);
     }
 
