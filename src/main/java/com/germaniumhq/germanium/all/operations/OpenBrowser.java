@@ -5,6 +5,7 @@ import com.germaniumhq.germanium.GermaniumDriver;
 import com.germaniumhq.germanium.IFrameSelector;
 import com.germaniumhq.germanium.all.GermaniumApi;
 import com.germaniumhq.germanium.iframe.DefaultIFrameSelector;
+import com.germaniumhq.germanium.wa.FirefoxOpenBrowserWithMarionette;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
@@ -153,15 +154,15 @@ public class OpenBrowser {
     }
 
     private WebDriver openLocalFirefox() {
-        String driverPath = EnsureDriver.ensureDriver("firefox");
-        ensureGeckoDriverService(driverPath);
+        return new FirefoxOpenBrowserWithMarionette(() -> {
+            DesiredCapabilities firefoxCapabilites = DesiredCapabilities.firefox();
+            firefoxCapabilites.setCapability("unexpectedAlertBehaviour", "ignore");
+            firefoxCapabilites.setCapability("marionette", false);
 
-        DesiredCapabilities firefoxCapabilites = DesiredCapabilities.firefox();
-        firefoxCapabilites.setCapability("unexpectedAlertBehaviour", "ignore");
-
-        return new FirefoxDriver(geckoDriverService,
-                firefoxCapabilites,
-                null);
+            return new FirefoxDriver(
+                    firefoxCapabilites,
+                    null);
+        }).execute();
     }
 
     private ChromeDriverService ensureChromeDriverService(String driverPath) {
@@ -183,7 +184,7 @@ public class OpenBrowser {
         return chromeDriverService;
     }
 
-    private static GeckoDriverService ensureGeckoDriverService(String driverPath) {
+    public static GeckoDriverService ensureGeckoDriverService(String driverPath) {
         if (geckoDriverService != null) {
             return geckoDriverService;
         }
