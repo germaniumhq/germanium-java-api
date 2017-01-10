@@ -23,6 +23,10 @@ elif [[ "$1" == "ie" ]]; then
     export TEST_BROWSER="ie:http://$TEST_WEBDRIVER_HUB:4444/wd/hub"
     export TEST_HOST="$TEST_HOST_IP:8002"
     mvn test -Dcucumber.options="-t ~@noie"
+elif [[ "$1" == "ie8" ]]; then
+    export TEST_BROWSER="ie:http://192.168.56.101:5555/"
+    export TEST_HOST="192.168.56.1:8004"
+    mvn test -Dcucumber.options="-t ~@noie"
 elif [[ "$1" == "edge" ]]; then
     export TEST_BROWSER="edge:http://$TEST_WEBDRIVER_HUB:4444/wd/hub"
     export TEST_HOST="$TEST_HOST_IP:8003"

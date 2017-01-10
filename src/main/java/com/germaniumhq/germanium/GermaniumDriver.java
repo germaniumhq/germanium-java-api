@@ -8,6 +8,7 @@ import com.germaniumhq.germanium.locators.JsLocator;
 import com.germaniumhq.germanium.locators.Locator;
 import com.germaniumhq.germanium.locators.XPathLocator;
 import com.germaniumhq.germanium.util.Wait;
+import com.germaniumhq.germanium.wa.Ie8LoadSupportScripts;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -148,14 +149,19 @@ public class GermaniumDriver implements WebDriver, JavascriptExecutor, TakesScre
     }
 
     private void loadSupportScripts() {
-        //throw new IllegalStateException("Not implemented");
-        if (this.js("return !window.__GERMANIUM_EXTENSIONS_LOADED")) {
-            for (String script: this.supportScripts) {
-                loadScript(script);
-            }
+        new Ie8LoadSupportScripts(() -> {
+            if (this.js("return !window.__GERMANIUM_EXTENSIONS_LOADED")) {
+                for (String script: this.supportScripts) {
+                    loadScript(script);
+                }
 
-            loadScript("germanium-extensions-loaded.js");
-        }
+                loadScript("germanium-extensions-loaded.js");
+            }
+        }).execute();
+    }
+
+    public List<String> getSupportScripts() {
+        return supportScripts;
     }
 
     /**
