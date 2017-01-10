@@ -22,12 +22,14 @@ import org.openqa.selenium.interactions.Mouse;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -40,6 +42,7 @@ public class GermaniumDriver implements WebDriver, JavascriptExecutor, TakesScre
     private final WebDriver webDriver;
     private IFrameSelector iFrameSelector;
     private String screenshotFolder;
+    private List<String> supportScripts;
     private String currentIFrame;
 
     private Map<String, Class<? extends Locator>> locatorMap = new HashMap<>();
@@ -55,10 +58,12 @@ public class GermaniumDriver implements WebDriver, JavascriptExecutor, TakesScre
      */
     public GermaniumDriver(WebDriver webDriver,
                            IFrameSelector iFrameSelector,
-                           String screenshotFolder) {
+                           String screenshotFolder,
+                           List<String> supportScripts) {
         this.webDriver = webDriver;
         this.iFrameSelector = iFrameSelector;
         this.screenshotFolder = screenshotFolder;
+        this.supportScripts = supportScripts;
 
         locatorMap.put("xpath", XPathLocator.class);
         locatorMap.put("css", CssLocator.class);
@@ -144,6 +149,48 @@ public class GermaniumDriver implements WebDriver, JavascriptExecutor, TakesScre
 
     private void loadSupportScripts() {
         //throw new IllegalStateException("Not implemented");
+        if (this.js("return !window.__GERMANIUM_EXTENSIONS_LOADED")) {
+            for (String script: this.supportScripts) {
+                loadScript(script);
+            }
+
+            loadScript("germanium-extensions-loaded.js");
+        }
+    }
+
+    /**
+     * Load a script from the classpath.
+     * @param name
+     */
+    public <T> T loadScript(String name) {
+        String absoluteName = String.format("/%s/%s",
+                this.getClass().getPackage().getName().replaceAll("\\.", "/"),
+                name);
+
+        InputStream inputStream = GermaniumDriver.class.getResourceAsStream(name);
+        if (inputStream == null) {
+            throw new IllegalArgumentException(String.format(
+                    "Unable to load script with name: %s. Script " +
+                            "was not found in the classpath (%s).",
+                    name,
+                    absoluteName
+            ));
+        }
+
+        String code;
+
+        try {
+            Scanner s = new Scanner(inputStream).useDelimiter("\\A");
+            code = s.hasNext() ? s.next() : "";
+        } finally {
+            try {
+                inputStream.close();
+            } catch (IOException e) {
+                // ignoring on purpose.
+            }
+        }
+
+        return this.js(code);
     }
 
     public <T> T js(String code, Object ... arguments) {

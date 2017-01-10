@@ -22,6 +22,9 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,6 +34,7 @@ public class OpenBrowser {
     private WebDriver webDriver;
     private IFrameSelector iFrameSelector = new DefaultIFrameSelector();
     private String screenshotFolder = "screenshots";
+    private List<String> supportScripts = new ArrayList<>();
     private float timeout = 60f;
 
     private volatile static GeckoDriverService geckoDriverService;
@@ -66,6 +70,11 @@ public class OpenBrowser {
 
     public OpenBrowser screenshotFolder(String screenshotFolder) {
         this.screenshotFolder = screenshotFolder;
+        return this;
+    }
+
+    public OpenBrowser withClasspathScript(String ... scripts) {
+        supportScripts.addAll(Arrays.asList(scripts));
         return this;
     }
 
@@ -122,7 +131,11 @@ public class OpenBrowser {
             return throwUnknownBrowser();
         }
 
-        GermaniumDriver germanium = new GermaniumDriver(webDriver, iFrameSelector, screenshotFolder);
+        GermaniumDriver germanium = new GermaniumDriver(
+                webDriver,
+                iFrameSelector,
+                screenshotFolder,
+                supportScripts);
 
         GermaniumApi.setGermanium(germanium);
 
