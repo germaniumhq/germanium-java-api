@@ -18,6 +18,6 @@ public class GetText {
                 "return arguments[0].textContent || arguments[0].innerText || '';",
                 element);
 
-        return result;
+        return result.replaceAll("\r\n", "\n");
     }
 }
