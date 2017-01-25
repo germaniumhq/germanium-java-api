@@ -3,15 +3,17 @@ germanium:
   files:
     pom.xml: maven:com.germaniumhq:germanium-parent
     germanium/pom.xml: maven:com.germaniumhq:germanium
-    germanium-tests/pom.xml: maven:com.germaniumhq:germanium-tests
+    germanium-tests/pom.xml:
+      - maven:com.germaniumhq:germanium-tests
+      - maven:com.germaniumhq:germanium
 
 germanium-drivers:
   version: parent:../germaniumdriversjava/@germanium-drivers
   files:
-    pom.xml: <germanium.binary.version>**VERSION**</germanium.binary.version>
+    germanium/pom.xml: maven:com.germaniumhq:binary-drivers
 
 selenium:
   version: parent:../germaniumdriversjava/@selenium
   files:
-    pom.xml: <selenium.version>**VERSION**</selenium.version>
+    germanium/pom.xml: maven:org.seleniumhq.selenium:selenium-java
 

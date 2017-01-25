@@ -6,13 +6,8 @@
 
     <groupId>com.germaniumhq</groupId>
     <artifactId>germanium-parent</artifactId>
-    <version>1.10.5</version>
+    <version>2.0.0</version>
     <packaging>pom</packaging>
-
-    <properties>
-        <germanium.binary.version>1.10.5</germanium.binary.version>
-        <selenium.version>3.0.1</selenium.version>
-    </properties>
 
     <modules>
         <module>germanium</module>
