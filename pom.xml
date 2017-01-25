@@ -6,11 +6,10 @@
 
     <groupId>com.germaniumhq</groupId>
     <artifactId>germanium-parent</artifactId>
-    <version>${germanium.version}</version>
+    <version>1.10.5</version>
     <packaging>pom</packaging>
 
     <properties>
-        <germanium.version>1.10.5</germanium.version>
         <germanium.binary.version>1.10.5</germanium.binary.version>
         <selenium.version>3.0.1</selenium.version>
     </properties>

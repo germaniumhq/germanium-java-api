@@ -6,7 +6,7 @@
 
     <groupId>com.germaniumhq</groupId>
     <artifactId>germanium-tests</artifactId>
-    <version>${parent.version}</version>
+    <version>1.10.5</version>
 
     <dependencies>
         <!-- testing dependencies -->

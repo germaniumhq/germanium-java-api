@@ -1,7 +1,9 @@
 germanium:
   version: parent:../germanium/@germanium
   files:
-    pom.xml: <germanium.version>**VERSION**</germanium.version>
+    pom.xml: maven:com.germaniumhq:germanium-parent
+    germanium/pom.xml: maven:com.germaniumhq:germanium
+    germanium-tests/pom.xml: maven:com.germaniumhq:germanium-tests
 
 germanium-drivers:
   version: parent:../germaniumdriversjava/@germanium-drivers
