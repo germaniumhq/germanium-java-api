@@ -1,0 +1,15 @@
+germanium:
+  version: parent:../germanium/@germanium
+  files:
+    pom.xml: <germanium.version>**VERSION**</germanium.version>
+
+germanium-drivers:
+  version: parent:../germaniumdriversjava/@germanium-drivers
+  files:
+    pom.xml: <germanium.binary.version>**VERSION**</germanium.binary.version>
+
+selenium:
+  version: parent:../germaniumdriversjava/@selenium
+  files:
+    pom.xml: <selenium.version>**VERSION**</selenium.version>
+
