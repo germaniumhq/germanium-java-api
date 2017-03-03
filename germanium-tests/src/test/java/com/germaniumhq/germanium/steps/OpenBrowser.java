@@ -9,6 +9,7 @@ import org.openqa.selenium.WebElement;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.germaniumhq.germanium.all.GermaniumApi.goTo;
 import static org.junit.Assert.assertEquals;
 
 public class OpenBrowser {
@@ -55,7 +56,7 @@ public class OpenBrowser {
                     pagMatcher.group(3);
         }
 
-        GermaniumApi.getGermanium().get(page);
+        goTo(page);
     }
 
     @Then("^the title of the page equals '(.*?)'$")

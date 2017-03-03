@@ -35,6 +35,14 @@ public class GermaniumApi {
         return new OpenBrowser();
     }
 
+    public static void goTo(String url) {
+        GermaniumApi.getGermanium().get(url);
+    }
+
+    public static void goTo(String url, long timeout) {
+        GermaniumApi.getGermanium().get(url, timeout);
+    }
+
     public static GermaniumDriver getGermanium() {
         return INSTANCE;
     }
