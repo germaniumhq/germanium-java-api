@@ -3,6 +3,7 @@ package com.germaniumhq.germanium.steps;
 import com.germaniumhq.germanium.Context;
 import com.germaniumhq.germanium.all.GermaniumApi;
 import com.germaniumhq.germanium.all.GermaniumIFrame;
+import com.germaniumhq.germanium.iframe.DefaultIFrameSelector;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.openqa.selenium.WebElement;
@@ -56,7 +57,16 @@ public class GermaniumIFrameSelector {
         });
     }
 
-    @When("^when I switch the iframe selector back to the default one$")
+    @When("^I switch the iframe selector to the germanium bundled default selector$")
+    public void i_switch_the_iframe_selector_to_the_germanium_bundled_default_selector() throws Throwable {
+        Context.set("currentIFrameSelector",
+                GermaniumApi.getGermanium().getIFrameSelector());
+
+        GermaniumApi.getGermanium().setIFrameSelector(new DefaultIFrameSelector());
+    }
+
+
+    @When("^when I switch the iframe selector back to the tests one$")
     public void when_I_switch_the_iframe_selector_back_to_the_default_one() throws Throwable {
         GermaniumApi.getGermanium().setIFrameSelector(
                 Context.get("currentIFrameSelector")

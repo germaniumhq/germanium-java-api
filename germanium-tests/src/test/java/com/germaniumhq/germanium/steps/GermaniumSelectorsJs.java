@@ -3,7 +3,6 @@ package com.germaniumhq.germanium.steps;
 import com.germaniumhq.germanium.Context;
 import com.germaniumhq.germanium.locators.Locator;
 import com.germaniumhq.germanium.selectors.JsSelector;
-import cucumber.api.PendingException;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.openqa.selenium.WebElement;
