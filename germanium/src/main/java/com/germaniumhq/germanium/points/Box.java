@@ -140,8 +140,17 @@ public class Box {
     public Box getBox() {
         String code = ScriptLoader.getScript("/germanium/points/box.min.js");
 
-        List<Long> positions = GermaniumApi.js(code, GermaniumApi.getGermanium()
-                .<WebElement>S(this.selector).element());
+        WebElement element = GermaniumApi.getGermanium().
+                <WebElement>S(this.selector).element();
+
+        if (element == null) {
+            throw new IllegalStateException(String.format(
+                    "The passed selector (%s) for finding " +
+                    "the bounding box didn't matched any elements.",
+                    this.selector));
+        }
+
+        List<Long> positions = GermaniumApi.js(code, element);
 
         this.box = new HashMap<>();
 

@@ -1,12 +1,15 @@
 package com.germaniumhq.germanium.steps;
 
+import com.germaniumhq.germanium.Context;
 import com.germaniumhq.germanium.all.GermaniumApi;
+import com.germaniumhq.germanium.all.GermaniumSelectors;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 import static com.germaniumhq.germanium.all.GermaniumActions.click;
 import static com.germaniumhq.germanium.all.GermaniumSelectors.Box;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 public class GermaniumPositionPosition {
@@ -74,4 +77,26 @@ public class GermaniumPositionPosition {
 
         assertEquals(expected_text, GermaniumApi.getText(selector));
     }
+
+    @When("^I try to get the box positions for a selector that doesn't matches$")
+    public void i_try_to_get_the_box_positions_for_a_selector_that_doesn_t_matches() throws Throwable {
+        try {
+            GermaniumSelectors.Box("unknownelement").getBox();
+        } catch (Exception e) {
+            Context.set("exception_message", e.getMessage());
+            return;
+        }
+
+        assertTrue("The unknown element box finding should have thrown an exception.",
+                false);
+    }
+
+    @Then("^I get an exception spelling out that my selector didn't matched$")
+    public void i_get_an_exception_spelling_out_that_my_selector_didn_t_matched() throws Throwable {
+        String message = Context.get("exception_message");
+        assertNotNull(message);
+        assertTrue(message.contains("The passed selector (unknownelement) for " +
+                "finding the bounding box didn't matched"));
+    }
+
 }
