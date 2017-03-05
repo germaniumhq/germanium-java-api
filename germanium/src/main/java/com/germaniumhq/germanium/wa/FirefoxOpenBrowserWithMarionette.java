@@ -8,7 +8,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.util.function.Supplier;
 
-import static com.germaniumhq.germanium.all.operations.OpenBrowser.ensureGeckoDriverService;
+import static com.germaniumhq.germanium.all.operations.wdbuilder.LocalWebDriverBuilder.ensureGeckoDriverService;
 
 /**
  * Instantiate firefox using the marionette driver,
@@ -22,8 +22,7 @@ public class FirefoxOpenBrowserWithMarionette extends SupplierWorkaround<RemoteW
     @Override
     protected RemoteWebDriver executeWorkAround() {
         String path = EnsureDriver.ensureDriver("firefox");
-        GeckoDriverService geckoDriverService =
-                ensureGeckoDriverService(path);
+        GeckoDriverService geckoDriverService = ensureGeckoDriverService(path);
 
         DesiredCapabilities firefoxCapabilites = DesiredCapabilities.firefox();
         firefoxCapabilites.setCapability("unexpectedAlertBehaviour", "ignore");

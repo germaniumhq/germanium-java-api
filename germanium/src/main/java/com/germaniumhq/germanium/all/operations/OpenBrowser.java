@@ -1,33 +1,21 @@
 package com.germaniumhq.germanium.all.operations;
 
-import com.germaniumhq.EnsureDriver;
 import com.germaniumhq.germanium.GermaniumDriver;
 import com.germaniumhq.germanium.IFrameSelector;
 import com.germaniumhq.germanium.all.GermaniumApi;
+import com.germaniumhq.germanium.all.operations.wdbuilder.LocalWebDriverBuilder;
+import com.germaniumhq.germanium.all.operations.wdbuilder.RemoteWebDriverQueryBuilder;
+import com.germaniumhq.germanium.all.operations.wdbuilder.RemoteWebDriverUrlOnlyBuilder;
 import com.germaniumhq.germanium.iframe.DefaultIFrameSelector;
-import com.germaniumhq.germanium.wa.FirefoxOpenBrowserWithMarionette;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeDriverService;
-import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.edge.EdgeDriverService;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.GeckoDriverService;
-import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.openqa.selenium.ie.InternetExplorerDriverService;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.HttpCommandExecutor;
-import org.openqa.selenium.remote.RemoteWebDriver;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import static com.germaniumhq.germanium.all.operations.wdbuilder.RemoteWebDriverUrlOnlyBuilder.REMOTE_ADDRESS;
 
 public class OpenBrowser {
     private String browser = "firefox";
@@ -36,13 +24,6 @@ public class OpenBrowser {
     private String screenshotFolder = "screenshots";
     private List<String> supportScripts = new ArrayList<>();
     private float timeout = 60f;
-
-    private volatile static GeckoDriverService geckoDriverService;
-    private volatile static ChromeDriverService chromeDriverService;
-    private volatile static InternetExplorerDriverService ieDriverService;
-    private volatile static EdgeDriverService edgeDriverService;
-
-    private static final Pattern REMOTE_ADDRESS = Pattern.compile("^(\\w+?):(.*?)$");
 
     public OpenBrowser browser(String browser) {
         this.browser = browser;
@@ -99,36 +80,12 @@ public class OpenBrowser {
 
         if (this.webDriver != null) {
             webDriver = this.webDriver;
+        } else if (RemoteWebDriverQueryBuilder.matches(browser)) {
+            webDriver = RemoteWebDriverQueryBuilder.webDriver(browser);
         } else if (remoteMatch.matches()) {
-            String remoteBrowser = remoteMatch.group(1);
-            DesiredCapabilities remoteCapabilites;
-
-            if ("firefox".equalsIgnoreCase(remoteBrowser) || "ff".equalsIgnoreCase(remoteBrowser)) {
-                remoteCapabilites = DesiredCapabilities.firefox();
-                remoteCapabilites.setCapability("unexpectedAlertBehaviour", "ignore");
-            } else if ("chrome".equalsIgnoreCase(remoteBrowser)) {
-                remoteCapabilites = DesiredCapabilities.chrome();
-            } else if ("ie".equalsIgnoreCase(remoteBrowser)) {
-                remoteCapabilites = DesiredCapabilities.internetExplorer();
-                remoteCapabilites.setCapability("requireWindowFocus", true);
-            } else if ("edge".equalsIgnoreCase(remoteBrowser)) {
-                remoteCapabilites = DesiredCapabilities.edge();
-            } else {
-                return throwUnknownBrowser();
-            }
-
-            String remoteUrlString = remoteMatch.group(2);
-            webDriver = new RemoteWebDriver(new HttpCommandExecutor(getUrl(remoteUrlString)), remoteCapabilites);
-        } else if ("firefox".equalsIgnoreCase(browser) || "ff".equalsIgnoreCase(browser)) {
-            webDriver = openLocalFirefox();
-        } else if ("chrome".equalsIgnoreCase(browser)) {
-            webDriver = openLocalChrome();
-        } else if ("ie".equalsIgnoreCase(browser)) {
-            webDriver = openLocalIe();
-        } else if ("edge".equalsIgnoreCase(browser)) {
-            webDriver = openLocalEdge();
+            webDriver = RemoteWebDriverUrlOnlyBuilder.webDriver(remoteMatch);
         } else {
-            return throwUnknownBrowser();
+            webDriver = LocalWebDriverBuilder.webDriver(browser);
         }
 
         GermaniumDriver germanium = new GermaniumDriver(
@@ -142,131 +99,11 @@ public class OpenBrowser {
         return germanium;
     }
 
-    private WebDriver openLocalIe() {
-        String driverPath = EnsureDriver.ensureDriver("ie");
-        ensureIeDriverService(driverPath);
-
-        DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
-        capabilities.setCapability("requireWindowFocus", true);
-
-        return new InternetExplorerDriver(ieDriverService, capabilities);
-    }
-
-    private WebDriver openLocalEdge() {
-        String driverPath = EnsureDriver.ensureDriver("edge");
-        ensureEdgeDriverService(driverPath);
-
-        return new EdgeDriver(edgeDriverService);
-    }
-
-    private WebDriver openLocalChrome() {
-        String driverPath = EnsureDriver.ensureDriver("chrome");
-        ensureChromeDriverService(driverPath);
-
-        return new ChromeDriver(chromeDriverService);
-    }
-
-    private WebDriver openLocalFirefox() {
-        return new FirefoxOpenBrowserWithMarionette(() -> {
-            DesiredCapabilities firefoxCapabilites = DesiredCapabilities.firefox();
-            firefoxCapabilites.setCapability("unexpectedAlertBehaviour", "ignore");
-            firefoxCapabilites.setCapability("marionette", false);
-
-            return new FirefoxDriver(
-                    firefoxCapabilites,
-                    null);
-        }).execute();
-    }
-
-    private ChromeDriverService ensureChromeDriverService(String driverPath) {
-        if (chromeDriverService != null) {
-            return chromeDriverService;
-        }
-
-        synchronized (OpenBrowser.class) {
-            if (chromeDriverService != null) {
-                return chromeDriverService;
-            }
-
-            chromeDriverService = new ChromeDriverService.Builder()
-                    .usingAnyFreePort()
-                    .usingDriverExecutable(new File(driverPath))
-                    .build();
-        }
-
-        return chromeDriverService;
-    }
-
-    public static GeckoDriverService ensureGeckoDriverService(String driverPath) {
-        if (geckoDriverService != null) {
-            return geckoDriverService;
-        }
-
-        synchronized (OpenBrowser.class) {
-            if (geckoDriverService != null) {
-                return geckoDriverService;
-            }
-
-            geckoDriverService = new GeckoDriverService.Builder()
-                    .usingDriverExecutable(new File(driverPath))
-                    .usingAnyFreePort()
-                    .build();
-        }
-
-        return geckoDriverService;
-    }
-
-    private static InternetExplorerDriverService ensureIeDriverService(String driverPath) {
-        if (ieDriverService != null) {
-            return ieDriverService;
-        }
-
-        synchronized (OpenBrowser.class) {
-            if (ieDriverService != null) {
-                return ieDriverService;
-            }
-
-            ieDriverService = new InternetExplorerDriverService.Builder()
-                    .usingDriverExecutable(new File(driverPath))
-                    .usingAnyFreePort()
-                    .build();
-        }
-
-        return ieDriverService;
-    }
-
-    private static EdgeDriverService ensureEdgeDriverService(String driverPath) {
-        if (edgeDriverService != null) {
-            return edgeDriverService;
-        }
-
-        synchronized (OpenBrowser.class) {
-            if (edgeDriverService != null) {
-                return edgeDriverService;
-            }
-
-            edgeDriverService = new EdgeDriverService.Builder()
-                    .usingDriverExecutable(new File(driverPath))
-                    .usingAnyFreePort()
-                    .build();
-        }
-
-        return edgeDriverService;
-    }
-
-    private GermaniumDriver throwUnknownBrowser() {
+    public static GermaniumDriver throwUnknownBrowser(String browser) {
         throw new IllegalArgumentException(String.format(
                 "Unknown browser: %s, only firefox, " +
                     "chrome and ie are supported." ,
                 browser
         ));
-    }
-
-    private URL getUrl(String urlString) {
-        try {
-            return new URL(urlString);
-        } catch (MalformedURLException e) {
-            throw new IllegalArgumentException("Unable to parse URL for browser: " + urlString, e);
-        }
     }
 }
