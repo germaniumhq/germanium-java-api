@@ -9,6 +9,7 @@ import org.openqa.selenium.WebElement;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.germaniumhq.germanium.all.GermaniumApi.getGermanium;
 import static com.germaniumhq.germanium.all.GermaniumApi.goTo;
 import static org.junit.Assert.assertEquals;
 
@@ -17,6 +18,10 @@ public class OpenBrowser {
 
     @Given("^I open the browser$")
     public void i_open_the_browser() throws Throwable {
+        if (getGermanium() != null && System.getenv("TEST_REUSE_BROWSER") != null) {
+            return;
+        }
+
         String browser = System.getenv("TEST_BROWSER");
 
         if (browser == null) {

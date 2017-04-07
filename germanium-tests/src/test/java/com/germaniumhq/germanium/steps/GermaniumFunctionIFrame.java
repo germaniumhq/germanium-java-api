@@ -30,7 +30,7 @@ public class GermaniumFunctionIFrame {
         });
     }
 
-    @When("^I try to access the iframe named '.*?' that is not by default defined$")
+    @When("^I try to access the iframe named '(.*?)' that is not by default defined$")
     public void i_try_to_acess_the_iframe_that_is_not_defined(String name) {
         try {
             runInFrame(name, () -> {});

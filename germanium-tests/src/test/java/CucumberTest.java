@@ -1,6 +1,8 @@
+import com.germaniumhq.germanium.all.GermaniumApi;
 import cucumber.api.CucumberOptions;
 import cucumber.api.SnippetType;
 import cucumber.api.junit.Cucumber;
+import org.junit.AfterClass;
 import org.junit.runner.RunWith;
 
 /**
@@ -12,4 +14,10 @@ import org.junit.runner.RunWith;
                  snippets = SnippetType.UNDERSCORE,
                  glue = "com.germaniumhq.germanium")
 public class CucumberTest {
+    @AfterClass
+    public static void suiteDone() {
+        if (System.getenv("TEST_REUSE_BROWSER") != null) {
+            GermaniumApi.closeBrowser();
+        }
+    }
 }

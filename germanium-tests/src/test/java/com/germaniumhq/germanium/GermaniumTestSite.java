@@ -65,7 +65,10 @@ public class GermaniumTestSite {
 
     @After
     public static void shutdown() {
-//        stop();
+        if (System.getenv("TEST_REUSE_BROWSER") != null) {
+            return;
+        }
+
         GermaniumApi.closeBrowser();
     }
 }
