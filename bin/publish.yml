@@ -1,0 +1,15 @@
+- name: Synchronize the Maven repository.
+  hosts: ciplogic
+  become: True
+  tasks:
+    - name: Upload the jar files recursively
+      synchronize:
+        src: ../m2repo/
+        dest: /opt/www/germaniumhq_maven
+
+    - name: Change the owner to nginx
+      file:
+        path: /opt/www/germaniumhq_maven
+        owner: 100
+        group: 101
+
