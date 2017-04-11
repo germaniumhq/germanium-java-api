@@ -1,0 +1,12 @@
+- name: Get the Maven server locally
+  hosts: ciplogic
+  become: False
+  gather_facts: False
+  tasks:
+    - name: Download the maven repo
+      synchronize:
+        src: /opt/www/germaniumhq_maven/
+        dest: ../m2repo
+        mode: pull
+
+
