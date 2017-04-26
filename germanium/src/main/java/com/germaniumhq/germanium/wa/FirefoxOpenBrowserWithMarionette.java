@@ -28,9 +28,7 @@ public class FirefoxOpenBrowserWithMarionette extends SupplierWorkaround<RemoteW
         firefoxCapabilites.setCapability("unexpectedAlertBehaviour", "ignore");
         firefoxCapabilites.setCapability("marionette", true);
 
-        return new FirefoxDriver(geckoDriverService,
-                firefoxCapabilites,
-                null);
+        return new FirefoxDriver(firefoxCapabilites);
     }
 
     @Override

@@ -3,18 +3,25 @@ package com.germaniumhq.germanium;
 import com.germaniumhq.germanium.all.GermaniumApi;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
+import io.undertow.Undertow;
+import io.undertow.server.HttpHandler;
+import io.undertow.server.HttpServerExchange;
+import io.undertow.server.handlers.PathHandler;
+import io.undertow.server.handlers.resource.FileResourceManager;
+import io.undertow.server.handlers.resource.ResourceHandler;
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.RequestContext;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static spark.Spark.init;
-import static spark.Spark.port;
-import static spark.Spark.post;
-import static spark.Spark.staticFiles;
 
 public class GermaniumTestSite {
     public static final int DEFAULT_PORT = 8000;
@@ -24,22 +31,60 @@ public class GermaniumTestSite {
     public static void initialize() {
         if (!serverRunning) {
             serverRunning = true;
-            port(readPort());
-            staticFiles.externalLocation("src/test/resources/");
+            Undertow server = Undertow.builder()
+                    .addHttpListener(readPort(), null)
+                .setHandler(getPathHandler("src/test/resources/"))
+                .build();
 
-            post("/upload", (request, response) -> {
-                // super small files are stored in memory, so we don't
-                // neet do configure a temporary folder.
-                DiskFileItemFactory diskFileItemFactory = new DiskFileItemFactory();
-                String body = "<html><body>Uploaded '%s'.</body></html>";
+            server.start();
+        }
+    }
 
-                List<FileItem> fileUpload = new ServletFileUpload(diskFileItemFactory)
-                        .parseRequest(request.raw());
+    private static HttpHandler getPathHandler(String path) {
+        return new PathHandler()
+                .addExactPath("/upload", new HttpHandler() {
+                    @Override
+                    public void handleRequest(HttpServerExchange exchange) throws Exception {
+                        DiskFileItemFactory diskFileItemFactory = new DiskFileItemFactory();
+                        String body = "<html><body>Uploaded '%s'.</body></html>";
 
-                return String.format(body, fileUpload.get(0).getName());
-            });
+                        exchange.getRequestReceiver().receiveFullBytes((e, bytes) -> {
+                            List<FileItem> fileUpload = parseRequest(diskFileItemFactory, e, bytes);
 
-            init();
+                            e.getResponseSender().send(String.format(body, fileUpload.get(0).getName()), Charset.forName("utf-8"));
+                        });
+
+                    }
+                })
+                .addPrefixPath("/", new ResourceHandler(new FileResourceManager(new File(path), 0, true, new String[]{})));
+    }
+
+    private static List<FileItem> parseRequest(DiskFileItemFactory diskFileItemFactory, final HttpServerExchange e, final byte[] bytes) {
+        try {
+            return new ServletFileUpload(diskFileItemFactory)
+                    .parseRequest(new RequestContext() {
+                        @Override
+                        public String getCharacterEncoding() {
+                            return null;
+                        }
+
+                        @Override
+                        public String getContentType() {
+                            return e.getRequestHeaders().get("ContentType").get(0);
+                        }
+
+                        @Override
+                        public int getContentLength() {
+                            return (int) e.getRequestContentLength();
+                        }
+
+                        @Override
+                        public InputStream getInputStream() throws IOException {
+                            return new ByteArrayInputStream(bytes);
+                        }
+                    });
+        } catch (Exception ex) {
+            throw new IllegalStateException("Unable to parse upload", ex);
         }
     }
 
