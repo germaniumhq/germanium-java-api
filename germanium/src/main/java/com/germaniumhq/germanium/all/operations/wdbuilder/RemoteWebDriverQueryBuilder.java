@@ -44,7 +44,7 @@ public class RemoteWebDriverQueryBuilder {
         } else if ("edge".equalsIgnoreCase(remoteBrowser)) {
             remoteCapabilites = DesiredCapabilities.edge();
         } else {
-            return throwUnknownBrowser(remoteBrowser);
+            return throwUnknownBrowser(remoteBrowser, browserString);
         }
 
         for (Map.Entry<String, String> capabiltity: browserSpecification.getDesiredCapabilities().entrySet()) {

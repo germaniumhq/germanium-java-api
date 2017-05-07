@@ -90,12 +90,22 @@ public class TypeKeys {
             element = Alert().element();
         }
 
+
         if (element instanceof Alert) {
             ((Alert)element).sendKeys(keys);
             return;
         }
 
         CompositeAction actionChain = new CompositeAction();
+
+        // We don't just randomly start sending keys, but we click first
+        // the element so it has focus, then only start typing in case the
+        // element is not focused.
+        if (selector != null && element != null &&
+                GermaniumApi.<Boolean>js("return arguments[0] != document.activeElement;", element)) {
+            actionChain.addAction(new ClickAction(GermaniumApi.getGermanium().getMouse(), (Locatable) element));
+            actionChain.addAction(new DelayAction(0.2f)); // wait for the selection to settle.
+        }
 
         /*
          # In case we have delays, we will pass insert after each character a small delay.

@@ -32,7 +32,7 @@ public class GermaniumTestSite {
         if (!serverRunning) {
             serverRunning = true;
             Undertow server = Undertow.builder()
-                    .addHttpListener(readPort(), null)
+                    .addHttpListener(readPort(), "0.0.0.0")
                 .setHandler(getPathHandler("src/test/resources/"))
                 .build();
 

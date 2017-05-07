@@ -38,7 +38,7 @@ public class LocalWebDriverBuilder {
         } else if ("edge".equalsIgnoreCase(browser)) {
             return openLocalEdge();
         } else {
-            return throwUnknownBrowser(browser);
+            return throwUnknownBrowser(browser, browser);
         }
     }
 

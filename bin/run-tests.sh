@@ -4,7 +4,7 @@
 cd $(readlink -f $(dirname $(readlink -f "$0"))/..)
 
 if [[ "$TEST_WEBDRIVER_HUB" == "" ]]; then
-    TEST_WEBDRIVER_HUB="192.168.0.6"
+    TEST_WEBDRIVER_HUB="192.168.0.23"
 fi # [[ "$TEST_WEBDRIVER_HOST" == "" ]]
 
 if [[ "$TEST_HOST_IP" == "" ]]; then

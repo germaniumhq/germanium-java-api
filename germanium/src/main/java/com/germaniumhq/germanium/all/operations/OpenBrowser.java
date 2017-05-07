@@ -99,11 +99,13 @@ public class OpenBrowser {
         return germanium;
     }
 
-    public static GermaniumDriver throwUnknownBrowser(String browser) {
+    public static GermaniumDriver throwUnknownBrowser(String browser, String parsedValue) {
         throw new IllegalArgumentException(String.format(
                 "Unknown browser: %s, only firefox, " +
-                    "chrome and ie are supported." ,
-                browser
+                    "chrome, edge, and ie are supported. " +
+                    "The value that was used for parsing was: `%s`." ,
+                browser,
+                parsedValue
         ));
     }
 }

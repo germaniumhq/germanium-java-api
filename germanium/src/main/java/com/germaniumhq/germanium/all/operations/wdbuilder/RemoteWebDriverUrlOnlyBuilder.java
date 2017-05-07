@@ -50,7 +50,7 @@ public class RemoteWebDriverUrlOnlyBuilder {
         } else if ("edge".equalsIgnoreCase(remoteBrowser)) {
             remoteCapabilites = DesiredCapabilities.edge();
         } else {
-            return throwUnknownBrowser(remoteBrowser);
+            return throwUnknownBrowser(remoteBrowser, remoteMatch.group(0));
         }
 
         String remoteUrlString = remoteMatch.group(2);
