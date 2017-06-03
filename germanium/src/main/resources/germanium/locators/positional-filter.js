@@ -23,52 +23,37 @@ return (function() {
     }
 
     function left(element) {
-        var result = 0;
-        while (element && element != document.body) {
-            result += element.offsetLeft;
-            element = element.offsetParent;
+        if (!element) {
+            throw new Error('no element in left')
         }
-
-        return result;
+        return Math.round(element.getBoundingClientRect().left) -
+            Math.round(document.body ? document.body.getBoundingClientRect().left: 0);
     }
 
     function top(element) {
-        var result = 0;
-        while (element && element != document.body) {
-            result += element.offsetTop;
-            element = element.offsetParent;
+        if (!element) {
+            throw new Error('no element in top')
         }
-
-        return result;
+        return Math.round(element.getBoundingClientRect().top) -
+            Math.round(document.body ? document.body.getBoundingClientRect().top : 0);
     }
 
     function right(element) {
-        if (!element || typeof element.offsetWidth == "undefined") {
-            return -1;
+        if (!element) {
+            throw new Error('no element in right')
         }
-
-        var result = element.offsetWidth - 1;
-        while (element && element != document.body) {
-            result += element.offsetLeft;
-            element = element.offsetParent;
-        }
-
-        return result;
+        return Math.round(element.getBoundingClientRect().right) -
+            Math.round(document.body ? document.body.getBoundingClientRect().left : 0) - 1;
     }
 
     function bottom(element) {
-        if (!element || typeof element.offsetHeight == "undefined") {
-            return -1;
+        if (!element) {
+            throw new Error('no element in bottom')
         }
-
-        var result = element.offsetHeight - 1;
-        while (element && element != document.body) {
-            result += element.offsetTop;
-            element = element.offsetParent;
-        }
-
-        return result;
+        return Math.round(element.getBoundingClientRect().bottom) -
+            Math.round(document.body ? document.body.getBoundingClientRect().top : 0) - 1;
     }
+
 
     readElements(aboveElements);
     readElements(rightOfElements);
@@ -78,11 +63,17 @@ return (function() {
 
     // The above filtering tries to make sure the elements we're
     // finding are above the reference elements in the `aboveElements`
-    for (i = elements.length - 1; i >= 0; i--) {
-        for (j = 0; j < aboveElements.length; j++) {
-            if (bottom(elements[i]) >= top(aboveElements[j])) {
-                elements.splice(i, 1)
+    if (aboveElements.length) {
+        NextI:
+        for (i = elements.length - 1; i >= 0; i--) {
+            for (j = 0; j < aboveElements.length; j++) {
+                if (bottom(elements[i]) < top(aboveElements[j]) &&
+                    overlapX(elements[i], aboveElements[j])) {
+                    continue NextI;
+                }
             }
+
+            elements.splice(i, 1)
         }
     }
 
@@ -126,11 +117,17 @@ return (function() {
 
     // The below filtering makes sure that the elements we're finding
     // are below the reference elements in the `belowElements`
-    for (i = elements.length - 1; i >= 0; i--) {
-        for (j = 0; j < belowElements.length; j++) {
-            if (top(elements[i]) <= bottom(belowElements[j])) {
-                elements.splice(i, 1)
+    if (belowElements.length) {
+        NextI:
+        for (i = elements.length - 1; i >= 0; i--) {
+            for (j = 0; j < belowElements.length; j++) {
+                if (top(elements[i]) > bottom(belowElements[j]) &&
+                    overlapX(elements[i], belowElements[j])) {
+                    continue NextI;
+                }
             }
+
+            elements.splice(i, 1);
         }
     }
 
@@ -138,7 +135,7 @@ return (function() {
     // we're under, to the top of our element.
     if (belowElements.length) {
         belowReference = bottom(belowElements[0]);
-        leftReference = left(belowReference[0]);
+        leftReference = left(belowElements[0]);
 
         elements.sort(function(e1, e2) {
             var overlapE1 = overlapX(belowElements[0], e1),
@@ -160,11 +157,17 @@ return (function() {
         });
     }
 
-    for (i = elements.length - 1; i >= 0; i--) {
-        for (j = 0; j < rightOfElements.length; j++) {
-            if (left(elements[i]) <= right(rightOfElements[j])) {
-                elements.splice(i, 1)
+    if (rightOfElements.length) {
+        NextI:
+        for (i = elements.length - 1; i >= 0; i--) {
+            for (j = 0; j < rightOfElements.length; j++) {
+                if (left(elements[i]) > right(rightOfElements[j]) &&
+                    overlapY(elements[i], rightOfElements[j])) {
+                    continue NextI;
+                }
             }
+
+            elements.splice(i, 1)
         }
     }
 
@@ -192,11 +195,17 @@ return (function() {
         });
     }
 
-    for (i = elements.length - 1; i >= 0; i--) {
-        for (j = 0; j < leftOfElements.length; j++) {
-            if (right(elements[i]) >= left(leftOfElements[j])) {
-                elements.splice(i, 1)
+    if (leftOfElements.length) {
+        NextI:
+        for (i = elements.length - 1; i >= 0; i--) {
+            for (j = 0; j < leftOfElements.length; j++) {
+                if (right(elements[i]) < left(leftOfElements[j]) &&
+                    overlapY(elements[i], leftOfElements[j])) {
+                    continue NextI;
+                }
             }
+
+            elements.splice(i, 1)
         }
     }
 
