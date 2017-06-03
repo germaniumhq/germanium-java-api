@@ -50,6 +50,18 @@ public class GermaniumSelectorsSelectorStaticLocatorHelper {
                 Image().above(Text("Surname")).exists());
     }
 
+    @When("^I search using selectors if an InputText right of the text \"([^\"]*)\" exists$")
+    public void i_search_using_selectors_if_an_InputText_right_of_exists(String text) throws Throwable {
+        Context.set("does_element_exist",
+                InputText().rightOf(Text(text)).exists());
+    }
+
+    @When("^I search using selectors for an InputText right of the text \"(.*)\"$")
+    public void i_search_using_selectors_if_an_InputText_right_of(String text) throws Throwable {
+        Context.set("found_element", InputText().rightOf(Text(text)).element());
+    }
+
+
     @Then("^no, it doesn't exists$")
     public void no_it_doesn_t_exists() throws Throwable {
         boolean doesElementExists = Context.get("does_element_exist");

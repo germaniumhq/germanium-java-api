@@ -8,6 +8,12 @@ public class GetText {
     public static String getText(Object selector) {
         WebElement element;
 
+        if (selector == null) {
+            throw new IllegalArgumentException("The passed selector into getText() was null. " +
+                    "In case you are using getText with waited: getText(waited(Element(..))) then " +
+                    "it means the waited() call has failed.");
+        }
+
         if (selector instanceof WebElement) {
             element = (WebElement) selector;
         } else {

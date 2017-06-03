@@ -3,12 +3,15 @@ package com.germaniumhq.germanium.steps;
 import com.germaniumhq.germanium.Context;
 import com.germaniumhq.germanium.all.GermaniumApi;
 import com.germaniumhq.germanium.all.GermaniumSelectors;
+import com.germaniumhq.germanium.points.Box;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 import static com.germaniumhq.germanium.all.GermaniumActions.click;
 import static com.germaniumhq.germanium.all.GermaniumSelectors.Box;
+import static com.germaniumhq.germanium.all.GermaniumSelectors.Css;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -99,4 +102,17 @@ public class GermaniumPositionPosition {
                 "finding the bounding box didn't matched"));
     }
 
+    @Then("I get the box positions for the first two rows")
+    public void i_get_the_boxes() {
+        Context.set("first_box", Box(Css("#row11")).getBox());
+        Context.set("second_box", Box(Css("#row21")).getBox());
+    }
+
+    @Then("the positions of the 2 boxes are different")
+    public void the_positions_are_the_same() {
+        Box box1 = Context.get("first_box");
+        Box box2 = Context.get("second_box");
+
+        assertNotEquals(box1.top(), box2.top());
+    }
 }
