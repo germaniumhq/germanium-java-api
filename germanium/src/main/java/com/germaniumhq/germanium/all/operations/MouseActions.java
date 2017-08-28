@@ -4,6 +4,7 @@ import com.germaniumhq.germanium.all.GermaniumApi;
 import com.germaniumhq.germanium.points.Point;
 import com.germaniumhq.germanium.util.ActionElementFinder;
 import com.germaniumhq.germanium.wa.EdgeMoveToElementWorkaround;
+import com.germaniumhq.germanium.wa.IE8MoveMouseCheckHover;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.ButtonReleaseAction;
 import org.openqa.selenium.interactions.ClickAction;
@@ -49,9 +50,11 @@ public class MouseActions {
 
     private static void moveToElement(CompositeAction actionChain, WebElement element) {
         new EdgeMoveToElementWorkaround(actionChain, element, () -> {
-            actionChain.addAction(new MoveMouseAction(
-                    GermaniumApi.getGermanium().getMouse(),
-                    (Locatable) element));
+            new IE8MoveMouseCheckHover(actionChain, element, () -> {
+                actionChain.addAction(new MoveMouseAction(
+                        GermaniumApi.getGermanium().getMouse(),
+                        (Locatable) element));
+            });
         }).execute();
     }
 

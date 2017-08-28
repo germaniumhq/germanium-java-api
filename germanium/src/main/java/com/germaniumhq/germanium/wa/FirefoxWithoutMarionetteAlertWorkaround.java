@@ -1,24 +1,29 @@
 package com.germaniumhq.germanium.wa;
 
+import com.germaniumhq.germanium.GermaniumDriver;
 import com.germaniumhq.germanium.all.GermaniumApi;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.HasCapabilities;
 import org.openqa.selenium.JavascriptExecutor;
 
 import java.util.function.Supplier;
 
-public class FirefoxWithoutMarionetteAlertWorkaround extends SupplierWorkaround<Boolean> {
-    public FirefoxWithoutMarionetteAlertWorkaround(Supplier<Boolean> defaultCode) {
+public class FirefoxWithoutMarionetteAlertWorkaround extends SupplierWorkaround<Alert> {
+    private final GermaniumDriver germaniumDriver;
+
+    public FirefoxWithoutMarionetteAlertWorkaround(GermaniumDriver germaniumDriver, Supplier<Alert> defaultCode) {
         super(defaultCode);
+        this.germaniumDriver = germaniumDriver;
     }
 
     @Override
-    protected Boolean executeWorkAround() {
+    protected Alert executeWorkAround() {
         try {
             ((JavascriptExecutor)GermaniumApi.getWebDriver())
                     .executeScript("1 == 1");
-            return false;
+            return germaniumDriver.getLastAlert();
         } catch (Exception e) {
-            return true;
+            return germaniumDriver.switchTo().alert();
         }
     }
 

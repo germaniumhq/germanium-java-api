@@ -3,7 +3,6 @@ package com.germaniumhq.germanium.locators;
 import com.germaniumhq.germanium.GermaniumDriver;
 import com.germaniumhq.germanium.impl.AlertChecker;
 import org.openqa.selenium.Alert;
-import org.openqa.selenium.NoAlertPresentException;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,11 +21,7 @@ public class AlertLocator implements Locator<Alert> {
 
     @Override
     public Alert element(Visibility visibility) {
-        try {
-            return germanium.switchTo().alert();
-        } catch (NoAlertPresentException e) {
-            return null;
-        }
+        return new AlertChecker(germanium).getAlert();
     }
 
     @Override
@@ -70,7 +65,7 @@ public class AlertLocator implements Locator<Alert> {
 
     @Override
     public boolean exists(Visibility visibility) {
-        return new AlertChecker(germanium).isAlertExisting();
+        return new AlertChecker(germanium).getAlert() != null;
     }
 
     @Override
@@ -85,12 +80,12 @@ public class AlertLocator implements Locator<Alert> {
 
     @Override
     public String text() {
-        return germanium.switchTo().alert().getText();
+        return new AlertChecker(germanium).getAlert().getText();
     }
 
     @Override
     public String text(Visibility visibility) {
-        return germanium.switchTo().alert().getText();
+        return new AlertChecker(germanium).getAlert().getText();
     }
 
     @Override

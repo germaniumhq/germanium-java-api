@@ -3,7 +3,6 @@ package com.germaniumhq.germanium.all.operations.actions;
 import com.germaniumhq.germanium.GermaniumDriver;
 import com.germaniumhq.germanium.all.GermaniumApi;
 import com.germaniumhq.germanium.locators.Locator;
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.ClickAction;
 import org.openqa.selenium.interactions.CompositeAction;
@@ -19,7 +18,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.germaniumhq.germanium.all.GermaniumSelectors.Alert;
 import static com.germaniumhq.germanium.impl.FilterNotDisplayed.filterOneForAction;
 
 
@@ -81,19 +79,7 @@ public class TypeKeys {
 
         if (selector != null) {
             List<Object> potentialElements = germanium.S(selector).elementList(Locator.Visibility.ALL_ELEMENTS);
-            if (potentialElements.size() == 1 && potentialElements.get(0) instanceof Alert) {
-                element = potentialElements.get(0);
-            } else {
-                element = filterOneForAction((List) potentialElements);
-            }
-        } else if (Alert().exists()) {
-            element = Alert().element();
-        }
-
-
-        if (element instanceof Alert) {
-            ((Alert)element).sendKeys(keys);
-            return;
+            element = filterOneForAction((List) potentialElements);
         }
 
         CompositeAction actionChain = new CompositeAction();

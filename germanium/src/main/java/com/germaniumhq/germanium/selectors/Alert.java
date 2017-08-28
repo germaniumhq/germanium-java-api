@@ -5,6 +5,7 @@ import com.germaniumhq.germanium.locators.Locator;
 
 import java.util.List;
 
+import static com.germaniumhq.germanium.all.GermaniumApi.getGermanium;
 import static com.germaniumhq.germanium.all.Wait.waitFor;
 
 public class Alert implements Selector<org.openqa.selenium.Alert>, Locator<org.openqa.selenium.Alert> {
@@ -78,6 +79,7 @@ public class Alert implements Selector<org.openqa.selenium.Alert>, Locator<org.o
             return true;
         });
 
+        getGermanium().setLastAlert(null);
         waitFor(this::notExists);
     }
 
@@ -89,6 +91,7 @@ public class Alert implements Selector<org.openqa.selenium.Alert>, Locator<org.o
             return true;
         });
 
+        getGermanium().setLastAlert(null);
         waitFor(this::notExists);
     }
 

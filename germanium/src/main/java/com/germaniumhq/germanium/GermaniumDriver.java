@@ -10,6 +10,7 @@ import com.germaniumhq.germanium.locators.XPathLocator;
 import com.germaniumhq.germanium.util.Wait;
 import com.germaniumhq.germanium.wa.Ie8LoadSupportScripts;
 import org.apache.log4j.Logger;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
@@ -45,6 +46,7 @@ public class GermaniumDriver implements WebDriver, JavascriptExecutor, TakesScre
     private String screenshotFolder;
     private List<String> supportScripts;
     private String currentIFrame;
+    private Alert lastAlert;
 
     private Map<String, Class<? extends Locator>> locatorMap = new HashMap<>();
     /**
@@ -95,10 +97,10 @@ public class GermaniumDriver implements WebDriver, JavascriptExecutor, TakesScre
         AlertChecker alertChecker = new AlertChecker(this);
 
         new Wait(timeout).waitFor(
-                alertChecker::isAlertExisting,
+                alertChecker::getAlert,
                 () -> this.js("return 'complete' == document['readyState']"));
 
-        if (alertChecker.isAlertExisting()) {
+        if (alertChecker.getAlert() != null) {
             log.warn("Since an alert was present, waitForPageToLoad " +
                     "exited prematurely, and the support scripts were not loaded. " +
                     "You need to call `getGermanium().loadSupportScripts()` " +
@@ -366,5 +368,13 @@ public class GermaniumDriver implements WebDriver, JavascriptExecutor, TakesScre
     @Override
     public Mouse getMouse() {
         return ((HasInputDevices)webDriver).getMouse();
+    }
+
+    public Alert getLastAlert() {
+        return lastAlert;
+    }
+
+    public void setLastAlert(Alert lastAlert) {
+        this.lastAlert = lastAlert;
     }
 }

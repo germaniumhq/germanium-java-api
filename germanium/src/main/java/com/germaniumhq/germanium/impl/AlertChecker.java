@@ -10,6 +10,8 @@ import org.openqa.selenium.WebDriverException;
 
 import java.util.function.Supplier;
 
+import static com.germaniumhq.germanium.all.GermaniumApi.getGermanium;
+
 /**
  * Code to allow alerts.
  */
@@ -22,14 +24,17 @@ public class AlertChecker {
         this.germaniumDriver = germaniumDriver;
     }
 
-    public boolean isAlertExisting() {
-        return new FirefoxWithoutMarionetteAlertWorkaround(() -> {
+    public Alert getAlert() {
+        return new FirefoxWithoutMarionetteAlertWorkaround(getGermanium(), () -> {
             try {
                 Alert alert = germaniumDriver.switchTo().alert();
                 alert.getText();
-                return true;
+
+                germaniumDriver.setLastAlert(alert);
+
+                return alert;
             } catch (NoAlertPresentException e) {
-                return false;
+                return germaniumDriver.getLastAlert();
             }
         }).execute();
     }
