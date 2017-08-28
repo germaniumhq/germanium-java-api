@@ -1,6 +1,7 @@
 package com.germaniumhq.germanium.all.operations;
 
 import com.germaniumhq.germanium.all.GermaniumApi;
+import com.germaniumhq.germanium.impl.GermaniumCompositeAction;
 import com.germaniumhq.germanium.points.Point;
 import com.germaniumhq.germanium.util.ActionElementFinder;
 import com.germaniumhq.germanium.wa.EdgeMoveToElementWorkaround;
@@ -9,7 +10,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.ButtonReleaseAction;
 import org.openqa.selenium.interactions.ClickAction;
 import org.openqa.selenium.interactions.ClickAndHoldAction;
-import org.openqa.selenium.interactions.CompositeAction;
 import org.openqa.selenium.interactions.ContextClickAction;
 import org.openqa.selenium.interactions.DoubleClickAction;
 import org.openqa.selenium.interactions.MoveMouseAction;
@@ -48,7 +48,7 @@ public class MouseActions {
         return ActionElementFinder.singleElement(selector);
     }
 
-    private static void moveToElement(CompositeAction actionChain, WebElement element) {
+    private static void moveToElement(GermaniumCompositeAction actionChain, WebElement element) {
         new EdgeMoveToElementWorkaround(actionChain, element, () -> {
             new IE8MoveMouseCheckHover(actionChain, element, () -> {
                 actionChain.addAction(new MoveMouseAction(
@@ -58,9 +58,9 @@ public class MouseActions {
         }).execute();
     }
 
-    private static CompositeAction mouseMove(Object selector, Point point, CompositeAction action) {
+    private static GermaniumCompositeAction mouseMove(Object selector, Point point, GermaniumCompositeAction action) {
         if (action == null) {
-            action = new CompositeAction();
+            action = new GermaniumCompositeAction();
         }
 
         Object element = elementOrPosition(selector);
@@ -162,15 +162,15 @@ public class MouseActions {
                                    Object toSelector, Point toPoint) {
         WebElement fromElement = elementOrNull(fromSelector, fromPoint);
 
-        CompositeAction action;
+        GermaniumCompositeAction action;
 
         if (fromElement != null) {
-            action = mouseMove(fromElement, null, null)
+            action = (GermaniumCompositeAction) mouseMove(fromElement, null, null)
                     .addAction(new ClickAndHoldAction(
                             GermaniumApi.getGermanium().getMouse(),
                             (Locatable) fromElement));
         } else {
-            action = mouseMove(fromSelector, fromPoint, null)
+            action = (GermaniumCompositeAction) mouseMove(fromSelector, fromPoint, null)
                     .addAction(new ClickAndHoldAction(
                             GermaniumApi.getGermanium().getMouse(),
                             null));
@@ -179,12 +179,12 @@ public class MouseActions {
         WebElement toElement = elementOrNull(toSelector, toPoint);
 
         if (toElement != null) {
-            action = mouseMove(toElement, null, action)
+            action = (GermaniumCompositeAction) mouseMove(toElement, null, action)
                     .addAction(new ButtonReleaseAction(
                             GermaniumApi.getGermanium().getMouse(),
                             (Locatable) toElement));
         } else {
-            action = mouseMove(toSelector, toPoint, action)
+            action = (GermaniumCompositeAction) mouseMove(toSelector, toPoint, action)
                     .addAction(new ButtonReleaseAction(
                             GermaniumApi.getGermanium().getMouse(),
                             null));

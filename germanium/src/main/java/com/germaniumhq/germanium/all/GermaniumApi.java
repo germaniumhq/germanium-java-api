@@ -25,7 +25,7 @@ import java.util.function.Supplier;
  * The full static Germanium API.
  */
 public class GermaniumApi {
-    private static GermaniumDriver INSTANCE;
+    private static InheritableThreadLocal<GermaniumDriver> INSTANCE = new InheritableThreadLocal<>();
 
     public static OpenBrowser openBrowser(String browser) {
         return new OpenBrowser().browser(browser);
@@ -44,7 +44,7 @@ public class GermaniumApi {
     }
 
     public static GermaniumDriver getGermanium() {
-        return INSTANCE;
+        return INSTANCE.get();
     }
 
     public static Locator<WebElement> S(String selector) {
@@ -82,8 +82,8 @@ public class GermaniumApi {
      * @return The old instance if present. Null if no other instance was there.
      */
     public static GermaniumDriver setGermanium(GermaniumDriver germanium) {
-        GermaniumDriver oldInstance = INSTANCE;
-        INSTANCE = germanium;
+        GermaniumDriver oldInstance = INSTANCE.get();
+        INSTANCE.set(germanium);
 
         return oldInstance;
     }
@@ -92,11 +92,11 @@ public class GermaniumApi {
      * Close the currently running browser.
      */
     public static void closeBrowser() {
-        if (INSTANCE != null) {
-            INSTANCE.quit();
+        if (INSTANCE.get() != null) {
+            INSTANCE.get().quit();
         }
 
-        INSTANCE = null;
+        INSTANCE.set(null);
     }
 
     public static <T> T js(String code, Object... parameters) {

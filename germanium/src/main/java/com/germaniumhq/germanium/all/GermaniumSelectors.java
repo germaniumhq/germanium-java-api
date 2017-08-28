@@ -2,6 +2,7 @@ package com.germaniumhq.germanium.all;
 
 import com.germaniumhq.germanium.points.Box;
 import com.germaniumhq.germanium.selectors.Alert;
+import com.germaniumhq.germanium.selectors.AnyOfSelector;
 import com.germaniumhq.germanium.selectors.Button;
 import com.germaniumhq.germanium.selectors.CheckBox;
 import com.germaniumhq.germanium.selectors.Css;
@@ -12,15 +13,21 @@ import com.germaniumhq.germanium.selectors.InputFile;
 import com.germaniumhq.germanium.selectors.InputText;
 import com.germaniumhq.germanium.selectors.JsSelector;
 import com.germaniumhq.germanium.selectors.Link;
+import com.germaniumhq.germanium.selectors.Selector;
 import com.germaniumhq.germanium.selectors.Text;
 import com.germaniumhq.germanium.selectors.Window;
 import com.germaniumhq.germanium.selectors.XPath;
+import org.openqa.selenium.WebElement;
 
 /**
  * Shorthand functions to return selectors instead of being
  * forced to call "new "
  */
 public class GermaniumSelectors {
+    public static AnyOfSelector AnyOfSelector(Selector<WebElement> ... usedSelectors) {
+        return new AnyOfSelector(usedSelectors);
+    }
+
     public static Alert Alert() {
         return new Alert();
     }

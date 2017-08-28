@@ -68,4 +68,13 @@ public class OpenBrowser {
     public void is_title_of_the_page_equals(String text) {
         assertEquals(text, GermaniumApi.getGermanium().getTitle());
     }
+
+    @Then("^the I can read from a different thread the title of the page as '(.*?)'$")
+    public void i_can_read_from_a_different_thread(String text) throws InterruptedException {
+        Thread t = new Thread(() -> {
+            assertEquals(text, GermaniumApi.getGermanium().getTitle());
+        });
+        t.start();
+        t.join();
+    }
 }

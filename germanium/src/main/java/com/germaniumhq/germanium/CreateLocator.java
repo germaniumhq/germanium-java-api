@@ -1,5 +1,6 @@
 package com.germaniumhq.germanium;
 
+import com.germaniumhq.germanium.all.GermaniumApi;
 import com.germaniumhq.germanium.locators.AlertLocator;
 import com.germaniumhq.germanium.locators.CompositeLocator;
 import com.germaniumhq.germanium.locators.CssLocator;
@@ -13,6 +14,7 @@ import com.germaniumhq.germanium.locators.WindowLocator;
 import com.germaniumhq.germanium.locators.XPathLocator;
 import com.germaniumhq.germanium.selectors.AbstractSelector;
 import com.germaniumhq.germanium.selectors.Alert;
+import com.germaniumhq.germanium.selectors.AnyOfSelector;
 import com.germaniumhq.germanium.selectors.InsideFilterSelector;
 import com.germaniumhq.germanium.selectors.PositionalFilterSelector;
 import com.germaniumhq.germanium.selectors.Selector;
@@ -136,6 +138,11 @@ public class CreateLocator {
                     textSelector.isTrimText());
         }
 
+        if (selector instanceof AnyOfSelector) {
+            return (Locator<T>) createCompositeLocator(GermaniumApi.getGermanium(),
+                                                       ((AnyOfSelector)selector).getUsedSelectors());
+        }
+
         if (selector instanceof AbstractSelector) {
             AbstractSelector abstractSelector = (AbstractSelector) selector;
 
@@ -209,6 +216,19 @@ public class CreateLocator {
         }
 
         return (Locator<T>) new CssLocator(germanium, stringSelector);
+    }
+
+    private static CompositeLocator createCompositeLocator(GermaniumDriver germanium, Selector<WebElement>[] usedSelectors) {
+        if (usedSelectors.length == 1) {
+            return (CompositeLocator) CreateLocator.<WebElement>createLocator(germanium, usedSelectors[0]);
+        }
+
+        List<DeferredLocator> locators = new ArrayList<>();
+        for (Selector<WebElement> usedSelector: usedSelectors) {
+            locators.add((DeferredLocator) CreateLocator.<WebElement>createLocator(germanium, usedSelector));
+        }
+
+        return new CompositeLocator(locators);
     }
 
     private static void raiseBadSelectorType(Object selector) {
