@@ -9,6 +9,7 @@ import cucumber.api.java.en.When;
 import org.openqa.selenium.WebElement;
 
 import static com.germaniumhq.germanium.all.GermaniumApi.S;
+import static com.germaniumhq.germanium.all.GermaniumApi.getGermanium;
 import static com.germaniumhq.germanium.all.GermaniumSelectors.Css;
 import static org.junit.Assert.*;
 
@@ -57,7 +58,7 @@ public class GermaniumApiS {
     @When("^I create a StaticElementLocator with a single element: #outsideTextFlowedInput$")
     public void i_create_a_StaticElementLocator_with_a_single_element_outsideTextFlowedInput() throws Throwable {
         WebElement element = Css("#outsideTextFlowedInput").element();
-        Context.set("static_element_locator", new StaticElementLocator(element));
+        Context.set("static_element_locator", new StaticElementLocator(getGermanium(), element));
     }
 
     @Then("^the StaticElementLocator has one element$")

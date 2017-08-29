@@ -14,10 +14,13 @@ import com.germaniumhq.germanium.selectors.InputText;
 import com.germaniumhq.germanium.selectors.JsSelector;
 import com.germaniumhq.germanium.selectors.Link;
 import com.germaniumhq.germanium.selectors.Selector;
+import com.germaniumhq.germanium.selectors.StaticElement;
 import com.germaniumhq.germanium.selectors.Text;
 import com.germaniumhq.germanium.selectors.Window;
 import com.germaniumhq.germanium.selectors.XPath;
 import org.openqa.selenium.WebElement;
+
+import java.util.List;
 
 /**
  * Shorthand functions to return selectors instead of being
@@ -97,6 +100,14 @@ public class GermaniumSelectors {
 
     public static Link Link(String searchText) {
         return new Link(searchText);
+    }
+
+    public static StaticElement StaticElement(WebElement elements) {
+        return new StaticElement(elements);
+    }
+
+    public static StaticElement StaticElement(List<WebElement> elements) {
+        return new StaticElement(elements);
     }
 
     public static Text Text(String text) {

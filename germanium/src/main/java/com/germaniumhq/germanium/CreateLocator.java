@@ -18,6 +18,7 @@ import com.germaniumhq.germanium.selectors.AnyOfSelector;
 import com.germaniumhq.germanium.selectors.InsideFilterSelector;
 import com.germaniumhq.germanium.selectors.PositionalFilterSelector;
 import com.germaniumhq.germanium.selectors.Selector;
+import com.germaniumhq.germanium.selectors.StaticElement;
 import com.germaniumhq.germanium.selectors.Text;
 import com.germaniumhq.germanium.selectors.Window;
 import org.openqa.selenium.WebElement;
@@ -143,6 +144,11 @@ public class CreateLocator {
                                                        ((AnyOfSelector)selector).getUsedSelectors());
         }
 
+        if (selector instanceof StaticElement) {
+            WebElement[] usedElements = ((StaticElement) selector).getUsedElements();
+            return (Locator<T>) new StaticElementLocator(germanium, usedElements);
+        }
+
         if (selector instanceof AbstractSelector) {
             AbstractSelector abstractSelector = (AbstractSelector) selector;
 
@@ -165,7 +171,7 @@ public class CreateLocator {
         }
 
         if (selector instanceof WebElement) {
-            return (Locator<T>) new StaticElementLocator((WebElement) selector);
+            return (Locator<T>) new StaticElementLocator(germanium, (WebElement) selector);
         }
 
         if (selector instanceof Alert) {
@@ -189,7 +195,7 @@ public class CreateLocator {
                 }
             }
 
-            return (Locator<T>) new StaticElementLocator(iterableSelector);
+            return (Locator<T>) new StaticElementLocator(germanium, iterableSelector);
         }
 
         if (!(selector instanceof String)) {
