@@ -23,8 +23,8 @@ USER ciplogic
 
 RUN curl -s "https://get.sdkman.io" | bash && \
     echo 'source "/home/ciplogic/.sdkman/bin/sdkman-init.sh"' >> /home/ciplogic/.bash_profile && \
-    bash -c -l "sdk install maven" && \
-    bash -c -l "sdk install java"
+    bash -c -l "sdk install maven 3.3.9" && \
+    bash -c -l "sdk install java 8u144-zulu"
 
 USER root
 
