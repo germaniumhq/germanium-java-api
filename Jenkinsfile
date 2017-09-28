@@ -1,5 +1,7 @@
 properties([
     parameters([
+        string(name: 'LOCAL_PROXY', defaultValue: '172.17.0.1:3128',
+                description: 'Squid proxy to use for fetching resources'),
         string(name: 'SOURCES_URL', defaultValue: 'http://192.168.0.2:10080/germanium/germanium-java.git',
                 description: 'Squid proxy to use for fetching resources'),
         string(name: 'DOCKER_HOST_IP', defaultValue: '192.168.0.2',
