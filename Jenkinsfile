@@ -24,7 +24,7 @@ stage('Build Docker Container') {
                 chmod 666 ./jenkins/scripts/settings.xml
             """
 
-            dockerBuild file: './jenkins/Dockerfile.java8',
+            dockerBuild file: './jenkins/Dockerfile.java8.build',
                 build_args: [
                     "http_proxy=http://${LOCAL_PROXY}",
                     "https_proxy=http://${LOCAL_PROXY}",
