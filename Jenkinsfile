@@ -47,7 +47,7 @@ stage('Compile Germanium') {
             links: [
                 'nexus:nexus'
             ],
-            command: 'bash -l -c /home/ciplogic/scripts/compile-germanium.sh'
+            command: 'bash -l -c /scripts/compile-germanium.sh'
     }
 }
 
@@ -83,7 +83,7 @@ stage('Run Tests') {
                     volumes: [
                         '/opt/host:/opt/container:rw'
                     ],
-                    command: '/home/ciplogic/scripts/test-drivers.sh'
+                    command: 'bash -l -c /scripts/test-drivers.sh'
             }
         }
     }
@@ -91,24 +91,3 @@ stage('Run Tests') {
     parallel(germaniumParallelTests)
 }
 
-stage('Release Local Nexus') {
-    node {
-        dockerRun image: 'ge',
-            name: 'container_name',
-            privileged: true,
-            remove: true,
-            env: [
-                'DISPLAY=vnc:0'
-            ],
-            links: [
-                'nexus:nexus'
-            ],
-            ports: [
-                '8080:80'
-            ],
-            volumes: [
-                '/opt/host:/opt/container:rw'
-            ],
-            command: '/scripts/test-drivers.sh'
-    }
-}
