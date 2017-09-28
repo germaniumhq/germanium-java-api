@@ -26,6 +26,6 @@ deactivate_proxy
 cd /home/ciplogic/project/germanium-tests
 
 # the environment comes from the Jenkinsfile
-mvn clean install
+mvn test -Dcucumber.options="-t ~@nochrome"
 
 
