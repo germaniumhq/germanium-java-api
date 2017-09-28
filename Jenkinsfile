@@ -14,13 +14,13 @@ RUN_CHROME_TESTS = Boolean.valueOf(RUN_CHROME_TESTS)
 stage('Build Docker Container') {
     node {
         withCredentials([file(credentialsId: 'NEXUS_SETTINGS_XML', variable: 'NEXUS_SETTINGS_XML')]) {
-            sh """
-                cp ${env.NEXUS_SETTINGS_XML}
-                chmod 666 /tmp/wut.xml
-            """
-
             deleteDir()
             checkout scm
+
+            sh """
+                cp ${env.NEXUS_SETTINGS_XML} ./jenkins/scripts/settings.xml
+                chmod 666 ./jenkins/scripts/settings.xml
+            """
 
             dockerBuild file: './jenkins/Dockerfile.java8',
                 build_args: [
