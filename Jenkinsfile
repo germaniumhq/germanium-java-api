@@ -75,7 +75,7 @@ stage('Run Tests') {
                         'DISPLAY=vnc:0'
                     ],
                     links: [
-                        'vnc:nvc'
+                        'vnc-server:vnc'
                     ],
                     ports: [
                         "${port}:${port}"
