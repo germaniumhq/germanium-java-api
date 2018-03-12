@@ -1,5 +1,5 @@
 germanium:
-  version: parent:../germanium/@germanium
+  version: parent:../germanium-build-system/@germanium
   files:
     pom.xml: maven:com.germaniumhq:germanium-parent
     germanium/pom.xml: maven:com.germaniumhq:germanium
@@ -8,7 +8,7 @@ germanium:
       - maven:com.germaniumhq:germanium
 
 germanium-drivers:
-  version: parent:../germaniumdriversjava/@germanium-drivers
+  version: parent:../germanium-java-drivers/@germanium-drivers
   files:
     germanium/pom.xml: maven:com.germaniumhq:binary-drivers
 

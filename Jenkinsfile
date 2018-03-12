@@ -1,93 +1,27 @@
-properties([
-    parameters([
-        string(name: 'LOCAL_PROXY', defaultValue: '172.17.0.1:3128',
-                description: 'Squid proxy to use for fetching resources'),
-        string(name: 'SOURCES_URL', defaultValue: 'http://192.168.0.2:10080/germanium/germanium-java.git',
-                description: 'Squid proxy to use for fetching resources'),
-        string(name: 'DOCKER_HOST_IP', defaultValue: '192.168.0.2',
-                description: 'The host where the browsers will try to connect. The port will be randomly allocated.'),
-        booleanParam(name: 'RUN_CHROME_TESTS', defaultValue: true,
-                description: 'Should the chrome tests run.')
-    ])
-])
-
-RUN_CHROME_TESTS = Boolean.valueOf(RUN_CHROME_TESTS)
-
-stage('Build Docker Container') {
+stage('Build Germanium') {
     node {
-        withCredentials([file(credentialsId: 'NEXUS_SETTINGS_XML', variable: 'NEXUS_SETTINGS_XML')]) {
-            deleteDir()
-            checkout scm
+        deleteDir()
 
-            sh """
-                cp ${env.NEXUS_SETTINGS_XML} ./jenkins/scripts/settings.xml
-                chmod 666 ./jenkins/scripts/settings.xml
-            """
+        checkout scm
 
-            dockerBuild file: './jenkins/Dockerfile.java8.build',
-                build_args: [
-                    "http_proxy=http://${LOCAL_PROXY}",
-                    "https_proxy=http://${LOCAL_PROXY}",
-                    "ftp_proxy=http://${LOCAL_PROXY}"
-                ],
-                tags: ['germanium_java8']
-        }
-    }
-}
+        dockerRm containers: [
+            'germanium_java_ok'
+        ]
 
-def name = 'ge-java-' + getGuid()
+        dockerBuild file: './Dockerfile',
+            tags: ['germanium_test:java']
 
-stage('Compile Germanium') {
-    node {
-        dockerRun image: 'germanium_java8',
-            name: name,
+        dockerRun image: 'germanium_test:java',
+            name: 'germanium_java_ok',
+            privileged: true,
             env: [
-                "SOURCES_URL=${SOURCES_URL}"
+                'DISPLAY=vnc-server:0'
             ],
-            links: [
-                'nexus:nexus'
-            ],
-            command: 'bash -l -c /scripts/compile-germanium.sh'
+            volumes: [
+                '/dev/shm:/dev/shm:rw'
+            ]
+
+        dockerCommit name: 'germanium_java_ok',
+            image: 'germanium_java'
     }
 }
-
-stage('Commit Docker Image') {
-    node {
-        sh """
-            docker commit ${name} ${name}
-        """
-    }
-}
-
-stage('Run Tests') {
-    def germaniumParallelTests = [:]
-
-    if (RUN_CHROME_TESTS) {
-        germaniumParallelTests."Chrome (Local)" = {
-            node {
-                def port = getRandomPort()
-                dockerRun image: name,
-                    privileged: true,
-                    remove: true,
-                    env: [
-                        'TEST_BROWSER=chrome',
-                        "TEST_HOST=${DOCKER_HOST_IP}:${port}",
-                        'DISPLAY=vnc:0'
-                    ],
-                    links: [
-                        'vnc-server:vnc'
-                    ],
-                    ports: [
-                        "${port}:${port}"
-                    ],
-                    volumes: [
-                        '/opt/host:/opt/container:rw'
-                    ],
-                    command: 'bash -l -c /scripts/test-drivers.sh'
-            }
-        }
-    }
-
-    parallel(germaniumParallelTests)
-}
-
