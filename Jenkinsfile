@@ -13,10 +13,12 @@ stage('Build Germanium') {
 
         dockerRun image: 'germanium_test:java',
             name: 'germanium_java_ok',
-            privileged: true,
             env: [
-                'DISPLAY=vnc-server:0'
+                'DISPLAY=vnc-server:0',
+                'TEST_REUSE_BROWSER=1',
+                'TEST_BROWSER=chrome'
             ],
+            networks: ['vnc'],
             volumes: [
                 '/dev/shm:/dev/shm:rw'
             ]
