@@ -16,7 +16,8 @@ stage('Build Germanium') {
             env: [
                 'DISPLAY=vnc-server:0',
                 'TEST_REUSE_BROWSER=1',
-                'TEST_BROWSER=chrome'
+                'TEST_BROWSER=chrome',
+                "MAVEN_EXTRA_PARAMETERS=-Dcucumber.options='-t ~@nochrome'"
             ],
             networks: ['vnc'],
             volumes: [
