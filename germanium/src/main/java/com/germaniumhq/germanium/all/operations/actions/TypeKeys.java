@@ -2,16 +2,10 @@ package com.germaniumhq.germanium.all.operations.actions;
 
 import com.germaniumhq.germanium.GermaniumDriver;
 import com.germaniumhq.germanium.all.GermaniumApi;
+import com.germaniumhq.germanium.impl.GermaniumCompositeAction;
 import com.germaniumhq.germanium.locators.Locator;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.interactions.ClickAction;
-import org.openqa.selenium.interactions.CompositeAction;
-import org.openqa.selenium.interactions.KeyDownAction;
-import org.openqa.selenium.interactions.KeyUpAction;
-import org.openqa.selenium.interactions.Keyboard;
-import org.openqa.selenium.interactions.Mouse;
-import org.openqa.selenium.interactions.SendKeysAction;
-import org.openqa.selenium.internal.Locatable;
+import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,14 +76,14 @@ public class TypeKeys {
             element = filterOneForAction((List) potentialElements);
         }
 
-        CompositeAction actionChain = new CompositeAction();
+        GermaniumCompositeAction actionChain = new GermaniumCompositeAction(germanium.getWebDriver());
 
         // We don't just randomly start sending keys, but we click first
         // the element so it has focus, then only start typing in case the
         // element is not focused.
         if (selector != null && element != null &&
                 GermaniumApi.<Boolean>js("return arguments[0] != document.activeElement;", element)) {
-            actionChain.addAction(new ClickAction(GermaniumApi.getGermanium().getMouse(), (Locatable) element));
+            actionChain.click((WebElement) element);
             actionChain.addAction(new DelayAction(0.2f)); // wait for the selection to settle.
         }
 
@@ -107,9 +101,9 @@ public class TypeKeys {
         actionChain.perform();
     }
 
-    private static void addDelayedKeys(CompositeAction actionChain, List<KeysAction> keysArray, Object element, float delay) {
-        if (element != null && element instanceof Locatable) {
-            addClickAction(actionChain, (Locatable) element);
+    private static void addDelayedKeys(GermaniumCompositeAction actionChain, List<KeysAction> keysArray, Object element, float delay) {
+        if (element != null && element instanceof WebElement) {
+            addClickAction(actionChain, (WebElement) element);
         }
 
         for (int i = 0; i < keysArray.size(); i++) {
@@ -121,9 +115,9 @@ public class TypeKeys {
         }
     }
 
-    private static void addImmediateKeys(CompositeAction actionChain, List<KeysAction> keysArray, Object element) {
-        if (element != null && element instanceof Locatable) {
-            addClickAction(actionChain, (Locatable) element);
+    private static void addImmediateKeys(GermaniumCompositeAction actionChain, List<KeysAction> keysArray, Object element) {
+        if (element != null && element instanceof WebElement) {
+            addClickAction(actionChain, (WebElement) element);
         }
 
         for (KeysAction keyAction : keysArray) {
@@ -131,35 +125,21 @@ public class TypeKeys {
         }
     }
 
-    private static void addClickAction(CompositeAction actionChain, Locatable element) {
-        actionChain.addAction(new ClickAction(
-                GermaniumApi.getGermanium().getMouse(),
-                element));
+    private static void addClickAction(GermaniumCompositeAction actionChain, WebElement element) {
+        actionChain.click(element);
     }
 
-    private static void addDelayAction(CompositeAction actionChain, float delay) {
+    private static void addDelayAction(GermaniumCompositeAction actionChain, float delay) {
         actionChain.addAction(new DelayAction(delay));
     }
 
-    private static void addSingleKeysAction(CompositeAction actionChain, KeysAction keyAction) {
-        Keyboard keyboard = GermaniumApi.getGermanium().getKeyboard();
-        Mouse mouse = GermaniumApi.getGermanium().getMouse();
-
+    private static void addSingleKeysAction(GermaniumCompositeAction actionChain, KeysAction keyAction) {
         if (keyAction instanceof BasicKeysAction) {
-            actionChain.addAction(new SendKeysAction(
-                    keyboard,
-                    mouse,
-                    ((BasicKeysAction) keyAction).getKeysString()));
+            actionChain.sendKeys(((BasicKeysAction) keyAction).getKeysString());
         } else if (keyAction instanceof ComboKeyDown) {
-            actionChain.addAction(new KeyDownAction(
-                    keyboard,
-                    mouse,
-                    ((ComboKeyDown) keyAction).getKeyValue()));
+            actionChain.keyDown(((ComboKeyDown) keyAction).getKeyValue());
         } else if (keyAction instanceof ComboKeyUp) {
-            actionChain.addAction(new KeyUpAction(
-                    keyboard,
-                    mouse,
-                    ((ComboKeyUp) keyAction).getKeyValue()));
+            actionChain.keyDown(((ComboKeyUp) keyAction).getKeyValue());
         }
     }
 

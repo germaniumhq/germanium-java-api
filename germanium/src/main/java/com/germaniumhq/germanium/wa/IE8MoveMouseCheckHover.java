@@ -4,12 +4,8 @@ import com.germaniumhq.germanium.all.GermaniumApi;
 import com.germaniumhq.germanium.impl.GermaniumCompositeAction;
 import org.openqa.selenium.HasCapabilities;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.MoveMouseAction;
-import org.openqa.selenium.interactions.MoveToOffsetAction;
 import org.openqa.selenium.interactions.PauseAction;
-import org.openqa.selenium.internal.Locatable;
 
-import static com.germaniumhq.germanium.all.GermaniumApi.getGermanium;
 import static com.germaniumhq.germanium.all.GermaniumApi.js;
 
 public class IE8MoveMouseCheckHover extends RunnableWorkaround {
@@ -27,7 +23,7 @@ public class IE8MoveMouseCheckHover extends RunnableWorkaround {
         final Object[] currentScroll = new Object[1];
 
         actionChain.addAction(() -> currentScroll[0] = getScrollXY())
-                .addAction(new MoveMouseAction(getGermanium().getMouse(), (Locatable) element))
+                .moveToElement(element)
                 .addAction(new PauseAction(200));
 
         actionChain.addDynamicAction((chain) -> {
@@ -35,15 +31,8 @@ public class IE8MoveMouseCheckHover extends RunnableWorkaround {
                 return;
             }
 
-            chain.addAction(new MoveToOffsetAction(
-                            getGermanium().getMouse(),
-                            (Locatable) element,
-                            -1,
-                            -1)
-                    ).addAction(new MoveMouseAction(
-                            getGermanium().getMouse(),
-                            (Locatable) element)
-                    );
+            chain.moveToElement(element, -1, -1)
+                    .moveToElement(element);
         });
 
     }

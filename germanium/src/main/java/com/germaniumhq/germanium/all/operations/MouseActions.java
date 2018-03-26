@@ -7,14 +7,6 @@ import com.germaniumhq.germanium.util.ActionElementFinder;
 import com.germaniumhq.germanium.wa.EdgeMoveToElementWorkaround;
 import com.germaniumhq.germanium.wa.IE8MoveMouseCheckHover;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.ButtonReleaseAction;
-import org.openqa.selenium.interactions.ClickAction;
-import org.openqa.selenium.interactions.ClickAndHoldAction;
-import org.openqa.selenium.interactions.ContextClickAction;
-import org.openqa.selenium.interactions.DoubleClickAction;
-import org.openqa.selenium.interactions.MoveMouseAction;
-import org.openqa.selenium.interactions.MoveToOffsetAction;
-import org.openqa.selenium.internal.Locatable;
 
 public class MouseActions {
     private static Object elementOrPosition(Object item) {
@@ -51,32 +43,28 @@ public class MouseActions {
     private static void moveToElement(GermaniumCompositeAction actionChain, WebElement element) {
         new EdgeMoveToElementWorkaround(actionChain, element, () -> {
             new IE8MoveMouseCheckHover(actionChain, element, () -> {
-                actionChain.addAction(new MoveMouseAction(
-                        GermaniumApi.getGermanium().getMouse(),
-                        (Locatable) element));
+                actionChain.moveToElement(element);
             });
         }).execute();
     }
 
     private static GermaniumCompositeAction mouseMove(Object selector, Point point, GermaniumCompositeAction action) {
         if (action == null) {
-            action = new GermaniumCompositeAction();
+            action = new GermaniumCompositeAction(GermaniumApi.getWebDriver());
         }
 
         Object element = elementOrPosition(selector);
 
         if (element instanceof Point) {
-            action.addAction(new MoveToOffsetAction(
-                    GermaniumApi.getGermanium().getMouse(),
-                    (Locatable) GermaniumApi.S("body").element(),
+            action.moveToElement(
+                    GermaniumApi.S("body").element(),
                     ((Point) element).getX(),
-                    ((Point) element).getY()));
+                    ((Point) element).getY());
         } else if (selector != null && point != null) {
-            action.addAction(new MoveToOffsetAction(
-                    GermaniumApi.getGermanium().getMouse(),
-                    (Locatable) element,
+            action.moveToElement(
+                    (WebElement) element,
                     point.getX(),
-                    point.getY()));
+                    point.getY());
         } else if (selector != null) {
             moveToElement(action, (WebElement) element);
         }
@@ -89,18 +77,14 @@ public class MouseActions {
 
         if (element != null) {
             mouseMove(element, null, null)
-                    .addAction(new ClickAction(
-                             GermaniumApi.getGermanium().getMouse(),
-                            (Locatable) element))
+                    .click((WebElement) element)
                     .perform();
 
             return;
         }
 
         mouseMove(selector, point, null)
-                .addAction(new ClickAction(
-                        GermaniumApi.getGermanium().getMouse(),
-                        (Locatable) element))
+                .click()
                 .perform();
     }
 
@@ -109,18 +93,14 @@ public class MouseActions {
 
         if (element != null) {
             mouseMove(element, null, null)
-                    .addAction(new ContextClickAction(
-                            GermaniumApi.getGermanium().getMouse(),
-                            (Locatable) element))
+                    .contextClick((WebElement) element)
                     .perform();
 
             return;
         }
 
         mouseMove(selector, point, null)
-                .addAction(new ContextClickAction(
-                        GermaniumApi.getGermanium().getMouse(),
-                        (Locatable) element))
+                .contextClick()
                 .perform();
     }
 
@@ -129,18 +109,14 @@ public class MouseActions {
 
         if (element != null) {
             mouseMove(element, null, null)
-                    .addAction(new DoubleClickAction(
-                            GermaniumApi.getGermanium().getMouse(),
-                            (Locatable) element))
+                    .doubleClick((WebElement) element)
                     .perform();
 
             return;
         }
 
         mouseMove(selector, point, null)
-                .addAction(new DoubleClickAction(
-                        GermaniumApi.getGermanium().getMouse(),
-                        (Locatable) element))
+                .doubleClick()
                 .perform();
     }
 
@@ -166,28 +142,20 @@ public class MouseActions {
 
         if (fromElement != null) {
             action = (GermaniumCompositeAction) mouseMove(fromElement, null, null)
-                    .addAction(new ClickAndHoldAction(
-                            GermaniumApi.getGermanium().getMouse(),
-                            (Locatable) fromElement));
+                    .clickAndHold(fromElement);
         } else {
             action = (GermaniumCompositeAction) mouseMove(fromSelector, fromPoint, null)
-                    .addAction(new ClickAndHoldAction(
-                            GermaniumApi.getGermanium().getMouse(),
-                            null));
+                    .clickAndHold();
         }
 
         WebElement toElement = elementOrNull(toSelector, toPoint);
 
         if (toElement != null) {
             action = (GermaniumCompositeAction) mouseMove(toElement, null, action)
-                    .addAction(new ButtonReleaseAction(
-                            GermaniumApi.getGermanium().getMouse(),
-                            (Locatable) toElement));
+                    .release(toElement);
         } else {
             action = (GermaniumCompositeAction) mouseMove(toSelector, toPoint, action)
-                    .addAction(new ButtonReleaseAction(
-                            GermaniumApi.getGermanium().getMouse(),
-                            null));
+                    .release();
         }
 
         action.perform();

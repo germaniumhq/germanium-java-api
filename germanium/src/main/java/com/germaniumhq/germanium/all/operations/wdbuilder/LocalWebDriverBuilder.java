@@ -9,6 +9,7 @@ import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeDriverService;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.GeckoDriverService;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.ie.InternetExplorerDriverService;
@@ -68,13 +69,11 @@ public class LocalWebDriverBuilder {
 
     private static WebDriver openLocalFirefox() {
         return new FirefoxOpenBrowserWithMarionette(() -> {
-            DesiredCapabilities firefoxCapabilites = DesiredCapabilities.firefox();
-            firefoxCapabilites.setCapability("unexpectedAlertBehaviour", "ignore");
-            firefoxCapabilites.setCapability("marionette", false);
+            FirefoxOptions firefoxOptions = new FirefoxOptions()
+                    .addPreference("unexpectedAlertBehaviour", "ignore")
+                    .addPreference("marionette", false);
 
-            return new FirefoxDriver(
-                    firefoxCapabilites,
-                    null);
+            return new FirefoxDriver(firefoxOptions);
         }).execute();
     }
 

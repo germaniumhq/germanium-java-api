@@ -4,12 +4,12 @@ stage('Build Germanium') {
 
         checkout scm
 
+        dockerBuild file: './Dockerfile',
+            tags: ['germanium_test:java']
+
         dockerRm containers: [
             'germanium_java_ok'
         ]
-
-        dockerBuild file: './Dockerfile',
-            tags: ['germanium_test:java']
 
         dockerRun image: 'germanium_test:java',
             name: 'germanium_java_ok',
@@ -28,3 +28,8 @@ stage('Build Germanium') {
             image: 'germanium_java'
     }
 }
+
+stage('Publish') {
+    input message: 'Publish to germaniumhq.com?'
+}
+

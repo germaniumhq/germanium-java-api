@@ -1,21 +1,21 @@
 package com.germaniumhq.germanium.wa;
 
 import com.germaniumhq.germanium.all.GermaniumApi;
+import com.germaniumhq.germanium.impl.GermaniumCompositeAction;
 import org.openqa.selenium.HasCapabilities;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.CompositeAction;
-import org.openqa.selenium.interactions.MoveToOffsetAction;
-import org.openqa.selenium.internal.Locatable;
 
 /**
  * This is a workaround for Edge, since calling move to element directly doesn't actually
  * moves the mouse, but moving to the element with an offset, will move the mouse correctly.
  */
 public class EdgeMoveToElementWorkaround extends RunnableWorkaround {
-    private final CompositeAction actionChain;
+    private final GermaniumCompositeAction actionChain;
     private final WebElement element;
 
-    public EdgeMoveToElementWorkaround(CompositeAction actionChain, WebElement element, Runnable defaultCode) {
+    public EdgeMoveToElementWorkaround(GermaniumCompositeAction actionChain,
+                                       WebElement element,
+                                       Runnable defaultCode) {
         super(defaultCode);
         this.actionChain = actionChain;
         this.element = element;
@@ -23,12 +23,7 @@ public class EdgeMoveToElementWorkaround extends RunnableWorkaround {
 
     @Override
     protected void executeWorkAround() {
-        actionChain.addAction(
-                new MoveToOffsetAction(
-                        GermaniumApi.getGermanium().getMouse(),
-                        (Locatable) element,
-                        0,
-                        0));
+        actionChain.moveToElement(element, 0, 0);
     }
 
     @Override
