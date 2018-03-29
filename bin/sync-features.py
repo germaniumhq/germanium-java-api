@@ -4,7 +4,7 @@ import os
 import shutil
 
 WALK_FOLDER = "../germanium/features"
-TARGET_FOLDER = "germanium-tests/src/test/resources/features"
+TARGET_FOLDER = "germanium-tests/src/test/resources"
 
 def is_in_features(name: str) -> bool:
     return name.startswith("%s/features" % (WALK_FOLDER))
@@ -22,7 +22,12 @@ for folder, directories, files in os.walk(WALK_FOLDER):
     os.makedirs("%s/%s" % (TARGET_FOLDER, relative_folder), exist_ok=True)
 
     for file in files: # type: str
-        if is_in_features(folder) and not file.endswith(".feature"):
+        if not is_in_features(folder):
+            shutil.copy("%s/%s" % (folder, file),
+                        "%s/%s/%s" % (TARGET_FOLDER, relative_folder, file))
+            continue
+
+        if not file.endswith(".feature") and not file.endswith(".txt"):
             continue
 
         shutil.copy("%s/%s" % (folder, file),

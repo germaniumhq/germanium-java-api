@@ -44,7 +44,7 @@ public class MouseActions {
         new EdgeMoveToElementWorkaround(actionChain, element, () -> {
             new IE8MoveMouseCheckHover(actionChain, element, () -> {
                 actionChain.moveToElement(element);
-            });
+            }).execute();
         }).execute();
     }
 

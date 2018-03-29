@@ -15,7 +15,7 @@ public class GermaniumFunctionSelectFile {
     @When("^I upload a file using the form from the page$")
     public void i_upload_a_file_using_the_form_from_the_page() throws Throwable {
         selectFile(InputFile(),
-                   "germanium-tests/src/test/resources/features/steps/test-data/upload_test_file.txt");
+                   "src/test/resources/features/features/steps/test-data/upload_test_file.txt");
 
         click(Button());
         GermaniumApi.getGermanium().waitForPageToLoad(10);
