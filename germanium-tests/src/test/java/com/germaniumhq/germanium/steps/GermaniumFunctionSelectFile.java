@@ -23,6 +23,7 @@ public class GermaniumFunctionSelectFile {
 
     @Then("^the file is uploaded successfully$")
     public void the_file_is_uploaded_successfully() throws Throwable {
-        assertTrue(getText("body").contains("Uploaded '"));
+        assertTrue(String.format("Unable to find `Uploaded` in %s", getText("body")),
+                getText("body").contains("Uploaded '"));
     }
 }
