@@ -9,6 +9,7 @@ import io.undertow.server.HttpServerExchange;
 import io.undertow.server.handlers.PathHandler;
 import io.undertow.server.handlers.resource.FileResourceManager;
 import io.undertow.server.handlers.resource.ResourceHandler;
+import io.undertow.util.HeaderValues;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.RequestContext;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -70,7 +71,13 @@ public class GermaniumTestSite {
 
                         @Override
                         public String getContentType() {
-                            return e.getRequestHeaders().get("ContentType").get(0);
+                            HeaderValues contentType = e.getRequestHeaders().get("Content-Type");
+
+                            if (contentType == null || contentType.isEmpty()) {
+                                return "application/octet-stream";
+                            }
+
+                            return contentType.get(0);
                         }
 
                         @Override
