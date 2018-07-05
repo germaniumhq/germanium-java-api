@@ -1,35 +1,54 @@
+properties([
+    safeParameters(this, [
+        booleanParam(name: 'RUN_CHROME_TESTS', defaultValue: true,
+                description: 'Should the chrome tests run'),
+        string(name: 'DOCKER_HOST_IP', defaultValue: '192.168.0.51',
+                description: 'Squid proxy to use for fetching resources')
+    ])
+])
+
+safeParametersCheck(this)
+
 stage('Build Germanium') {
     node {
         deleteDir()
-
         checkout scm
 
-        dockerBuild file: './Dockerfile',
-            tags: ['germanium_test:java']
-
-        dockerRm containers: [
-            'germanium_java_ok'
-        ]
-
-        dockerRun image: 'germanium_test:java',
-            name: 'germanium_java_ok',
-            env: [
-                'DISPLAY=vnc-server:0',
-                'TEST_REUSE_BROWSER=1',
-                'TEST_BROWSER=chrome',
-                "MAVEN_EXTRA_PARAMETERS=-Dcucumber.options='-t ~@nochrome'"
-            ],
-            networks: ['vnc'],
-            volumes: [
-                '/dev/shm:/dev/shm:rw'
-            ]
-
-        dockerCommit name: 'germanium_java_ok',
-            image: 'germanium_java'
+        docker.build('germanium_java8')
     }
 }
 
-stage('Publish') {
-    input message: 'Publish to germaniumhq.com?'
+stage('Run Tests') {
+    def germaniumParallelTests = [:]
+
+    if (RUN_CHROME_TESTS) {
+        germaniumParallelTests."Chrome (Local)" = {
+            node {
+                def port = getRandomPort()
+
+                dockerInside image: 'germanium_java8',
+                    privileged: true,
+                    env: [
+                        'TEST_BROWSER=chrome',
+                        "TEST_HOST=${DOCKER_HOST_IP}:${port}",
+                        'DISPLAY=vnc:0'
+                    ],
+                    links: [
+                        'vnc-server:vnc'
+                    ],
+                    ports: [
+                        "${port}:${port}"
+                    ],
+                    code: {
+                        sh """
+                            cd /src
+                            mvn test -Dcucumber.options="-t ~@nochrome"
+                        """
+                    }
+            }
+        }
+    }
+
+    parallel(germaniumParallelTests)
 }
 
